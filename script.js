@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['pendling', 'trekking'],
                 description: "Et ypperlig pendlervalg med integrert 750 Wh batteri som gir lang rekkevidde og kraftig Bosch-motor for høy marsjfart. Dempegaffel og dempet setepinne sørger for komfort selv på ujevn asfalt.",
                 features: ["750 Wh batteri", "Kraftig Bosch-motor", "Dempegaffel", "Dempet setepinne", "Kontinuerlig kjørelys"],
-                price: "KR 10.000", // Husk å bytte til kr om nødvendig for andre sykler
-                image: "https://via.placeholder.com/300x180.png?text=Charger4+GT", // Bytt ut!
-                productUrl: "#", // Bytt ut!
+                price: "KR 69.000", // Husk å bytte til kr om nødvendig for andre sykler
+                image: "https://evoelsykler.no/wp-content/uploads/2023/12/charger4-gt-toruing-24-sort-640x427.jpg", // Bytt ut!
+                productUrl: "https://evoelsykler.no/produkt/riese-muller-charger4-gt-touring-2/", // Bytt ut!
                 frame_types: ['high-step', 'mid-step'],
                 speed_kmh: 25,
                 cargo_capacity: 'small',
