@@ -198,7 +198,7 @@ body {
 }
 
 
-/* Navigasjonsknapper (Tilbake/Reset) */
+/* Navigasjonsknapper (Tilbake/Reset) i spørsmålsseksjonen */
 .navigation-buttons {
     display: flex;
     justify-content: space-between;
@@ -208,6 +208,7 @@ body {
     border-top: 1px solid #e9ecef;
 }
 
+/* Generell knappestyling */
 .button {
     padding: 10px 20px;
     border: none;
@@ -287,48 +288,44 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Anbefalinger Header */
+/* ****** OPPDATERT: Anbefalinger Header ****** */
 .recommendations-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #e9ecef;
+    display: flex;                 /* Plasserer tittel og knapp side ved side */
+    justify-content: space-between; /* Skyver tittel til venstre og knapp til høyre */
+    align-items: center;           /* Justerer dem vertikalt i midten */
+    margin-bottom: 30px;           /* Luft under */
+    padding-bottom: 15px;           /* Padding for linjen under */
+    border-bottom: 1px solid #e9ecef; /* Linje under */
 }
 .recommendations-title {
     font-size: 2em;
     font-weight: bold;
     color: #343a40;
-    margin: 0;
+    margin: 0; /* Fjerner standard H2-margin */
 }
+/* Juster evt knappestørrelse spesifikt her */
+/* .recommendations-header #reset-button-final { font-size: 0.9em; padding: 8px 16px; } */
+/* ****** SLUTT: Anbefalinger Header ****** */
 
-/* ****** NYTT/OPPDATERT: Anbefalings-Grid Layout ****** */
+/* Anbefalings-Grid Layout */
 .recommendations-grid {
     display: grid;
-    /* Mobilførst: Start med 1 kolonne */
     grid-template-columns: 1fr;
-    gap: 25px; /* Mellomrom */
+    gap: 25px;
     margin-bottom: 30px;
 }
 
-/* På større skjermer (f.eks. 768px og oppover) */
 @media (min-width: 768px) {
     .recommendations-grid {
-        /* Definer 2 like kolonner */
         grid-template-columns: 1fr 1fr;
     }
-
-    /* Styling for KUN det første kortet på større skjermer */
     .recommendations-grid .recommendation-card:first-child {
-        /* Få det første kortet til å strekke seg over begge kolonnene */
         grid-column: 1 / -1;
     }
 }
-/* ****** SLUTT: Anbefalings-Grid Layout ****** */
 
 
-/* Anbefalingskort Styling (forblir stort sett det samme) */
+/* Anbefalingskort Styling */
 .recommendation-card {
     border: 1px solid #e0e0e0;
     border-radius: 10px;
@@ -464,11 +461,14 @@ body {
     font-size: 0.9em;
 }
 
+/* ****** OPPDATERT: Skjuler den gamle actions-diven ****** */
 .recommendations-actions {
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #e9ecef;
+    display: none; /* Skjuler denne div-en siden knappen er flyttet */
+    /* Behold gamle stiler hvis du skal legge inn ANDRE knapper her senere */
+    /* text-align: center; */
+    /* margin-top: 20px; */
+    /* padding-top: 20px; */
+    /* border-top: 1px solid #e9ecef; */
 }
 
 /* Footer */
@@ -504,6 +504,12 @@ body {
         flex-direction: column-reverse;
         gap: 10px;
     }
+    /* Juster header for anbefalinger på små skjermer */
+    .recommendations-header {
+        flex-direction: column; /* Stable tittel og knapp vertikalt */
+        align-items: flex-start; /* Juster til venstre */
+        gap: 10px; /* Litt luft mellom tittel og knapp */
+    }
     .recommendations-title {
         font-size: 1.6em;
     }
@@ -518,11 +524,8 @@ body {
 }
 
 /* Justering for når grid har 2 kolonner, men bare 1 element i andre rad */
-/* (Hvis du ender opp med kun 2 anbefalinger totalt) */
 /* @media (min-width: 768px) {
     .recommendations-grid .recommendation-card:nth-child(2):last-child {
-        grid-column: 1 / 2;  /* Sørg for at den holder seg i første kolonne */
-        /* justify-self: center; /* Valgfritt: sentrer i kolonnen */
-        /* max-width: 80%; /* Valgfritt: gjør den litt smalere hvis sentrert */
-    /* }
+        grid-column: 1 / 2;
+    }
 /* } */
