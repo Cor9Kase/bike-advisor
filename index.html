@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evo Elsykkel Rådgiver</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="bike-advisor-container">
+
+        <header class="advisor-header">
+            <h1>EVO <span class="highlight">Sykkelrådgivning</span></h1>
+            <p>Finn din perfekte elsykkel basert på dine behov.</p>
+            <!-- <img src="path/to/evo-logo.png" alt="EVO Elsykler Logo"> -->
+        </header>
+
+        <div id="advisor-content">
+
+            <!-- Seksjon for anbefalinger (vises til slutt) -->
+            <div id="recommendations-section" class="hidden">
+                <div id="summary-sentence-final" class="summary-box">
+                    <!-- Den ferdige setningen vises her -->
+                </div>
+                <div class="recommendations-header">
+                     <h2 class="recommendations-title">Din anbefaling</h2>
+                     <!-- <span class="based-on-needs">Basert på dine behov</span> -->
+                </div>
+                <div id="recommendations-output" class="recommendations-grid">
+                    <!-- Anbefalte sykler lastes inn her -->
+                </div>
+                <div class="recommendations-actions">
+                     <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
+                     <!-- <button id="send-info-button" class="button button-primary">Send meg sykkelinfo</button> -->
+                </div>
+            </div>
+
+            <!-- Seksjon for spørsmål (vises underveis) -->
+            <div id="questions-section">
+                <div id="sentence-builder" class="summary-box">
+                    <!-- Setningen bygges opp her -->
+                </div>
+
+                <div id="options-area" class="options-container">
+                    <h2 id="step-title">Laster inn...</h2>
+                    <div id="step-options">
+                        <!-- Alternativknapper lastes inn her -->
+                    </div>
+                     <div id="step-progress" class="progress-indicator">
+                        <div id="progress-bar" class="progress-bar-inner"></div>
+                        <span id="progress-text" class="progress-label">Trinn 1/X</span>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button id="back-button" class="button button-secondary hidden">
+                         <!-- SVG Ikon for tilbake -->
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                         </svg>
+                        Tilbake
+                    </button>
+                    <button id="reset-button-step" class="button button-secondary">
+                        <!-- SVG Ikon for reset -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Start på nytt
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="advisor-footer">
+             <p>© <span id="current-year"></span> Evo Elsykler</p>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
