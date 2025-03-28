@@ -23,37 +23,23 @@
                 <div id="summary-sentence-final" class="summary-box">
                     <!-- Den ferdige setningen vises her -->
                 </div>
+
+                <!-- Lasteindikator -->
+                <div id="loading-indicator" class="loading-container hidden">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Konfigurerer dine anbefalinger...</p>
+                </div>
+
+                <!-- Selve anbefalingene -->
                 <div class="recommendations-header">
                      <h2 class="recommendations-title">Din anbefaling</h2>
                      <!-- <span class="based-on-needs">Basert på dine behov</span> -->
                 </div>
-                <div id="recommendations-section" class="hidden">
-    <div id="summary-sentence-final" class="summary-box">
-        <!-- Den ferdige setningen vises her -->
-    </div>
-
-    <!-- ****** NYTT ELEMENT START ****** -->
-    <div id="loading-indicator" class="loading-container hidden">
-        <div class="spinner"></div>
-        <p class="loading-text">Konfigurerer dine anbefalinger...</p>
-    </div>
-    <!-- ****** NYTT ELEMENT SLUTT ****** -->
-
-
-    <div class="recommendations-header">
-         <h2 class="recommendations-title">Din anbefaling</h2>
-    </div>
-    <div id="recommendations-output" class="recommendations-grid">
-        <!-- Anbefalte sykler lastes inn her -->
-    </div>
-    <div class="recommendations-actions">
-         <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
-         <!-- <button id="send-info-button" class="button button-primary">Send meg sykkelinfo</button> -->
-    </div>
-</div>
-                <div id="recommendations-output" class="recommendations-grid">
+                <div id="recommendations-output" class="recommendations-grid hidden"> <!-- Start skjult -->
                     <!-- Anbefalte sykler lastes inn her -->
                 </div>
+
+                <!-- Knapper under anbefalinger -->
                 <div class="recommendations-actions">
                      <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
                      <!-- <button id="send-info-button" class="button button-primary">Send meg sykkelinfo</button> -->
@@ -71,22 +57,25 @@
                     <div id="step-options">
                         <!-- Alternativknapper lastes inn her -->
                     </div>
+                     <!-- Fremdriftsindikator -->
                      <div id="step-progress" class="progress-indicator">
-                        <div id="progress-bar" class="progress-bar-inner"></div>
+                        <!-- ****** VIKTIG: Lagt til YTRE div for styling ****** -->
+                        <div class="progress-bar-outer">
+                           <div id="progress-bar" class="progress-bar-inner"></div>
+                        </div>
                         <span id="progress-text" class="progress-label">Trinn 1/X</span>
                     </div>
                 </div>
 
+                <!-- Navigasjonsknapper -->
                 <div class="navigation-buttons">
                     <button id="back-button" class="button button-secondary hidden">
-                         <!-- SVG Ikon for tilbake -->
                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                          </svg>
                         Tilbake
                     </button>
                     <button id="reset-button-step" class="button button-secondary">
-                        <!-- SVG Ikon for reset -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                         </svg>
@@ -99,10 +88,13 @@
 
         <footer class="advisor-footer">
              <p>© <span id="current-year"></span> Evo Elsykler</p>
+             <!-- Hvis du vil ha Evo-navnet i footeren: -->
+             <!-- <p>© <span id="current-year"></span> EVO Elsykler</p> -->
         </footer>
 
     </div>
 
+    <!-- Viktig: script.js lastes helt til slutt -->
     <script src="script.js"></script>
 </body>
 </html>
