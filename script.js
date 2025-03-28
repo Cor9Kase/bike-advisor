@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['pendling', 'trekking'],
                 description: "Et ypperlig pendlervalg med integrert 750 Wh batteri som gir lang rekkevidde og kraftig Bosch-motor for høy marsjfart. Dempegaffel og dempet setepinne sørger for komfort selv på ujevn asfalt.",
                 features: ["750 Wh batteri", "Kraftig Bosch-motor", "Dempegaffel", "Dempet setepinne", "Kontinuerlig kjørelys"],
-                price: "5,699.00 €", // Husk å bytte til kr om nødvendig for andre sykler
+                price: "KR 10.000", // Husk å bytte til kr om nødvendig for andre sykler
                 image: "https://via.placeholder.com/300x180.png?text=Charger4+GT", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['high-step', 'mid-step'],
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['pendling', 'bybruk', 'allsidig', 'transport'],
                 description: "En kompakt elsykkel som kombinerer bysykkelens smidighet med god lastkapasitet. Lett å manøvrere i bytrafikk og tar liten plass.", // Litt justert beskrivelse
                 features: ["400 Wh batteri", "Bosch Performance Line motor", "Kompakt", "Ergonomisk sittestilling", "Robust ramme", "50 kg lastkapasitet (bak)"], // Oppdatert motor-info muligens? Sjekk gjerne spesifikasjoner for P9 vs D8
-                price: "37 000 kr", // Oppdatert pris
+                price: "KR 37.000", // Oppdatert pris
                 image: "https://www.ternbicycles.com/sites/default/files/2022-02/22-TN-ani-QuickHaul-configurations-v02.gif", // Oppdatert bilde-URL (Merk: URL nevner H9)
                 productUrl: "https://evoelsykler.no/produkt/tern-quick-haul-p9-400/?attribute_pa_farge=gronn&gad_source=1&gclid=Cj0KCQjwkZm_BhDrARIsAAEbX1FuNlRzuUBlKTbajjzWES0zb_flPmbDMd6jEmIoL5cFOZ0au9sEUOwaAnneEALw_wcB&gclsrc=aw.ds", // Oppdatert produkt-URL
                 frame_types: ['low-step'],
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['pendling', 'bybruk'],
                 description: "En sporty pendlesykkel med slank, tradisjonell ramme. Den er rask og lettkjørt, med en sterk Bosch Performance-motor som gir rask akselerasjon.",
                 features: ["Bosch Performance-motor", "Slank ramme", "Fremoverlent kjørestilling", "Smalere dekk", "Dempegaffel"],
-                price: "4,499.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Roadster", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['high-step', 'mid-step'],
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['bybruk', 'leisure'],
                 description: "En klassisk komfort-elsykkel i retrostil, rettet mot bysykling i rolig tempo. Elegant buet lav-innstegsramme, dempegaffel og dempet setepinne.",
                 features: ["Lav-innstegsramme", "Dempegaffel", "Dempet setepinne", "Navgir og beltedrift", "Oppreist, avslappet sittestilling"],
-                price: "4,299.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Swing", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['low-step'],
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['bybruk', 'leisure', 'allsidig'],
                 description: "Terns 'Near Busy Dad' (NBD) er en superlav innstegs elsykkel utformet for enkelhet og komfort i byen. Med ultralav ramme er det enkelt å sette føttene flatt i bakken.",
                 features: ["Ultralav ramme (39 cm steg)", "Bosch Active Plus-motor", "Tykkere dekk", "Dempepinne i setet", "Brukervennlig"],
-                price: "3,999.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=NBD", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['low-step'],
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['bybruk', 'pendling', 'trekking', 'allsidig'],
                 description: "En kombinasjon av komfort og allsidighet i et lavt innsteg-design. Gjennomstegsramme som gjør av- og påstigning enkelt.",
                 features: ["Gjennomstegsramme", "Bosch CX-motor", "625-750 Wh batteri", "Solid bagasjebrett", "Dempet forgaffel"],
-                price: "4,799.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Nevo4", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['low-step', 'mid-step'],
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['terreng', 'mtb'],
                 description: "En fulldempet terreng-elsykkel bygget for eventyr i høy hastighet. Fox Float bakdemper og 150 mm vandring foran, som sammen med en kraftig Bosch Performance CX-motor.",
                 features: ["Fox Float bakdemper", "150mm vandring", "Bosch Performance CX-motor", "High Speed-klar", "Ekstremt kapabel offroad"],
-                price: "6,999.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Delite+Mountain", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['high-step'],
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['terreng', 'trekking', 'pendling'],
                 description: "'Super'-versjonen av Delite kommer med dobbelt batteri (1125 Wh totalt) for ekstra lang rekkevidde på raske turer. Skapt for de lengste og mest krevende turene.",
                 features: ["Dobbelt batteri (1125 Wh)", "Full demping", "Rohloff elektronisk gir", "ABS-bremser (opsjon)", "DualBattery-teknologi"],
-                price: "7,999.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Superdelite", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['high-step', 'mid-step'],
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['transport', 'family'],
                 description: "En premium lastesykkel med frontmontert lasteplan og fulldempet ramme. Takler tung last (f.eks. to barn i kasse med kalesje) uten å kompromisse på stabilitet eller kjøreglede.",
                 features: ["Bosch Cargo Line-motor", "Fulldempet", "Frontmontert lasteplan", "Lavt tyngdepunkt", "Høy stabilitet"],
-                price: "7,299.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Load4+60", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['cargo'],
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['transport', 'family', 'allsidig'],
                 description: "Terns velkjente longtail-lastesykkel, designet for å erstatte bilen i hverdagen. Kompakt format men kan frakte opp til to barn eller store varemengder på det forlengede bakre lasteplanet.",
                 features: ["Bosch Cargo-motor", "Mulighet for doble batterier", "Kompakt format", "Tilbehør for barn og hund", "Garasjevennlig størrelse"],
-                price: "5,499.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=GSD+S10", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['cargo-longtail'],
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['transport', 'family', 'business'],
                 description: "En frontlaster spesialdesignet for familier og varelevering. Romslig transportboks foran med benker til barn og sikkerhetsbelter.",
                 features: ["Bosch Performance CX-motor", "Stort lastevolum", "Familievennlig", "Tilbehør for ulike behov", "God balanse mellom pris og funksjonalitet"],
-                price: "6,699.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Packster+70", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['cargo'],
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['allsidig', 'transport', 'trekking', 'family'],
                 description: "Bygget for å takle flere oppgaver. En miks av terrengsykkel og longtail-lastesykkel med utvidet bagasjebrett som kan ta barneseter eller sidevesker med varer.",
                 features: ["Bosch CX-motor", "Opptil 750 Wh batteri", "Family-utgave med barneseter", "Sidevesker", "Offroad-kapasitet"],
-                price: "5,868.60 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Multicharger2", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['high-step', 'mid-step'],
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['allsidig', 'bybruk', 'transport', 'family'],
                 description: "En ultraversatil bysykkel med kompakte 20' hjul og lang akselavstand med integrert bagasjebrett, noe som gir lavt tyngdepunkt og stabilitet med last.",
                 features: ["Kompakte 20' hjul", "Last opp til 100 kg", "To barn bakpå", "Kort for bysykling", "Fullt utstyrt"],
-                price: "4,999.00 €",
+                price: "KR 10.000",
                 image: "https://via.placeholder.com/300x180.png?text=Multitinker", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['low-step'],
