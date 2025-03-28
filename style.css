@@ -65,10 +65,17 @@ body {
 .summary-box .placeholder,
 .summary-box .selected-value {
     display: inline-block; /* For bedre layout */
-    padding: 3px 8px;
+    padding: 3px 8px;     /* Behøver ikke endre padding nødvendigvis */
     border-radius: 5px;
-    margin: 0 3px; /* Litt luft rundt */
+    margin-top: 2px;      /* Liten justering for vertikal linjering? Kan sløyfes. */
+    margin-bottom: 2px;   /* Liten justering for vertikal linjering? Kan sløyfes. */
+    margin-left: 6px;     /* Økt margin til venstre */
+    margin-right: 6px;    /* Økt margin til høyre */
+    vertical-align: baseline; /* Prøv dette for bedre vertikal justering med teksten */
 }
+
+/* Eventuelt, behold den kortere margin-syntaksen hvis du foretrekker det: */
+/* margin: 2px 6px; */ /* 2px oppe/nede, 6px høyre/venstre */
 
 .summary-box .placeholder {
     background-color: rgba(255, 255, 255, 0.6);
