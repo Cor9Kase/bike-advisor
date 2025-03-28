@@ -176,19 +176,18 @@ body {
     align-items: center;
     margin-top: 20px;
 }
-/* ****** NY YTRE DIV STYLING ****** */
 .progress-bar-outer {
     flex-grow: 1;
     height: 8px;
     background-color: #e9ecef;
     border-radius: 4px;
-    overflow: hidden; /* Viktig for at inner ikke går utenfor */
+    overflow: hidden;
     margin-right: 10px;
 }
-.progress-bar-inner { /* Selve fargede baren */
+.progress-bar-inner {
     height: 100%;
-    width: 0%; /* Starter på 0, oppdateres med JS */
-    background-color: #28a745; /* Grønn */
+    width: 0%;
+    background-color: #28a745;
     border-radius: 4px;
     transition: width 0.4s ease-out;
 }
@@ -252,7 +251,7 @@ body {
    /* Vises/skjules med JS */
 }
 
-/* ****** NY: Lasteindikator ****** */
+/* Lasteindikator */
 .loading-container {
     display: flex;
     flex-direction: column;
@@ -287,8 +286,8 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-/* ****** SLUTT: Lasteindikator ****** */
 
+/* Anbefalinger Header */
 .recommendations-header {
     display: flex;
     justify-content: space-between;
@@ -304,19 +303,32 @@ body {
     margin: 0;
 }
 
+/* ****** NYTT/OPPDATERT: Anbefalings-Grid Layout ****** */
 .recommendations-grid {
     display: grid;
+    /* Mobilførst: Start med 1 kolonne */
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 25px; /* Mellomrom */
     margin-bottom: 30px;
 }
 
+/* På større skjermer (f.eks. 768px og oppover) */
 @media (min-width: 768px) {
     .recommendations-grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        /* Definer 2 like kolonner */
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Styling for KUN det første kortet på større skjermer */
+    .recommendations-grid .recommendation-card:first-child {
+        /* Få det første kortet til å strekke seg over begge kolonnene */
+        grid-column: 1 / -1;
     }
 }
+/* ****** SLUTT: Anbefalings-Grid Layout ****** */
 
+
+/* Anbefalingskort Styling (forblir stort sett det samme) */
 .recommendation-card {
     border: 1px solid #e0e0e0;
     border-radius: 10px;
@@ -470,7 +482,7 @@ body {
 }
 
 /* Responsivitet */
-@media (max-width: 600px) {
+@media (max-width: 600px) { /* Juster 600px om nødvendig */
     #bike-advisor-container {
         margin: 10px;
         padding: 10px;
@@ -486,7 +498,7 @@ body {
         font-size: 1.4em;
     }
     .option-button {
-        min-width: 100%;
+        min-width: 100%; /* Full bredde på små skjermer */
     }
     .navigation-buttons {
         flex-direction: column-reverse;
@@ -504,3 +516,13 @@ body {
         justify-content: flex-start;
     }
 }
+
+/* Justering for når grid har 2 kolonner, men bare 1 element i andre rad */
+/* (Hvis du ender opp med kun 2 anbefalinger totalt) */
+/* @media (min-width: 768px) {
+    .recommendations-grid .recommendation-card:nth-child(2):last-child {
+        grid-column: 1 / 2;  /* Sørg for at den holder seg i første kolonne */
+        /* justify-self: center; /* Valgfritt: sentrer i kolonnen */
+        /* max-width: 80%; /* Valgfritt: gjør den litt smalere hvis sentrert */
+    /* }
+/* } */
