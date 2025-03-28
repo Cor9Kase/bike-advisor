@@ -244,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
+    const loadingIndicator = document.getElementById('loading-indicator'); // Ny referanse
 
 
     // --- 4. Definisjoner for Trinn og Alternativer ---
@@ -338,17 +339,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
      function calculateCurrentVisibleStep() {
         let visibleStepCount = 0;
-         // Gå gjennom trinnene opp til (men ikke inkludert) det logiske currentStep
          for (let i = 0; i < currentStep; i++) {
             const stepDef = steps[i];
-            // Hvis trinnet ikke har en betingelse ELLER betingelsen er oppfylt
              if (!stepDef || !stepDef.condition || stepDef.condition()) {
                  visibleStepCount++;
              }
          }
-         // Returnerer 1 for første trinn, 2 for andre synlige trinn, etc.
-         // Hvis currentStep er 1, returnerer den 1 (siden løkken ikke kjører)
-         return Math.max(1, visibleStepCount); // Sørg for at vi minst returnerer 1
+         return Math.max(1, visibleStepCount);
     }
 
     function calculateTotalVisibleSteps() {
@@ -388,13 +385,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderOptions() {
-         // Først, beregn hvilket *synlig* trinn vi er på
          const currentVisibleStepNum = calculateCurrentVisibleStep();
-         const stepDef = getStepDefinition(currentVisibleStepNum); // Hent definisjon basert på synlig trinnnummer
+         const stepDef = getStepDefinition(currentVisibleStepNum);
 
         if (!stepDef) {
             console.error("Kunne ikke finne definisjon for synlig trinn:", currentVisibleStepNum, "(logisk trinn:", currentStep, ")");
-             generateAndShowRecommendations(); // Gå til resultater hvis vi er "ferdig"
+             generateAndShowRecommendations();
             return;
         }
 
@@ -435,8 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recommendationsOutput.innerHTML = '';
 
         if (recommendations.length === 0) {
-            // Bruker HTML som vist i brukerens bilde
-            recommendationsOutput.innerHTML = '<p>Beklager, vi fant ingen Evo-sykler som matchet alle dine valg. Prøv å justere valgene dine, eller kontakt oss for veiledning.</p>';
+            recommendationsOutput.innerHTML = '<p>Beklager, vi fant ingen sykler som matchet alle dine valg. Prøv å justere valgene dine, eller kontakt oss for veiledning.</p>';
             return;
         }
 
@@ -487,112 +482,121 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // OPPDatert updateView for å håndtere loading state bedre
     function updateView() {
-        if (showRecommendationsView) {
+        if (showRecommendationsView) { // Når vi er i resultatvisning (eller loading)
             questionsSection.classList.add('hidden');
             recommendationsSection.classList.remove('hidden');
+            // Selve visningen av loader vs output håndteres nå i generateAndShowRecommendations
             renderSentence(summarySentenceFinal);
-            renderRecommendations();
-            advisorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
+        } else { // Når vi viser spørsmål
             questionsSection.classList.remove('hidden');
-            recommendationsSection.classList.add('hidden');
+            recommendationsSection.classList.add('hidden'); // Skjul hele resultatseksjonen
+            loadingIndicator.classList.add('hidden'); // Sørg for at loader er skjult
+            recommendationsOutput.classList.add('hidden'); // Sørg for at output er skjult
             renderSentence(sentenceBuilder);
             renderOptions();
-            // Vis/skjul tilbakeknapp basert på *synlig* trinnnummer
             backButton.classList.toggle('hidden', calculateCurrentVisibleStep() <= 1);
         }
-        // Sørg for at totalt antall trinn er oppdatert
         totalSteps = calculateTotalVisibleSteps();
         updateProgress(); // Oppdater progressbar uansett view
     }
 
-    // --- 7. Logikk for Anbefalinger (Oppdatert regelbasert) ---
+    // --- 7. Logikk for Anbefalinger (Oppdatert regelbasert + Loading) ---
     function generateAndShowRecommendations() {
-        console.log("Genererer anbefalinger basert på:", selections);
+        console.log("Starter generering av anbefalinger...");
 
-        // 1. Start med sykler som matcher valgt formål
-        let potentialMatches = BikeCatalog.evoOriginal.filter(bike =>
-            bike.purpose && bike.purpose.includes(selections.purpose)
-        );
-        console.log(`Fant ${potentialMatches.length} sykler for formål: ${selections.purpose}`);
+        // 0. Forbered visning av laster
+        showRecommendationsView = true; // Sett state til resultatvisning
+        questionsSection.classList.add('hidden'); // Skjul spørsmål
+        recommendationsSection.classList.remove('hidden'); // Vis resultatseksjon-containeren
+        recommendationsOutput.classList.add('hidden'); // Skjul selve resultatlisten foreløpig
+        loadingIndicator.classList.remove('hidden'); // VIS LASTEREN!
+        renderSentence(summarySentenceFinal); // Oppdater setningen med en gang
 
-        // 2. Spesialfiltrering for 'transport' basert på 'cargoLocation'
-        if (selections.purpose === 'transport' && selections.cargoLocation) {
-            console.log(`Filtrerer transport-sykler for lastetype: ${selections.cargoLocation}`);
-            potentialMatches = potentialMatches.filter(bike => {
-                const targetLocation = selections.cargoLocation === 'frontlaster' ? 'front' : 'rear';
-                return bike.cargo_location === targetLocation;
-            });
-            console.log(`Etter lastetype-filter: ${potentialMatches.length} sykler igjen.`);
-        }
+        // Scroll til resultatseksjonen så brukeren ser lasteren
+        recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        // 3. Valgfri Sortering (prioriter match på rammetype hvis valgt)
-        if (selections.frameType) {
-            const frameMap = { dypGjennomgang: 'low-step', lavtTopprør: 'mid-step', høytTopprør: 'high-step' };
-            const desiredFrameInternal = frameMap[selections.frameType];
+        // --- SIMULER EN LITEN FORSINKELSE (f.eks. 750ms = 0.75 sek) ---
+        setTimeout(() => {
+            console.log("Utfører filtrering/sortering...");
 
-            potentialMatches.sort((a, b) => {
-                const aMatchesFrame = a.frame_types && a.frame_types.includes(desiredFrameInternal);
-                const bMatchesFrame = b.frame_types && b.frame_types.includes(desiredFrameInternal);
+            // 1. Start med sykler som matcher valgt formål
+            let potentialMatches = BikeCatalog.evoOriginal.filter(bike =>
+                bike.purpose && bike.purpose.includes(selections.purpose)
+            );
 
-                if (aMatchesFrame && !bMatchesFrame) return -1;
-                if (!aMatchesFrame && bMatchesFrame) return 1;
-                return 0;
-            });
-            console.log("Sortert basert på rammetype-match (hvis valgt).");
-        }
-        // Andre sorteringer kan legges til her (f.eks. på pris, batteri...)
+            // 2. Spesialfiltrering for 'transport'
+            if (selections.purpose === 'transport' && selections.cargoLocation) {
+                potentialMatches = potentialMatches.filter(bike => {
+                    const targetLocation = selections.cargoLocation === 'frontlaster' ? 'front' : 'rear';
+                    return bike.cargo_location === targetLocation;
+                });
+            }
 
-        // 4. Begrens til topp 3 resultater
-        recommendations = potentialMatches.slice(0, 3);
-        console.log("Endelige anbefalinger:", recommendations.map(b => b.name));
+            // 3. Valgfri Sortering (prioriter match på rammetype)
+            if (selections.frameType) {
+                const frameMap = { dypGjennomgang: 'low-step', lavtTopprør: 'mid-step', høytTopprør: 'high-step' };
+                const desiredFrameInternal = frameMap[selections.frameType];
+                potentialMatches.sort((a, b) => {
+                    const aMatchesFrame = a.frame_types && a.frame_types.includes(desiredFrameInternal);
+                    const bMatchesFrame = b.frame_types && b.frame_types.includes(desiredFrameInternal);
+                    if (aMatchesFrame && !bMatchesFrame) return -1;
+                    if (!aMatchesFrame && bMatchesFrame) return 1;
+                    return 0;
+                });
+            }
 
-        // 5. Vis resultat-viewet
-        showRecommendationsView = true;
-        updateView();
+            // 4. Begrens til topp 3 resultater
+            recommendations = potentialMatches.slice(0, 3);
+            console.log("Endelige anbefalinger funnet:", recommendations.map(b => b.name));
+
+            // 5. Skjul lasteren
+            loadingIndicator.classList.add('hidden');
+
+            // 6. Render og vis de faktiske anbefalingene
+            renderRecommendations(); // Fyll inn resultatlisten
+            recommendationsOutput.classList.remove('hidden'); // VIS resultatlisten
+
+        }, 750); // Juster ventetid ved behov
     }
 
 
     // --- 8. Event Handlers ---
     function handleOptionSelect(stepId, value) {
-        // Oppdater state
         selections[stepId] = value;
         console.log("Valg oppdatert:", selections);
 
-        // Gå til neste logiske trinn
-        currentStep++;
+        currentStep++; // Gå til neste logiske trinn index
 
-         // Sjekk om neste trinn er betinget og ikke skal vises
-         let nextStepDef = steps[currentStep - 1]; // Husk 0-basert index
-         while(nextStepDef && nextStepDef.condition && !nextStepDef.condition()) {
-             console.log(`Hopper over betinget trinn ${currentStep}: ${nextStepDef.id}`);
-             currentStep++; // Hopp over dette trinnet
-             nextStepDef = steps[currentStep - 1];
-         }
+        let nextStepDef = steps[currentStep - 1];
+        while(nextStepDef && nextStepDef.condition && !nextStepDef.condition()) {
+            console.log(`Hopper over betinget trinn ${currentStep}: ${nextStepDef.id}`);
+            currentStep++;
+            nextStepDef = steps[currentStep - 1];
+        }
 
-        // Sjekk om vi er ferdige (currentStep er nå *etter* siste synlige trinn)
-        if (currentStep > steps.length) { // Eller en mer robust sjekk basert på synlige trinn
+        // Sjekk om vi er ferdige ved å se om neste *synlige* trinn finnes
+        const nextVisibleStepNum = calculateCurrentVisibleStep(); // Hva er nummeret på det trinnet vi *skal* til?
+        const totalVisibleSteps = calculateTotalVisibleSteps();
+
+        if (nextVisibleStepNum > totalVisibleSteps) { // Hvis neste synlige trinn er *etter* totalt antall synlige
              console.log("Alle trinn fullført, viser resultater.");
              generateAndShowRecommendations();
         } else {
-             // Gå til neste trinn (eller det første etter overhoppede)
-             updateView();
+             updateView(); // Oppdater til neste spørsmål
          }
     }
 
-
    function handleBack() {
         if (showRecommendationsView) {
-             // Går tilbake fra resultatvisning til siste spørsmål
              showRecommendationsView = false;
-             // currentStep er allerede forbi siste trinn, trenger ikke endre det
+             // Trenger ikke nødvendigvis justere currentStep her,
+             // calculateCurrentVisibleStep vil gi oss siste spørsmålsnummer
              updateView();
          } else {
-             // Går tilbake mellom spørsmål
-             // Må finne det *forrige* synlige trinnet
              let previousVisibleStepIndex = -1;
-             let targetVisibleStepNum = calculateCurrentVisibleStep() - 1; // Vi vil til det *forrige* synlige
+             let targetVisibleStepNum = calculateCurrentVisibleStep() - 1;
 
              if (targetVisibleStepNum >= 1) {
                  let visibleStepCounter = 0;
@@ -608,19 +612,14 @@ document.addEventListener('DOMContentLoaded', () => {
                  }
 
                  if (previousVisibleStepIndex !== -1) {
-                     currentStep = previousVisibleStepIndex + 1; // Sett logisk trinn
-                     // Nullstill valget for trinnet vi går tilbake fra? Valgfritt, men ofte lurt
-                     // const stepIdToReset = steps[currentStep]?.id; // Id for trinnet ETTER det vi går til
-                     // if(stepIdToReset) selections[stepIdToReset] = null;
-
+                     currentStep = previousVisibleStepIndex + 1;
                      updateView();
                  } else {
                      console.warn("Kunne ikke finne forrige synlige trinn index.");
-                     resetAdvisor(); // Fallback
+                     resetAdvisor();
                  }
              } else {
                  console.log("Kan ikke gå tilbake fra første trinn.");
-                 // Tilbake-knappen skal være skjult her uansett via updateView()
              }
          }
     }
@@ -632,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         recommendations = [];
         showRecommendationsView = false;
-        totalSteps = calculateTotalVisibleSteps(); // Resett totalt antall
+        totalSteps = calculateTotalVisibleSteps();
         updateView();
     }
 
@@ -643,8 +642,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetButtonFinal.addEventListener('click', resetAdvisor);
     currentYearSpan.textContent = new Date().getFullYear();
 
-    // Initial view setup
-    totalSteps = calculateTotalVisibleSteps(); // Beregn initielt antall trinn
+    totalSteps = calculateTotalVisibleSteps();
     updateView();
 
 });
