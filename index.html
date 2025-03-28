@@ -30,18 +30,22 @@
                     <p class="loading-text">Konfigurerer dine anbefalinger...</p>
                 </div>
 
-                <!-- Selve anbefalingene -->
+                <!-- Selve anbefalingene - Header MED knapp -->
                 <div class="recommendations-header">
                      <h2 class="recommendations-title">Din anbefaling</h2>
+                     <!-- KNAPPEN ER FLYTTET HIT -->
+                     <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
                      <!-- <span class="based-on-needs">Basert på dine behov</span> -->
                 </div>
-                <div id="recommendations-output" class="recommendations-grid hidden"> <!-- Start skjult -->
+
+                <!-- Anbefalings-Grid -->
+                <div id="recommendations-output" class="recommendations-grid hidden">
                     <!-- Anbefalte sykler lastes inn her -->
                 </div>
 
-                <!-- Knapper under anbefalinger -->
+                <!-- Knapper under anbefalinger (NÅ TOM) -->
                 <div class="recommendations-actions">
-                     <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
+                     <!-- reset-button-final er fjernet herfra -->
                      <!-- <button id="send-info-button" class="button button-primary">Send meg sykkelinfo</button> -->
                 </div>
             </div>
@@ -59,7 +63,6 @@
                     </div>
                      <!-- Fremdriftsindikator -->
                      <div id="step-progress" class="progress-indicator">
-                        <!-- ****** VIKTIG: Lagt til YTRE div for styling ****** -->
                         <div class="progress-bar-outer">
                            <div id="progress-bar" class="progress-bar-inner"></div>
                         </div>
@@ -88,8 +91,6 @@
 
         <footer class="advisor-footer">
              <p>© <span id="current-year"></span> Evo Elsykler</p>
-             <!-- Hvis du vil ha Evo-navnet i footeren: -->
-             <!-- <p>© <span id="current-year"></span> EVO Elsykler</p> -->
         </footer>
 
     </div>
