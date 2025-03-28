@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. Data (Riese & Müller / Tern Eksempler) ---
-    // VIKTIG: Bytt ut placeholder-URLer med ekte bilde-URLer og produktlenker!
-    // VIKTIG: Bytt ut prisformat (€) til kr hvis ønskelig.
+    // --- 1. Data (Riese & Müller / Tern Eksempler - med oppdatert Tern Quick Haul) ---
+    // VIKTIG: Bytt ut resterende placeholder-URLer med ekte bilde-URLer og produktlenker!
     const BikeCatalog = {
         evoOriginal: [
             // Pendling
@@ -12,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 purpose: ['pendling', 'trekking'],
                 description: "Et ypperlig pendlervalg med integrert 750 Wh batteri som gir lang rekkevidde og kraftig Bosch-motor for høy marsjfart. Dempegaffel og dempet setepinne sørger for komfort selv på ujevn asfalt.",
                 features: ["750 Wh batteri", "Kraftig Bosch-motor", "Dempegaffel", "Dempet setepinne", "Kontinuerlig kjørelys"],
-                price: "5,699.00 €",
+                price: "5,699.00 €", // Husk å bytte til kr om nødvendig for andre sykler
                 image: "https://via.placeholder.com/300x180.png?text=Charger4+GT", // Bytt ut!
                 productUrl: "#", // Bytt ut!
                 frame_types: ['high-step', 'mid-step'],
@@ -21,21 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 cargo_location: null,
                 distance_km: [40, 120]
             },
+            // ****** OPPDATERT SYKKEL START ******
             {
-                id: 'tern-quick-haul-d8',
-                name: "Tern Quick Haul D8",
+                id: 'tern-quick-haul-p9', // Oppdatert ID
+                name: "Tern Quick Haul P9", // Oppdatert navn
                 purpose: ['pendling', 'bybruk', 'allsidig', 'transport'],
-                description: "En kompakt elsykkel som kombinerer bysykkelens smidighet med noe lastkapasitet. Lett å manøvrere i bytrafikk og tar liten plass på kontoret eller i boden.",
-                features: ["400 Wh batteri", "Bosch-motor", "Kompakt", "Ergonomisk sittestilling", "Robust ramme", "50 kg lastkapasitet (bak)"],
-                price: "3,499.00 €",
-                image: "https://via.placeholder.com/300x180.png?text=Quick+Haul+D8", // Bytt ut!
-                productUrl: "#", // Bytt ut!
+                description: "En kompakt elsykkel som kombinerer bysykkelens smidighet med god lastkapasitet. Lett å manøvrere i bytrafikk og tar liten plass.", // Litt justert beskrivelse
+                features: ["400 Wh batteri", "Bosch Performance Line motor", "Kompakt", "Ergonomisk sittestilling", "Robust ramme", "50 kg lastkapasitet (bak)"], // Oppdatert motor-info muligens? Sjekk gjerne spesifikasjoner for P9 vs D8
+                price: "37 000 kr", // Oppdatert pris
+                image: "https://evoelsykler.no/wp-content/uploads/2024/06/Quick-Haul-H9-gronn.jpg", // Oppdatert bilde-URL (Merk: URL nevner H9)
+                productUrl: "https://evoelsykler.no/produkt/tern-quick-haul-p9-400/?attribute_pa_farge=gronn&gad_source=1&gclid=Cj0KCQjwkZm_BhDrARIsAAEbX1FuNlRzuUBlKTbajjzWES0zb_flPmbDMd6jEmIoL5cFOZ0au9sEUOwaAnneEALw_wcB&gclsrc=aw.ds", // Oppdatert produkt-URL
                 frame_types: ['low-step'],
                 speed_kmh: 25,
                 cargo_capacity: 'medium',
                 cargo_location: 'rear',
-                distance_km: [20, 70]
+                distance_km: [20, 70] // Estimat, kan justeres basert på P9-spesifikasjoner
             },
+            // ****** OPPDATERT SYKKEL SLUTT ******
             {
                 id: 'rm-roadster',
                 name: "Riese & Müller Roadster",
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 distance_km: [30, 80]
             },
 
-            // Bybruk
+            // Bybruk (resten av syklene er uendret fra forrige versjon)
             {
                 id: 'rm-swing',
                 name: "Riese & Müller Swing",
@@ -194,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 cargo_location: 'rear',
                 distance_km: [40, 110]
             },
-            // Tern Quick Haul D8 er allerede listet under Pendling, men passer også her.
             {
                 id: 'rm-multitinker',
                 name: "Riese & Müller Multitinker",
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
-    const loadingIndicator = document.getElementById('loading-indicator'); // Ny referanse
+    const loadingIndicator = document.getElementById('loading-indicator');
 
 
     // --- 4. Definisjoner for Trinn og Alternativer ---
@@ -302,10 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 { id: 'frontlaster', label: 'Frontlaster', image: 'https://via.placeholder.com/80x60.png?text=Front', description: 'Lasteboks foran', className: 'cargo-type' }, // Bytt ut bilde!
                 { id: 'langhale', label: 'Langhale (Longtail)', image: 'https://via.placeholder.com/80x60.png?text=Rear', description: 'Forlenget bagasjebrett bak', className: 'cargo-type' } // Bytt ut bilde!
             ],
-            condition: () => selections.purpose === 'transport' // Betingelse for å vise trinnet
+            condition: () => selections.purpose === 'transport'
         }
     ];
-    totalSteps = calculateTotalVisibleSteps(); // Sett totalt antall trinn basert på initielle forhold
+    totalSteps = calculateTotalVisibleSteps();
 
 
     // --- 5. Hjelpefunksjoner ---
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProgress() {
         const currentVisibleStep = calculateCurrentVisibleStep();
-        const totalVisibleSteps = calculateTotalVisibleSteps(); // Beregn på nytt i tilfelle forhold endres
+        const totalVisibleSteps = calculateTotalVisibleSteps();
 
         const progressPercentage = totalVisibleSteps > 0 ? (currentVisibleStep / totalVisibleSteps) * 100 : 0;
         progressBar.style.width = `${progressPercentage}%`;
@@ -482,51 +482,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // OPPDatert updateView for å håndtere loading state bedre
     function updateView() {
-        if (showRecommendationsView) { // Når vi er i resultatvisning (eller loading)
+        if (showRecommendationsView) {
             questionsSection.classList.add('hidden');
             recommendationsSection.classList.remove('hidden');
-            // Selve visningen av loader vs output håndteres nå i generateAndShowRecommendations
             renderSentence(summarySentenceFinal);
-        } else { // Når vi viser spørsmål
+        } else {
             questionsSection.classList.remove('hidden');
-            recommendationsSection.classList.add('hidden'); // Skjul hele resultatseksjonen
-            loadingIndicator.classList.add('hidden'); // Sørg for at loader er skjult
-            recommendationsOutput.classList.add('hidden'); // Sørg for at output er skjult
+            recommendationsSection.classList.add('hidden');
+            loadingIndicator.classList.add('hidden');
+            recommendationsOutput.classList.add('hidden');
             renderSentence(sentenceBuilder);
             renderOptions();
             backButton.classList.toggle('hidden', calculateCurrentVisibleStep() <= 1);
         }
         totalSteps = calculateTotalVisibleSteps();
-        updateProgress(); // Oppdater progressbar uansett view
+        updateProgress();
     }
 
     // --- 7. Logikk for Anbefalinger (Oppdatert regelbasert + Loading) ---
     function generateAndShowRecommendations() {
         console.log("Starter generering av anbefalinger...");
 
-        // 0. Forbered visning av laster
-        showRecommendationsView = true; // Sett state til resultatvisning
-        questionsSection.classList.add('hidden'); // Skjul spørsmål
-        recommendationsSection.classList.remove('hidden'); // Vis resultatseksjon-containeren
-        recommendationsOutput.classList.add('hidden'); // Skjul selve resultatlisten foreløpig
-        loadingIndicator.classList.remove('hidden'); // VIS LASTEREN!
-        renderSentence(summarySentenceFinal); // Oppdater setningen med en gang
+        showRecommendationsView = true;
+        questionsSection.classList.add('hidden');
+        recommendationsSection.classList.remove('hidden');
+        recommendationsOutput.classList.add('hidden');
+        loadingIndicator.classList.remove('hidden');
+        renderSentence(summarySentenceFinal);
 
-        // Scroll til resultatseksjonen så brukeren ser lasteren
         recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        // --- SIMULER EN LITEN FORSINKELSE (f.eks. 750ms = 0.75 sek) ---
         setTimeout(() => {
             console.log("Utfører filtrering/sortering...");
 
-            // 1. Start med sykler som matcher valgt formål
             let potentialMatches = BikeCatalog.evoOriginal.filter(bike =>
                 bike.purpose && bike.purpose.includes(selections.purpose)
             );
 
-            // 2. Spesialfiltrering for 'transport'
             if (selections.purpose === 'transport' && selections.cargoLocation) {
                 potentialMatches = potentialMatches.filter(bike => {
                     const targetLocation = selections.cargoLocation === 'frontlaster' ? 'front' : 'rear';
@@ -534,7 +527,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // 3. Valgfri Sortering (prioriter match på rammetype)
             if (selections.frameType) {
                 const frameMap = { dypGjennomgang: 'low-step', lavtTopprør: 'mid-step', høytTopprør: 'high-step' };
                 const desiredFrameInternal = frameMap[selections.frameType];
@@ -547,18 +539,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // 4. Begrens til topp 3 resultater
             recommendations = potentialMatches.slice(0, 3);
             console.log("Endelige anbefalinger funnet:", recommendations.map(b => b.name));
 
-            // 5. Skjul lasteren
             loadingIndicator.classList.add('hidden');
+            renderRecommendations();
+            recommendationsOutput.classList.remove('hidden');
 
-            // 6. Render og vis de faktiske anbefalingene
-            renderRecommendations(); // Fyll inn resultatlisten
-            recommendationsOutput.classList.remove('hidden'); // VIS resultatlisten
-
-        }, 750); // Juster ventetid ved behov
+        }, 750); // Ventetid
     }
 
 
@@ -567,7 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selections[stepId] = value;
         console.log("Valg oppdatert:", selections);
 
-        currentStep++; // Gå til neste logiske trinn index
+        currentStep++;
 
         let nextStepDef = steps[currentStep - 1];
         while(nextStepDef && nextStepDef.condition && !nextStepDef.condition()) {
@@ -576,23 +564,20 @@ document.addEventListener('DOMContentLoaded', () => {
             nextStepDef = steps[currentStep - 1];
         }
 
-        // Sjekk om vi er ferdige ved å se om neste *synlige* trinn finnes
-        const nextVisibleStepNum = calculateCurrentVisibleStep(); // Hva er nummeret på det trinnet vi *skal* til?
+        const nextVisibleStepNum = calculateCurrentVisibleStep();
         const totalVisibleSteps = calculateTotalVisibleSteps();
 
-        if (nextVisibleStepNum > totalVisibleSteps) { // Hvis neste synlige trinn er *etter* totalt antall synlige
+        if (nextVisibleStepNum > totalVisibleSteps) {
              console.log("Alle trinn fullført, viser resultater.");
              generateAndShowRecommendations();
         } else {
-             updateView(); // Oppdater til neste spørsmål
+             updateView();
          }
     }
 
    function handleBack() {
         if (showRecommendationsView) {
              showRecommendationsView = false;
-             // Trenger ikke nødvendigvis justere currentStep her,
-             // calculateCurrentVisibleStep vil gi oss siste spørsmålsnummer
              updateView();
          } else {
              let previousVisibleStepIndex = -1;
