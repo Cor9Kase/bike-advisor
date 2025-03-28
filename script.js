@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: "En kompakt elsykkel som kombinerer bysykkelens smidighet med god lastkapasitet. Lett å manøvrere i bytrafikk og tar liten plass.", // Litt justert beskrivelse
                 features: ["400 Wh batteri", "Bosch Performance Line motor", "Kompakt", "Ergonomisk sittestilling", "Robust ramme", "50 kg lastkapasitet (bak)"], // Oppdatert motor-info muligens? Sjekk gjerne spesifikasjoner for P9 vs D8
                 price: "37 000 kr", // Oppdatert pris
-                image: "https://evoelsykler.no/wp-content/uploads/2024/06/Quick-Haul-H9-gronn.jpg", // Oppdatert bilde-URL (Merk: URL nevner H9)
+                image: "https://www.ternbicycles.com/sites/default/files/2022-02/22-TN-ani-QuickHaul-configurations-v02.gif", // Oppdatert bilde-URL (Merk: URL nevner H9)
                 productUrl: "https://evoelsykler.no/produkt/tern-quick-haul-p9-400/?attribute_pa_farge=gronn&gad_source=1&gclid=Cj0KCQjwkZm_BhDrARIsAAEbX1FuNlRzuUBlKTbajjzWES0zb_flPmbDMd6jEmIoL5cFOZ0au9sEUOwaAnneEALw_wcB&gclsrc=aw.ds", // Oppdatert produkt-URL
                 frame_types: ['low-step'],
                 speed_kmh: 25,
