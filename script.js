@@ -1,83 +1,229 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. Data (Fra React-eksempelet, justert litt) ---
-    // VIKTIG: Bytt ut placeholder-URLer med ekte bilde-URLer!
-    // VIKTIG: Bruk KUN Evo-sykler her. Dette er Riese & Müller / Tern eksempler.
+    // --- 1. Data (Riese & Müller / Tern Eksempler) ---
+    // VIKTIG: Bytt ut placeholder-URLer med ekte bilde-URLer og produktlenker!
+    // VIKTIG: Bytt ut prisformat (€) til kr hvis ønskelig.
     const BikeCatalog = {
-        // OBS: Dette MÅ erstattes med Evo's sykler og deres egenskaper!
-        // Eksempel på struktur for Evo:
-         evoOriginal: [ // Eller kall det 'allBikes'
-             {
-                id: 'evo-flex',
-                name: "Evo Flex",
-                purpose: ['city', 'commute', 'compact'], // Bruksområder
-                distance_km: [0, 40], // Min/maks typisk rekkevidde eller egnethet
-                speed_kmh: 25, // 25 for pedelec, 45 for S-pedelec
-                cargo_capacity: 'small', // 'none', 'small', 'medium', 'large'
-                frame_types: ['low-step', 'mid-step'], // Tilgjengelige rammer
-                cargo_location: null, // 'front', 'rear' (for lastesykler)
-                description: "En kompakt og fleksibel bysykkel, perfekt for kortere turer og enkel oppbevaring.",
-                features: ["Kompakt design", "Lett ramme", "Integrert batteri", "Enkel å manøvrere"],
-                price: "24990 kr", // Eksempelpris
-                image: "https://via.placeholder.com/300x180.png?text=Evo+Flex", // Bytt ut!
-                productUrl: "#" // Bytt ut!
-             },
-             {
-                id: 'evo-explore',
-                name: "Evo Explore",
-                purpose: ['trekking', 'commute', 'leisure'],
-                distance_km: [20, 80],
+        evoOriginal: [
+            // Pendling
+            {
+                id: 'rm-charger4-gt',
+                name: "Riese & Müller Charger4 GT",
+                purpose: ['pendling', 'trekking'],
+                description: "Et ypperlig pendlervalg med integrert 750 Wh batteri som gir lang rekkevidde og kraftig Bosch-motor for høy marsjfart. Dempegaffel og dempet setepinne sørger for komfort selv på ujevn asfalt.",
+                features: ["750 Wh batteri", "Kraftig Bosch-motor", "Dempegaffel", "Dempet setepinne", "Kontinuerlig kjørelys"],
+                price: "5,699.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Charger4+GT", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['high-step', 'mid-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'small',
+                cargo_location: null,
+                distance_km: [40, 120]
+            },
+            {
+                id: 'tern-quick-haul-d8',
+                name: "Tern Quick Haul D8",
+                purpose: ['pendling', 'bybruk', 'allsidig', 'transport'],
+                description: "En kompakt elsykkel som kombinerer bysykkelens smidighet med noe lastkapasitet. Lett å manøvrere i bytrafikk og tar liten plass på kontoret eller i boden.",
+                features: ["400 Wh batteri", "Bosch-motor", "Kompakt", "Ergonomisk sittestilling", "Robust ramme", "50 kg lastkapasitet (bak)"],
+                price: "3,499.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Quick+Haul+D8", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['low-step'],
                 speed_kmh: 25,
                 cargo_capacity: 'medium',
+                cargo_location: 'rear',
+                distance_km: [20, 70]
+            },
+            {
+                id: 'rm-roadster',
+                name: "Riese & Müller Roadster",
+                purpose: ['pendling', 'bybruk'],
+                description: "En sporty pendlesykkel med slank, tradisjonell ramme. Den er rask og lettkjørt, med en sterk Bosch Performance-motor som gir rask akselerasjon.",
+                features: ["Bosch Performance-motor", "Slank ramme", "Fremoverlent kjørestilling", "Smalere dekk", "Dempegaffel"],
+                price: "4,499.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Roadster", // Bytt ut!
+                productUrl: "#", // Bytt ut!
                 frame_types: ['high-step', 'mid-step'],
-                cargo_location: null,
-                description: "Allsidig tursykkel som takler både asfalt og grusveier. God komfort for lengre turer.",
-                features: ["Kraftig motor", "Stort batteri", "Komfortabel sittestilling", "Bagasjebærer"],
-                price: "34990 kr",
-                image: "https://via.placeholder.com/300x180.png?text=Evo+Explore", // Bytt ut!
-                productUrl: "#" // Bytt ut!
-             },
-              {
-                id: 'evo-cargo-king',
-                name: "Evo Cargo King",
-                purpose: ['transport', 'family', 'business'],
-                distance_km: [10, 60],
                 speed_kmh: 25,
-                cargo_capacity: 'large', // Eller 'massive'
-                frame_types: ['cargo'], // Egen type?
-                cargo_location: 'front', // Eller 'rear' for longtail
-                description: "Robust lastesykkel designet for å frakte tung last, barn eller varer.",
-                features: ["Stor lastekapasitet", "Stabil ramme", "Kraftig motor for last", "Valgfritt tilbehør"],
-                price: "49990 kr",
-                image: "https://via.placeholder.com/300x180.png?text=Evo+Cargo+King", // Bytt ut!
-                productUrl: "#" // Bytt ut!
-             },
-             // ... Legg til ALLE relevante EVO-sykler her med så mye data som mulig
-        ],
-        // Struktur fra React-eksempelet beholdes for inspirasjon, men vi bruker 'evoOriginal' som kilde
-        byPurpose: {
-            // Disse kan potensielt genereres fra 'evoOriginal' eller defineres manuelt hvis logikken krever det
-            pendling: ['evo-explore', 'evo-flex'], // Referer til sykkel IDer
-            bybruk: ['evo-flex'],
-            terreng: [], // Legg til Evo terrengsykkel-IDer
-            transport: ['evo-cargo-king'],
-            allsidig: ['evo-explore'] // Eller en spesifikk modell?
-        },
-        // ... andre kategorier som byDistance, byFrame etc. kan også lages
-        // men det er kanskje enklere å filtrere direkte på egenskapene i 'evoOriginal'
+                cargo_capacity: 'small',
+                cargo_location: null,
+                distance_km: [30, 80]
+            },
+
+            // Bybruk
+            {
+                id: 'rm-swing',
+                name: "Riese & Müller Swing",
+                purpose: ['bybruk', 'leisure'],
+                description: "En klassisk komfort-elsykkel i retrostil, rettet mot bysykling i rolig tempo. Elegant buet lav-innstegsramme, dempegaffel og dempet setepinne.",
+                features: ["Lav-innstegsramme", "Dempegaffel", "Dempet setepinne", "Navgir og beltedrift", "Oppreist, avslappet sittestilling"],
+                price: "4,299.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Swing", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'small',
+                cargo_location: null,
+                distance_km: [30, 80]
+            },
+            {
+                id: 'tern-nbd',
+                name: "Tern NBD",
+                purpose: ['bybruk', 'leisure', 'allsidig'],
+                description: "Terns 'Near Busy Dad' (NBD) er en superlav innstegs elsykkel utformet for enkelhet og komfort i byen. Med ultralav ramme er det enkelt å sette føttene flatt i bakken.",
+                features: ["Ultralav ramme (39 cm steg)", "Bosch Active Plus-motor", "Tykkere dekk", "Dempepinne i setet", "Brukervennlig"],
+                price: "3,999.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=NBD", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'small',
+                cargo_location: null,
+                distance_km: [25, 70]
+            },
+            {
+                id: 'rm-nevo4',
+                name: "Riese & Müller Nevo4",
+                purpose: ['bybruk', 'pendling', 'trekking', 'allsidig'],
+                description: "En kombinasjon av komfort og allsidighet i et lavt innsteg-design. Gjennomstegsramme som gjør av- og påstigning enkelt.",
+                features: ["Gjennomstegsramme", "Bosch CX-motor", "625-750 Wh batteri", "Solid bagasjebrett", "Dempet forgaffel"],
+                price: "4,799.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Nevo4", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['low-step', 'mid-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'medium',
+                cargo_location: 'rear',
+                distance_km: [40, 110]
+            },
+
+            // Terreng
+            {
+                id: 'rm-delite-mountain',
+                name: "Riese & Müller Delite Mountain",
+                purpose: ['terreng', 'mtb'],
+                description: "En fulldempet terreng-elsykkel bygget for eventyr i høy hastighet. Fox Float bakdemper og 150 mm vandring foran, som sammen med en kraftig Bosch Performance CX-motor.",
+                features: ["Fox Float bakdemper", "150mm vandring", "Bosch Performance CX-motor", "High Speed-klar", "Ekstremt kapabel offroad"],
+                price: "6,999.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Delite+Mountain", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['high-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'none',
+                cargo_location: null,
+                distance_km: [35, 90]
+            },
+            {
+                id: 'rm-superdelite',
+                name: "Riese & Müller Superdelite",
+                purpose: ['terreng', 'trekking', 'pendling'],
+                description: "'Super'-versjonen av Delite kommer med dobbelt batteri (1125 Wh totalt) for ekstra lang rekkevidde på raske turer. Skapt for de lengste og mest krevende turene.",
+                features: ["Dobbelt batteri (1125 Wh)", "Full demping", "Rohloff elektronisk gir", "ABS-bremser (opsjon)", "DualBattery-teknologi"],
+                price: "7,999.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Superdelite", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['high-step', 'mid-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'small',
+                cargo_location: null,
+                distance_km: [60, 180]
+            },
+
+            // Transport
+            {
+                id: 'rm-load4-60',
+                name: "Riese & Müller Load4 60",
+                purpose: ['transport', 'family'],
+                description: "En premium lastesykkel med frontmontert lasteplan og fulldempet ramme. Takler tung last (f.eks. to barn i kasse med kalesje) uten å kompromisse på stabilitet eller kjøreglede.",
+                features: ["Bosch Cargo Line-motor", "Fulldempet", "Frontmontert lasteplan", "Lavt tyngdepunkt", "Høy stabilitet"],
+                price: "7,299.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Load4+60", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['cargo'],
+                speed_kmh: 25,
+                cargo_capacity: 'massive',
+                cargo_location: 'front',
+                distance_km: [30, 80]
+            },
+            {
+                id: 'tern-gsd-s10',
+                name: "Tern GSD S10",
+                purpose: ['transport', 'family', 'allsidig'],
+                description: "Terns velkjente longtail-lastesykkel, designet for å erstatte bilen i hverdagen. Kompakt format men kan frakte opp til to barn eller store varemengder på det forlengede bakre lasteplanet.",
+                features: ["Bosch Cargo-motor", "Mulighet for doble batterier", "Kompakt format", "Tilbehør for barn og hund", "Garasjevennlig størrelse"],
+                price: "5,499.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=GSD+S10", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['cargo-longtail'],
+                speed_kmh: 25,
+                cargo_capacity: 'massive',
+                cargo_location: 'rear',
+                distance_km: [30, 100]
+            },
+            {
+                id: 'rm-packster-70',
+                name: "Riese & Müller Packster 70",
+                purpose: ['transport', 'family', 'business'],
+                description: "En frontlaster spesialdesignet for familier og varelevering. Romslig transportboks foran med benker til barn og sikkerhetsbelter.",
+                features: ["Bosch Performance CX-motor", "Stort lastevolum", "Familievennlig", "Tilbehør for ulike behov", "God balanse mellom pris og funksjonalitet"],
+                price: "6,699.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Packster+70", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['cargo'],
+                speed_kmh: 25,
+                cargo_capacity: 'massive',
+                cargo_location: 'front',
+                distance_km: [30, 80]
+            },
+
+            // Allsidig
+            {
+                id: 'rm-multicharger2',
+                name: "Riese & Müller Multicharger2",
+                purpose: ['allsidig', 'transport', 'trekking', 'family'],
+                description: "Bygget for å takle flere oppgaver. En miks av terrengsykkel og longtail-lastesykkel med utvidet bagasjebrett som kan ta barneseter eller sidevesker med varer.",
+                features: ["Bosch CX-motor", "Opptil 750 Wh batteri", "Family-utgave med barneseter", "Sidevesker", "Offroad-kapasitet"],
+                price: "5,868.60 €",
+                image: "https://via.placeholder.com/300x180.png?text=Multicharger2", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['high-step', 'mid-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'large',
+                cargo_location: 'rear',
+                distance_km: [40, 110]
+            },
+            // Tern Quick Haul D8 er allerede listet under Pendling, men passer også her.
+            {
+                id: 'rm-multitinker',
+                name: "Riese & Müller Multitinker",
+                purpose: ['allsidig', 'bybruk', 'transport', 'family'],
+                description: "En ultraversatil bysykkel med kompakte 20' hjul og lang akselavstand med integrert bagasjebrett, noe som gir lavt tyngdepunkt og stabilitet med last.",
+                features: ["Kompakte 20' hjul", "Last opp til 100 kg", "To barn bakpå", "Kort for bysykling", "Fullt utstyrt"],
+                price: "4,999.00 €",
+                image: "https://via.placeholder.com/300x180.png?text=Multitinker", // Bytt ut!
+                productUrl: "#", // Bytt ut!
+                frame_types: ['low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'large',
+                cargo_location: 'rear',
+                distance_km: [30, 80]
+            }
+        ]
     };
 
 
     // --- 2. State Variabler ---
     let currentStep = 1;
-    let totalSteps = 6; // Antall trinn totalt (juster etter dine spørsmål)
+    let totalSteps = 6; // Startverdi, justeres dynamisk
     let selections = {
-        purpose: null, // 'pendling', 'bybruk', 'terreng', 'transport', 'allsidig'
-        distance: null, // 'kort', 'medium', 'lang'
-        bikeType: null, // 'standard', 'highSpeed'
-        cargo: null, // 'små', 'store', 'massiv'
-        frameType: null, // 'dypGjennomgang', 'lavtTopprør', 'høytTopprør'
-        cargoLocation: null // 'frontlaster', 'langhale' (kun for 'transport')
+        purpose: null,
+        distance: null,
+        bikeType: null,
+        cargo: null,
+        frameType: null,
+        cargoLocation: null
     };
     let recommendations = [];
     let showRecommendationsView = false;
@@ -110,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { id: 'bybruk', label: 'Være ute i byen / Koseturer' },
                 { id: 'terreng', label: 'Bevege meg utenfor veien (sti/grus)' },
                 { id: 'transport', label: 'Transportere mye (varer/barn)' },
-                { id: 'allsidig', label: 'En allsidig sykkel til "litt av alt"' } // Endret fra 'Spar plass'
+                { id: 'allsidig', label: 'En allsidig sykkel til "litt av alt"' }
             ]
         },
         { // Trinn 2
@@ -127,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Hvilken type el-sykkel ønsker du?',
             options: [
                 { id: 'standard', label: 'Standard elsykkel (opptil 25 km/t)' },
-                { id: 'highSpeed', label: 'S-Pedelec / Speed Bike (opptil 45 km/t)' } // Krever registrering etc.
+                { id: 'highSpeed', label: 'S-Pedelec / Speed Bike (opptil 45 km/t)' }
             ]
         },
         { // Trinn 4
@@ -152,22 +298,19 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'cargoLocation',
             title: 'Hvilken type lastesykkel ser du for deg?',
             options: [
-                // VIKTIG: Bytt ut placeholder bilder
-                { id: 'frontlaster', label: 'Frontlaster', image: 'https://via.placeholder.com/80x60.png?text=Front', description: 'Lasteboks foran', className: 'cargo-type' },
-                { id: 'langhale', label: 'Langhale (Longtail)', image: 'https://via.placeholder.com/80x60.png?text=Rear', description: 'Forlenget bagasjebrett bak', className: 'cargo-type' }
+                { id: 'frontlaster', label: 'Frontlaster', image: 'https://via.placeholder.com/80x60.png?text=Front', description: 'Lasteboks foran', className: 'cargo-type' }, // Bytt ut bilde!
+                { id: 'langhale', label: 'Langhale (Longtail)', image: 'https://via.placeholder.com/80x60.png?text=Rear', description: 'Forlenget bagasjebrett bak', className: 'cargo-type' } // Bytt ut bilde!
             ],
             condition: () => selections.purpose === 'transport' // Betingelse for å vise trinnet
         }
-        // Legg til flere trinn her om nødvendig
     ];
-    totalSteps = steps.filter(step => !step.condition || step.condition()).length; // Juster totalt antall trinn basert på initielle forhold
+    totalSteps = calculateTotalVisibleSteps(); // Sett totalt antall trinn basert på initielle forhold
 
 
     // --- 5. Hjelpefunksjoner ---
     function getStepDefinition(stepNum) {
         let visibleStepIndex = 0;
         for (const stepDef of steps) {
-            // Sjekk om trinnet er betinget og om betingelsen er oppfylt
             const isConditional = typeof stepDef.condition === 'function';
             if (!isConditional || stepDef.condition()) {
                 visibleStepIndex++;
@@ -176,17 +319,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        return null; // Fant ikke trinnet
+        return null;
     }
 
     function getLabelById(optionsArray, id) {
         const option = optionsArray.find(opt => opt.id === id);
-        return option ? option.label : `[${id}]`; // Returner ID hvis label ikke finnes
+        return option ? option.label : `[${id}]`;
     }
 
     function updateProgress() {
         const currentVisibleStep = calculateCurrentVisibleStep();
-        const totalVisibleSteps = calculateTotalVisibleSteps();
+        const totalVisibleSteps = calculateTotalVisibleSteps(); // Beregn på nytt i tilfelle forhold endres
 
         const progressPercentage = totalVisibleSteps > 0 ? (currentVisibleStep / totalVisibleSteps) * 100 : 0;
         progressBar.style.width = `${progressPercentage}%`;
@@ -195,13 +338,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
      function calculateCurrentVisibleStep() {
         let visibleStepCount = 0;
-        for (let i = 0; i < currentStep; i++) {
+         // Gå gjennom trinnene opp til (men ikke inkludert) det logiske currentStep
+         for (let i = 0; i < currentStep; i++) {
             const stepDef = steps[i];
-             if (!stepDef.condition || stepDef.condition()) {
+            // Hvis trinnet ikke har en betingelse ELLER betingelsen er oppfylt
+             if (!stepDef || !stepDef.condition || stepDef.condition()) {
                  visibleStepCount++;
              }
-        }
-        return visibleStepCount;
+         }
+         // Returnerer 1 for første trinn, 2 for andre synlige trinn, etc.
+         // Hvis currentStep er 1, returnerer den 1 (siden løkken ikke kjører)
+         return Math.max(1, visibleStepCount); // Sørg for at vi minst returnerer 1
     }
 
     function calculateTotalVisibleSteps() {
@@ -217,56 +364,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 6. Rendering Funksjoner ---
 
-    // Oppdaterer setningsbyggeren
     function renderSentence(targetElement) {
         const purposeLabel = selections.purpose ? `<span class="selected-value">${getLabelById(steps[0].options, selections.purpose)}</span>` : `<span class="placeholder">bruksområde</span>`;
         const distanceLabel = selections.distance ? `<span class="selected-value">${getLabelById(steps[1].options, selections.distance)}</span>` : `<span class="placeholder">reiseavstand</span>`;
         const bikeTypeLabel = selections.bikeType ? `<span class="selected-value">${getLabelById(steps[2].options, selections.bikeType)}</span>` : `<span class="placeholder">sykkeltype</span>`;
-        const cargoLabel = selections.cargo ? ` Jeg transporterer ofte <span class="selected-value">${getLabelById(steps[3].options, selections.cargo)}</span>` : '';
-        const frameTypeLabel = selections.frameType ? ` Foretrekker en ramme med <span class="selected-value">${getLabelById(steps[4].options, selections.frameType)}</span>` : '';
-        const cargoLocationLabel = selections.cargoLocation && selections.purpose === 'transport' ? ` med <span class="selected-value">${getLabelById(steps[5].options, selections.cargoLocation)}</span>` : '';
+
+        let details = "";
+        if (selections.cargo) {
+             details += ` Jeg transporterer ofte <span class="selected-value">${getLabelById(steps[3].options, selections.cargo)}</span>`;
+        }
+         if (selections.purpose === 'transport' && selections.cargoLocation) {
+            details += ` med <span class="selected-value">${getLabelById(steps[5].options, selections.cargoLocation)}</span>`;
+        }
+         if (selections.frameType) {
+            details += `. Foretrekker en ramme med <span class="selected-value">${getLabelById(steps[4].options, selections.frameType)}</span>`;
+        }
 
         targetElement.innerHTML = `
             <p>Med min sykkel ønsker jeg først og fremst ${purposeLabel}
             og planlegger regelmessige reiser på ${distanceLabel}.
-            Jeg ønsker ${bikeTypeLabel}.
-            ${cargoLabel}${cargoLocationLabel}${frameTypeLabel}.</p>
+            Jeg ønsker ${bikeTypeLabel}.${details}.</p>
         `;
     }
 
-    // Viser alternativene for det gjeldende trinnet
     function renderOptions() {
-        const stepDef = getStepDefinition(currentStep);
+         // Først, beregn hvilket *synlig* trinn vi er på
+         const currentVisibleStepNum = calculateCurrentVisibleStep();
+         const stepDef = getStepDefinition(currentVisibleStepNum); // Hent definisjon basert på synlig trinnnummer
+
         if (!stepDef) {
-            console.error("Kunne ikke finne definisjon for trinn:", currentStep);
-            // Kanskje vise feilmelding eller gå til resultater?
-             generateAndShowRecommendations();
+            console.error("Kunne ikke finne definisjon for synlig trinn:", currentVisibleStepNum, "(logisk trinn:", currentStep, ")");
+             generateAndShowRecommendations(); // Gå til resultater hvis vi er "ferdig"
             return;
         }
 
         stepTitle.textContent = stepDef.title;
-        stepOptions.innerHTML = ''; // Tøm forrige innhold
+        stepOptions.innerHTML = '';
 
         stepDef.options.forEach(option => {
             const button = document.createElement('button');
             button.classList.add('option-button');
-            if(option.className) { // For spesielle klasser som 'cargo-type'
+            if(option.className) {
                  button.classList.add(option.className);
             }
-            button.dataset.value = option.id; // Lagre ID-en
+            button.dataset.value = option.id;
 
             let buttonContent = ``;
              if(option.image){
                  buttonContent += `<img src="${option.image}" alt="${option.label}">`;
              }
-             buttonContent += `<div>${option.label}</div>`; // Selve teksten
+             buttonContent += `<div>${option.label}</div>`;
 
              if (option.description) {
                 buttonContent += `<div class="description">${option.description}</div>`;
             }
-
             button.innerHTML = buttonContent;
-
 
             if (selections[stepDef.id] === option.id) {
                 button.classList.add('selected');
@@ -276,15 +428,14 @@ document.addEventListener('DOMContentLoaded', () => {
             stepOptions.appendChild(button);
         });
 
-        // Oppdater fremdrift
         updateProgress();
     }
 
-    // Viser anbefalingene
      function renderRecommendations() {
-        recommendationsOutput.innerHTML = ''; // Tøm gamle
+        recommendationsOutput.innerHTML = '';
 
         if (recommendations.length === 0) {
+            // Bruker HTML som vist i brukerens bilde
             recommendationsOutput.innerHTML = '<p>Beklager, vi fant ingen Evo-sykler som matchet alle dine valg. Prøv å justere valgene dine, eller kontakt oss for veiledning.</p>';
             return;
         }
@@ -312,7 +463,6 @@ document.addEventListener('DOMContentLoaded', () => {
                  </div>`;
             }
 
-
             card.innerHTML = `
                 ${badgeText ? `<div class="recommendation-badge">${badgeText}</div>` : ''}
                 <div class="recommendation-image-container">
@@ -328,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <div class="recommendation-buttons">
                              <a href="${bike.productUrl || '#'}" target="_blank" class="button button-secondary">Se detaljer</a>
-                            <!-- <button class="button button-primary">Konfigurer</button> -->
+                             <!-- <button class="button button-primary">Konfigurer</button> -->
                         </div>
                     </div>
                 </div>
@@ -337,129 +487,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Styrer hvilken "view" som vises (spørsmål eller resultater)
     function updateView() {
         if (showRecommendationsView) {
             questionsSection.classList.add('hidden');
             recommendationsSection.classList.remove('hidden');
-            renderSentence(summarySentenceFinal); // Vis endelig setning
+            renderSentence(summarySentenceFinal);
             renderRecommendations();
-            advisorContainer.scrollIntoView({ behavior: 'smooth' }); // Scroll til toppen av containeren
+            advisorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
             questionsSection.classList.remove('hidden');
             recommendationsSection.classList.add('hidden');
-            renderSentence(sentenceBuilder); // Vis setning under bygging
+            renderSentence(sentenceBuilder);
             renderOptions();
-            // Vis/skjul tilbakeknapp
-            backButton.classList.toggle('hidden', currentStep === 1);
+            // Vis/skjul tilbakeknapp basert på *synlig* trinnnummer
+            backButton.classList.toggle('hidden', calculateCurrentVisibleStep() <= 1);
         }
+        // Sørg for at totalt antall trinn er oppdatert
+        totalSteps = calculateTotalVisibleSteps();
+        updateProgress(); // Oppdater progressbar uansett view
     }
 
-    // --- 7. Logikk for Anbefalinger ---
+    // --- 7. Logikk for Anbefalinger (Oppdatert regelbasert) ---
     function generateAndShowRecommendations() {
-         console.log("Genererer anbefalinger basert på:", selections); // Debugging
+        console.log("Genererer anbefalinger basert på:", selections);
 
-         // *** Start avansert filtrering/scoring (Eksempel) ***
-         const scoredBikes = BikeCatalog.evoOriginal.map(bike => {
-             let score = 0;
-             let matchReasons = []; // For debugging/forklaring
+        // 1. Start med sykler som matcher valgt formål
+        let potentialMatches = BikeCatalog.evoOriginal.filter(bike =>
+            bike.purpose && bike.purpose.includes(selections.purpose)
+        );
+        console.log(`Fant ${potentialMatches.length} sykler for formål: ${selections.purpose}`);
 
-             // 1. Formål (Viktigste?) - Gi høy score for primærtreff, lavere for sekundærtreff
-             if (bike.purpose.includes(selections.purpose)) {
-                 score += 10;
-                 matchReasons.push(`Passer formål (${selections.purpose})`);
-                 if(bike.purpose[0] === selections.purpose) { // Hvis det er listet som #1 formål
-                    score += 5;
-                    matchReasons.push("Primært formål");
-                 }
-             } else {
-                 score -= 20; // Straff hvis formålet ikke matcher i det hele tatt?
-                 matchReasons.push(`Passer IKKE formål (${selections.purpose})`);
-             }
+        // 2. Spesialfiltrering for 'transport' basert på 'cargoLocation'
+        if (selections.purpose === 'transport' && selections.cargoLocation) {
+            console.log(`Filtrerer transport-sykler for lastetype: ${selections.cargoLocation}`);
+            potentialMatches = potentialMatches.filter(bike => {
+                const targetLocation = selections.cargoLocation === 'frontlaster' ? 'front' : 'rear';
+                return bike.cargo_location === targetLocation;
+            });
+            console.log(`Etter lastetype-filter: ${potentialMatches.length} sykler igjen.`);
+        }
 
-             // 2. Distanse - Sjekk om brukerens valg er innenfor sykkelens range
-             const distanceMap = { kort: 20, medium: 50, lang: 100 }; // Max km for kategori
-             const userMaxDistance = distanceMap[selections.distance] || 50;
-             if (bike.distance_km && bike.distance_km[1] >= userMaxDistance * 0.8) { // Sykkelens maks rekkevidde er minst 80% av brukerens ønske
-                 score += 5;
-                 matchReasons.push(`Passende rekkevidde (>=${Math.round(userMaxDistance * 0.8)}km)`);
-                 if(bike.distance_km[1] >= userMaxDistance) score += 3; // Bonus for full match
-             } else if (bike.distance_km) {
-                  matchReasons.push(`Rekkevidde (${bike.distance_km[1]}km) kanskje for kort for ${selections.distance} (${userMaxDistance}km)`);
-                  score -= 5; // Liten straff hvis for kort
-             }
+        // 3. Valgfri Sortering (prioriter match på rammetype hvis valgt)
+        if (selections.frameType) {
+            const frameMap = { dypGjennomgang: 'low-step', lavtTopprør: 'mid-step', høytTopprør: 'high-step' };
+            const desiredFrameInternal = frameMap[selections.frameType];
 
-             // 3. Hastighet
-             const desiredSpeed = selections.bikeType === 'highSpeed' ? 45 : 25;
-             if (bike.speed_kmh === desiredSpeed) {
-                 score += 8;
-                 matchReasons.push(`Riktig hastighet (${desiredSpeed}km/t)`);
-             } else if (desiredSpeed === 45 && bike.speed_kmh === 25) {
-                  score -= 15; // Stor straff hvis man vil ha speed, men sykkelen ikke er det
-                 matchReasons.push(`FEIL hastighet (ønsket ${desiredSpeed}km/t)`);
-             } else if (desiredSpeed === 25 && bike.speed_kmh === 45) {
-                 // Mindre viktig, men kan være en faktor? Kanskje nøytral.
-                 matchReasons.push(`Overkvalifisert hastighet (er ${bike.speed_kmh}km/t)`);
-             }
+            potentialMatches.sort((a, b) => {
+                const aMatchesFrame = a.frame_types && a.frame_types.includes(desiredFrameInternal);
+                const bMatchesFrame = b.frame_types && b.frame_types.includes(desiredFrameInternal);
 
+                if (aMatchesFrame && !bMatchesFrame) return -1;
+                if (!aMatchesFrame && bMatchesFrame) return 1;
+                return 0;
+            });
+            console.log("Sortert basert på rammetype-match (hvis valgt).");
+        }
+        // Andre sorteringer kan legges til her (f.eks. på pris, batteri...)
 
-             // 4. Lastekapasitet
-             const cargoMap = { små: 1, store: 2, massiv: 3 };
-             const bikeCargoLevel = bike.cargo_capacity ? (cargoMap[bike.cargo_capacity] || 0) : 0;
-             const userCargoLevel = selections.cargo ? (cargoMap[selections.cargo] || 0) : 0;
+        // 4. Begrens til topp 3 resultater
+        recommendations = potentialMatches.slice(0, 3);
+        console.log("Endelige anbefalinger:", recommendations.map(b => b.name));
 
-             if (bikeCargoLevel >= userCargoLevel) {
-                 score += 6;
-                 matchReasons.push(`Tilstrekkelig lastekapasitet (${bike.cargo_capacity} >= ${selections.cargo})`);
-                 if(bikeCargoLevel === userCargoLevel && userCargoLevel > 0) score += 2; // Bonus for nøyaktig match
-             } else if(userCargoLevel > 0) {
-                 score -= 8; // Straff hvis man trenger mer kapasitet enn sykkelen har
-                 matchReasons.push(`For liten lastekapasitet (${bike.cargo_capacity} < ${selections.cargo})`);
-             }
-
-             // 5. Rammetype - Gi poeng hvis *en av* sykkelens rammer matcher ønsket
-             if (bike.frame_types && bike.frame_types.length > 0 && selections.frameType) {
-                 const frameMap = { dypGjennomgang: 'low-step', lavtTopprør: 'mid-step', høytTopprør: 'high-step' };
-                 const desiredFrameInternal = frameMap[selections.frameType];
-                 if (bike.frame_types.includes(desiredFrameInternal)) {
-                     score += 7;
-                     matchReasons.push(`Ønsket rammetype (${selections.frameType}) tilgjengelig`);
-                 } else {
-                      // Liten straff hvis ønsket type ikke finnes for denne modellen
-                      score -= 3;
-                     matchReasons.push(`Ønsket rammetype (${selections.frameType}) IKKE tilgjengelig`);
-                 }
-             }
-
-
-             // 6. Lastetype (Kun for transport) - Match hvis bruker valgte transport OG lastetype
-             if (selections.purpose === 'transport' && selections.cargoLocation && bike.purpose.includes('transport')) {
-                 const cargoLocationMap = { frontlaster: 'front', langhale: 'rear' };
-                 const desiredLocationInternal = cargoLocationMap[selections.cargoLocation];
-                 if (bike.cargo_location === desiredLocationInternal) {
-                     score += 10; // Viktig match for lastesykler
-                     matchReasons.push(`Riktig lastetype (${selections.cargoLocation})`);
-                 } else {
-                     score -= 10; // Viktig feilmatch for lastesykler
-                      matchReasons.push(`FEIL lastetype (ønsket ${selections.cargoLocation})`);
-                 }
-             }
-
-             console.log(`Sykkel: ${bike.name}, Score: ${score}, Grunner: ${matchReasons.join(', ')}`); // Debugging
-             return { ...bike, score, matchReasons };
-
-         }).filter(bike => bike.score > 0); // Filtrer ut sykler med negativ score (passer dårlig)
-
-
-         // Sorter etter høyest score
-         scoredBikes.sort((a, b) => b.score - a.score);
-
-        // Ta de topp 3 (eller færre hvis det ikke er nok treff)
-        recommendations = scoredBikes.slice(0, 3);
-         console.log("Endelige anbefalinger:", recommendations); // Debugging
-
-         // *** Slutt avansert filtrering/scoring ***
-
+        // 5. Vis resultat-viewet
         showRecommendationsView = true;
         updateView();
     }
@@ -467,63 +556,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 8. Event Handlers ---
     function handleOptionSelect(stepId, value) {
-        // Fjern 'selected' fra andre knapper i samme trinn
-        const buttons = stepOptions.querySelectorAll('.option-button');
-        buttons.forEach(btn => btn.classList.remove('selected'));
-
-        // Legg til 'selected' på den klikkede knappen
-        const selectedButton = stepOptions.querySelector(`.option-button[data-value="${value}"]`);
-        if(selectedButton) selectedButton.classList.add('selected');
-
-
         // Oppdater state
         selections[stepId] = value;
         console.log("Valg oppdatert:", selections);
 
+        // Gå til neste logiske trinn
+        currentStep++;
 
-        // Gå til neste trinn eller vis resultater
-         const currentVisibleStep = calculateCurrentVisibleStep();
-         const totalVisibleSteps = calculateTotalVisibleSteps();
+         // Sjekk om neste trinn er betinget og ikke skal vises
+         let nextStepDef = steps[currentStep - 1]; // Husk 0-basert index
+         while(nextStepDef && nextStepDef.condition && !nextStepDef.condition()) {
+             console.log(`Hopper over betinget trinn ${currentStep}: ${nextStepDef.id}`);
+             currentStep++; // Hopp over dette trinnet
+             nextStepDef = steps[currentStep - 1];
+         }
 
-        if (currentVisibleStep < totalVisibleSteps) {
-            currentStep++; // Øk den *logiske* steg-telleren
-            updateView();
+        // Sjekk om vi er ferdige (currentStep er nå *etter* siste synlige trinn)
+        if (currentStep > steps.length) { // Eller en mer robust sjekk basert på synlige trinn
+             console.log("Alle trinn fullført, viser resultater.");
+             generateAndShowRecommendations();
         } else {
-            generateAndShowRecommendations();
-        }
+             // Gå til neste trinn (eller det første etter overhoppede)
+             updateView();
+         }
     }
 
-    function handleBack() {
-         if (currentStep > 1) {
-            // Finn det *faktiske* forrige synlige trinnet
-            let previousStepIndex = -1;
-            let visibleCount = 0;
-            for(let i = 0; i < steps.length; i++){
-                const stepDef = steps[i];
-                 if (!stepDef.condition || stepDef.condition()){
-                     visibleCount++;
-                     if(visibleCount === calculateCurrentVisibleStep() -1) {
-                         previousStepIndex = i;
-                         break;
+
+   function handleBack() {
+        if (showRecommendationsView) {
+             // Går tilbake fra resultatvisning til siste spørsmål
+             showRecommendationsView = false;
+             // currentStep er allerede forbi siste trinn, trenger ikke endre det
+             updateView();
+         } else {
+             // Går tilbake mellom spørsmål
+             // Må finne det *forrige* synlige trinnet
+             let previousVisibleStepIndex = -1;
+             let targetVisibleStepNum = calculateCurrentVisibleStep() - 1; // Vi vil til det *forrige* synlige
+
+             if (targetVisibleStepNum >= 1) {
+                 let visibleStepCounter = 0;
+                 for (let i = 0; i < steps.length; i++) {
+                     const stepDef = steps[i];
+                     if (!stepDef.condition || stepDef.condition()) {
+                         visibleStepCounter++;
+                         if (visibleStepCounter === targetVisibleStepNum) {
+                             previousVisibleStepIndex = i;
+                             break;
+                         }
                      }
                  }
-            }
 
-             if(previousStepIndex !== -1){
-                 currentStep = previousStepIndex + 1; // Sett currentStep til indeksen + 1
+                 if (previousVisibleStepIndex !== -1) {
+                     currentStep = previousVisibleStepIndex + 1; // Sett logisk trinn
+                     // Nullstill valget for trinnet vi går tilbake fra? Valgfritt, men ofte lurt
+                     // const stepIdToReset = steps[currentStep]?.id; // Id for trinnet ETTER det vi går til
+                     // if(stepIdToReset) selections[stepIdToReset] = null;
 
-                 // Nullstill valget for det trinnet vi går *tilbake til*? Valgfritt.
-                 // const stepDef = getStepDefinition(currentStep);
-                 // if(stepDef) selections[stepDef.id] = null;
-
-                 showRecommendationsView = false; // Sørg for at vi viser spørsmål
-                 updateView();
+                     updateView();
+                 } else {
+                     console.warn("Kunne ikke finne forrige synlige trinn index.");
+                     resetAdvisor(); // Fallback
+                 }
              } else {
-                 console.log("Fant ikke forrige synlige trinn");
-                 resetAdvisor(); // Fallback hvis noe går galt
+                 console.log("Kan ikke gå tilbake fra første trinn.");
+                 // Tilbake-knappen skal være skjult her uansett via updateView()
              }
-
-        }
+         }
     }
 
     function resetAdvisor() {
@@ -533,7 +632,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         recommendations = [];
         showRecommendationsView = false;
-        updateView(); // Kall denne for å rendre første trinn på nytt
+        totalSteps = calculateTotalVisibleSteps(); // Resett totalt antall
+        updateView();
     }
 
 
@@ -543,6 +643,8 @@ document.addEventListener('DOMContentLoaded', () => {
     resetButtonFinal.addEventListener('click', resetAdvisor);
     currentYearSpan.textContent = new Date().getFullYear();
 
-    updateView(); // Vis det første trinnet når siden lastes
+    // Initial view setup
+    totalSteps = calculateTotalVisibleSteps(); // Beregn initielt antall trinn
+    updateView();
 
 });
