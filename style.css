@@ -477,3 +477,50 @@ body {
         justify-content: flex-start;
     }
 }
+
+/* Inne i style.css (legg til på slutten eller et logisk sted) */
+
+.loading-container {
+    display: flex; /* Bruk flexbox for enkel sentrering */
+    flex-direction: column; /* Stable spinner og tekst vertikalt */
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px; /* God luft rundt */
+    min-height: 200px; /* Sørger for at den tar litt plass */
+    text-align: center;
+    border: 1px solid #e9ecef; /* Valgfri ramme som matcher litt */
+    border-radius: 8px;
+    background-color: #f8f9fa; /* Litt annen bakgrunn */
+    margin-bottom: 30px; /* Samme som .recommendations-header */
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1); /* Lys grå kant */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #28a745; /* Grønn farge for spinner-delen */
+    animation: spin 1s ease infinite; /* Animasjon */
+    margin-bottom: 15px; /* Plass mellom spinner og tekst */
+}
+
+.loading-text {
+    font-size: 1.1em;
+    color: #495057; /* Mørk grå tekst */
+    font-weight: 500;
+}
+
+/* Selve animasjonen */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Sørg for at .hidden-klassen er definert (bør allerede være der) */
+.hidden {
+    display: none !important;
+}
