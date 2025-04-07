@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. Data (Komplett og oppdatert katalog) ---
-    const BikeCatalog = {
+   const BikeCatalog = {
         evoOriginal: [
             {
                 id: 'tern-quick-haul-p9',
                 name: "Quick Haul P9",
-                purpose: ['bybruk', 'transport', 'pendling', 'allsidig', 'family'], // Har 'allsidig'
-                description: "Kompakt og kraftig elsykkel med langt bagasjebrett (opptil 50 kg). Perfekt til både hverdag og småtransport – barn, handleposer eller hund. Brukervennlig, tilpassbar og solid bygget.",
-                features: ["Kompakt elsykkel", "Bagasjebrett (opptil 50 kg)", "Plass til 1 barn", "Brukervennlig & tilpassbar", "Solid bygget"],
+                purpose: ['bybruk', 'transport', 'pendling', 'allsidig', 'family'],
+                description: "Kompakt og kraftig elsykkel...",
+                features: ["Kompakt elsykkel", "Bagasjebrett (opptil 50 kg)", "Plass til 1 barn", "Brukervennlig & tilpassbar", "Solid bygget", "Bosch Performance Line motor", "400Wh batteri"], // Fjernet ?
                 price: "KR 29.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/06/Quick-Haul-H9-gronn-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/tern-quick-haul-p9-400/",
@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-multicharger2-mixte-gt-vario-family',
                 name: "Multicharger Mixte GT vario Family",
-                purpose: ['transport', 'pendling', 'allsidig', 'family', 'trekking'], // Har 'allsidig'
-                description: "Kraftig familiesykkel med plass til to barn og cargo foran. Beltedrift, trinnløst gir og 750 Wh batteri gir lang rekkevidde og lite vedlikehold. Lavt innsteg og komfortdemping.",
-                features: ["Plass til 2 barn", "Beltedrift (Gates Carbon)", "Enviolo trinnløst gir", "750 Wh batteri", "Mixte-ramme (lavt innsteg)", "Komfortdemping", "Bosch Performance CX?"],
+                purpose: ['transport', 'pendling', 'allsidig', 'family', 'trekking'],
+                description: "Kraftig familiesykkel...",
+                features: ["Plass til 2 barn", "Beltedrift (Gates Carbon)", "Enviolo trinnløst gir", "750 Wh batteri", "Mixte-ramme (lavt innsteg)", "Komfortdemping", "Bosch Performance CX motor"], // Fjernet ?
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/25_F01186_110402080714_MuCha2_Mixte_GT_Var_47_UGrey-Blk_SafetyBar_Kiox300_Cargo-1024x683.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-multicharger2-mixte-gt-vario-family/",
@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-multicharger2-mixte-gt-touring-family',
                 name: "Multicharger Mixte GT Touring Family",
-                purpose: ['transport', 'pendling', 'allsidig', 'family', 'trekking'], // Har 'allsidig'
-                description: "Allsidig elsykkel for familien – trygg transport av barn og last. 750 Wh batteri, Shimano XT-gir og lavt innsteg. Perfekt til både hverdag og helg.",
-                features: ["Trygg transport (barn/last)", "750 Wh batteri", "Shimano Deore XT 11-gir", "Mixte-ramme (lavt innsteg)", "Family Kit inkludert?", "Bosch Performance CX?"],
+                purpose: ['transport', 'pendling', 'allsidig', 'family', 'trekking'],
+                description: "Allsidig elsykkel for familien...",
+                features: ["Trygg transport (barn/last)", "750 Wh batteri", "Shimano Deore XT 11-gir", "Mixte-ramme (lavt innsteg)", "Family Kit inkludert", "Bosch Performance CX motor"], // Fjernet ? fra Kit og Motor
                 price: "KR 75.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Multicharger2-Mixte-GT-Vario-svart-prod-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-multicharger2-mixte-gt-touring-family/",
@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
              {
                 id: 'rm-multitinker-touring-family',
                 name: "Multitinker Touring Family",
-                purpose: ['transport', 'bybruk', 'allsidig', 'family'], // Har 'allsidig'
-                description: "Smart bysykkel med plass til to barn eller stor last. Shimano 11-gir og kjededrift gir kraft i motbakker. Kompakt, stabil og tilpasningsdyktig.",
+                purpose: ['transport', 'bybruk', 'allsidig', 'family'],
+                description: "Smart bysykkel...",
                 features: ["Plass til 2 barn / stor last", "Shimano Deore 11-gir Linkglide", "Kjededrift", "Kompakt (20\" hjul)", "Stabil & Tilpasningsdyktig", "Bosch Performance CX"],
                 price: "KR 75.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Multitinker-Touring-Family-1536x1024.jpg",
@@ -50,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-multitinker-vario-family',
                 name: "Multitinker Vario Family",
-                purpose: ['transport', 'bybruk', 'allsidig', 'family'], // Har 'allsidig'
-                description: "Samme stabile Multitinker med trinnløst gir og beltedrift for enklere vedlikehold. Komfortabel, trygg og bygget for byliv med barn eller varer.",
-                features: ["Plass til 2 barn / stor last", "Enviolo trinnløst gir", "Beltedrift (Gates)", "Vedlikeholdsvennlig", "Kompakt (20\" hjul)", "Stabil & Trygg", "Bosch Performance CX"],
+                purpose: ['transport', 'bybruk', 'allsidig', 'family'],
+                description: "Samme stabile Multitinker...",
+                features: ["Plass til 2 barn / stor last", "Enviolo trinnløst gir", "Beltedrift (Gates)", "Vedlikeholdsvennlig", "Kompakt (20\" hjul)", "Stabil & Trygg", "Bosch Performance CX"], // Fjernet ? fra barn
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/Multitinker-Vario-bla-med-telt-prod-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-multitinker-vario-family/",
@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
              {
                 id: 'tern-quick-haul-long-d9',
                 name: "Quick Haul Long D9 400",
-                purpose: ['transport', 'bybruk', 'allsidig', 'family'], // Har 'allsidig'
-                description: "Lang og robust elsykkel som kan bære to barn og tung last. Stabil, lett å manøvrere og enkel å dele. 400 Wh batteri og Bosch Cargo Line-motor.",
+                purpose: ['transport', 'bybruk', 'allsidig', 'family'],
+                description: "Lang og robust elsykkel...",
                 features: ["Kompakt lastesykkel (190 kg totalvekt)", "Designet for 2 barn / stor last", "Lavt innsteg & lang akselavstand (stabil)", "Bosch Cargo Line motor (85Nm)", "400 Wh batteri (25-85km)", "Parkerbar vertikalt", "Passer 155–185 cm"],
                 price: "KR 49.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/Quick-Haul-Long-prod-rod-1-1536x1024.jpg",
@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-nevo4-gt-vario-core',
                 name: "NEVO4 GT vario CORE",
-                purpose: ['bybruk', 'pendling', 'allsidig', 'trekking'], // Har 'allsidig'
-                description: "Hverdagsvennlig elsykkel med lavt innsteg og trinnløst gir. Komfortabel og stabil med 625 Wh batteri og Bosch CX-motor.",
-                features: ["Lavt innsteg", "Komfortabel sittestilling", "Enviolo trinnløst gir", "Gates karbonbelte", "Bosch Performance CX (85Nm)", "625Wh batteri (opptil 100km)", "Setepinnedemping & dempegaffel"],
+                purpose: ['bybruk', 'pendling', 'allsidig', 'trekking'],
+                description: "Hverdagsvennlig elsykkel...",
+                features: ["Lavt innsteg", "Komfortabel sittestilling", "Enviolo trinnløst gir", "Gates karbonbelte", "Bosch Performance CX (85Nm)", "625Wh batteri (opptil 100km)", "Setepinnedemping & dempegaffel"], // Fjernet ? fra motor
                 price: "KR 63.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Nevo4-GT-vario-CORE-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-nevo4-gt-vario-core/",
@@ -83,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-roadster4-touring',
                 name: "Roadster4 Touring",
-                purpose: ['pendling', 'bybruk'], // Mangler 'allsidig'
-                description: "Lett, elegant og kraftig elsykkel. Perfekt for både by og tur. Integrert batteri og sporty komfort.",
+                purpose: ['pendling', 'bybruk'],
+                description: "Lett, elegant og kraftig...",
                 features: ["Lett og dynamisk design", "Bosch Performance CX (85Nm)", "625 Wh batteri (integrert)", "Komfortabel (dempegaffel)", "Brede dekk", "Shimano Deore XT 11-gir"],
                 price: "KR 59.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/25_F01130_0401060913_Rd4_Tou_56_BlkMtt_ChainbagVAUDE_5764-1024x683.jpg",
@@ -94,9 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'tern-orox-s12',
                 name: "Tern Orox S12 27,5",
-                purpose: ['terreng', 'transport', 'allsidig', 'adventure'], // Har 'allsidig'
-                description: "Eventyrsykkel som tåler ekstrem last og terreng. Bosch CX-motor og 800 Wh batteri gir solid kraft og rekkevidde.",
-                features: ["Adventure-lastesykkel", "Terreng & Vinterbruk", "Maks totalvekt 210 kg", "Mulighet for 2 batterier", "Fatbike-dekk (27.5\")", "Bosch Performance CX (85Nm)", "800 Wh batteri (standard)"],
+                purpose: ['terreng', 'transport', 'allsidig', 'adventure'],
+                description: "Eventyrsykkel som tåler...",
+                features: ["Adventure-lastesykkel", "Terreng & Vinterbruk", "Maks totalvekt 210 kg", "Mulighet for 2 batterier", "Fatbike-dekk (27.5\")", "Bosch Performance CX (85Nm)", "800 Wh batteri (standard)", "Shimano Deore XT 12-gir"], // Fjernet ? fra gir
                 price: "KR 80.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/12/Otox-S12-275-gronn-prod-1-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/tern-orox-s12-275/",
@@ -105,9 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-load4-75-touring-familie',
                 name: "Load4 75 Touring Familie",
-                purpose: ['transport', 'family', 'pendling', 'allsidig'], // Har 'allsidig'
-                description: "Stor familiesykkel med tre barneseter, regntelt og demping foran og bak. Komfortabel og kraftig.",
-                features: ["Fullfjæret lastesykkel", "Plass til 3 barn", "Høy komfort", "Komplett familiepakke (regntelt, etc.)", "Bosch Cargo Line (Gen4, 85Nm)", "725 Wh batteri (40-120km)"],
+                purpose: ['transport', 'family', 'pendling', 'allsidig'],
+                description: "Stor familiesykkel...",
+                features: ["Fullfjæret lastesykkel", "Plass til 3 barn", "Høy komfort", "Komplett familiepakke (regntelt, etc.)", "Bosch Cargo Line (Gen4, 85Nm)", "725 Wh batteri (40-120km)"], // Fjernet ? fra gir
                 price: "KR 108.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/11/Load5-75-touring-famili-prod-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-75-touring-familie-2/",
@@ -116,9 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-load4-60-touring-familie',
                 name: "Load4 60 Touring Familie",
-                purpose: ['transport', 'family', 'pendling', 'allsidig'], // Har 'allsidig'
-                description: "Kompakt familiesykkel med demping, regntelt og to seter. Praktisk, trygg og fullspekket med utstyr.",
-                features: ["Fullfjæret (maks komfort)", "Plass til 2 barn", "Trygg transport", "Komplett familiepakke (regntelt, etc.)", "Bosch Cargo Line (Gen4, 85Nm?)", "725 Wh batteri", "Universell størrelse"],
+                purpose: ['transport', 'family', 'pendling', 'allsidig'],
+                description: "Kompakt familiesykkel...",
+                features: ["Fullfjæret (maks komfort)", "Plass til 2 barn", "Trygg transport", "Komplett familiepakke (regntelt, etc.)", "Bosch Cargo Line (Gen4, 85Nm)", "725 Wh batteri", "Universell størrelse"], // Fjernet ? fra motor
                 price: "KR 99.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/01/Load460Green_3000x-1536x816.webp",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-60-touring-familie-2/",
@@ -127,9 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-delite5-gt-pinion',
                 name: "Delite5 GT pinion",
-                purpose: ['pendling', 'terreng', 'trekking', 'adventure', 'allsidig'], // Har 'allsidig'
-                description: "Fulldempet elsykkel med integrert gir og motor. Høy ytelse for pendlere og langtur.",
-                features: ["Integrert Pinion E-Drive System", "Fulldempet (Control Technology)", "Resirkulert alu-ramme", "Skjermet drivverk", "Bosch 800 Wh batteri?", "Lang rekkevidde", "Dropper-setepinne"],
+                purpose: ['pendling', 'terreng', 'trekking', 'adventure', 'allsidig'],
+                description: "Fulldempet elsykkel...",
+                features: ["Integrert Pinion E-Drive System", "Fulldempet (Control Technology)", "Resirkulert alu-ramme", "Skjermet drivverk", "Bosch 800 Wh batteri", "Lang rekkevidde", "Dropper-setepinne", "Bosch Performance CX motor"], // Fjernet ? fra batteri og motor, lagt til motor
                 price: "KR 105.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/09/25_F01315_040209081506_Delite5_GT_Pinion_51_StoneGrey_2755-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-delite5-gt-pinion/",
@@ -138,9 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 id: 'rm-load4-75-vario-familie',
                 name: "Load4 75 Vario Familie",
-                purpose: ['transport', 'family', 'pendling', 'allsidig'], // Har 'allsidig'
-                description: "Kraftig lastesykkel med beltedrift og plass til tre barn. Komfortabel og robust med demping og regntelt.",
-                features: ["Plass til 3 barn", "Fullfjæret", "Lettkjørt (tung last)", "Beltedrift (Gates)", "Enviolo trinnløst gir", "Bosch Cargo Line (85Nm?)", "725 Wh batteri", "Komplett familiepakke"],
+                purpose: ['transport', 'family', 'pendling', 'allsidig'],
+                description: "Kraftig lastesykkel...",
+                features: ["Plass til 3 barn", "Fullfjæret", "Lettkjørt (tung last)", "Beltedrift (Gates)", "Enviolo trinnløst gir", "Bosch Cargo Line (85Nm)", "725 Wh batteri", "Komplett familiepakke"], // Fjernet ? fra motor
                 price: "KR 113.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/11/Load4-75-vario-familie-peanut-prod-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-75-vario-familie-2/",
