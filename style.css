@@ -288,24 +288,21 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* ****** OPPDATERT: Anbefalinger Header ****** */
+/* Anbefalinger Header */
 .recommendations-header {
-    display: flex;                 /* Plasserer tittel og knapp side ved side */
-    justify-content: space-between; /* Skyver tittel til venstre og knapp til høyre */
-    align-items: center;           /* Justerer dem vertikalt i midten */
-    margin-bottom: 30px;           /* Luft under */
-    padding-bottom: 15px;           /* Padding for linjen under */
-    border-bottom: 1px solid #e9ecef; /* Linje under */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
 }
 .recommendations-title {
     font-size: 2em;
     font-weight: bold;
     color: #343a40;
-    margin: 0; /* Fjerner standard H2-margin */
+    margin: 0;
 }
-/* Juster evt knappestørrelse spesifikt her */
-/* .recommendations-header #reset-button-final { font-size: 0.9em; padding: 8px 16px; } */
-/* ****** SLUTT: Anbefalinger Header ****** */
 
 /* Anbefalings-Grid Layout */
 .recommendations-grid {
@@ -320,7 +317,7 @@ body {
         grid-template-columns: 1fr 1fr;
     }
     .recommendations-grid .recommendation-card:first-child {
-        grid-column: 1 / -1;
+        grid-column: 1 / -1; /* Første kort tar full bredde */
     }
 }
 
@@ -342,6 +339,7 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Badge (Topp valg etc.) */
 .recommendation-badge {
     position: absolute;
     top: 0;
@@ -355,21 +353,24 @@ body {
     z-index: 1;
 }
 
-
+/* === START ENDRING === */
 .recommendation-image-container {
-    background-color: #f1f3f5;
-    padding: 20px;
+    /* background-color: #f1f3f5; */ /* Fjernet grå */
+    background-color: #ffffff;    /* Satt til hvit */
+    padding: 10px;                /* Redusert padding */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px;
+    height: 200px;                /* Beholdt fast høyde */
     border-bottom: 1px solid #e0e0e0;
 }
 .recommendation-image {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 100%;             /* Får nå bruke mer av høyden */
     object-fit: contain;
+    display: block; /* Kan hjelpe mot ekstra bunnmarg */
 }
+/* === SLUTT ENDRING === */
 
 .recommendation-content {
     padding: 20px;
@@ -391,6 +392,7 @@ body {
     flex-grow: 1;
 }
 
+/* Nøkkelegenskaper */
 .recommendation-features {
     margin-bottom: 20px;
 }
@@ -461,14 +463,9 @@ body {
     font-size: 0.9em;
 }
 
-/* ****** OPPDATERT: Skjuler den gamle actions-diven ****** */
+/* Skjuler den gamle actions-diven */
 .recommendations-actions {
-    display: none; /* Skjuler denne div-en siden knappen er flyttet */
-    /* Behold gamle stiler hvis du skal legge inn ANDRE knapper her senere */
-    /* text-align: center; */
-    /* margin-top: 20px; */
-    /* padding-top: 20px; */
-    /* border-top: 1px solid #e9ecef; */
+    display: none;
 }
 
 /* Footer */
@@ -482,7 +479,7 @@ body {
 }
 
 /* Responsivitet */
-@media (max-width: 600px) { /* Juster 600px om nødvendig */
+@media (max-width: 600px) {
     #bike-advisor-container {
         margin: 10px;
         padding: 10px;
@@ -498,17 +495,16 @@ body {
         font-size: 1.4em;
     }
     .option-button {
-        min-width: 100%; /* Full bredde på små skjermer */
+        min-width: 100%;
     }
     .navigation-buttons {
         flex-direction: column-reverse;
         gap: 10px;
     }
-    /* Juster header for anbefalinger på små skjermer */
     .recommendations-header {
-        flex-direction: column; /* Stable tittel og knapp vertikalt */
-        align-items: flex-start; /* Juster til venstre */
-        gap: 10px; /* Litt luft mellom tittel og knapp */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
     .recommendations-title {
         font-size: 1.6em;
@@ -523,9 +519,12 @@ body {
     }
 }
 
-/* Justering for når grid har 2 kolonner, men bare 1 element i andre rad */
-/* @media (min-width: 768px) {
+/* Grid justering */
+@media (min-width: 768px) {
     .recommendations-grid .recommendation-card:nth-child(2):last-child {
         grid-column: 1 / 2;
     }
-/* } */
+     .recommendations-grid .recommendation-card:nth-child(3):last-child {
+        grid-column: 1 / 2;
+    }
+}
