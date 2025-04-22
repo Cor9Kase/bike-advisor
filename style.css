@@ -504,3 +504,16 @@ body {
     /* Kort 3 vil automatisk legge seg i kolonne 2 pga. grid-flyten,
        trenger ingen egen regel med mindre det er det *siste* kortet. */
 }
+
+/* Legg til denne regelen i style.css */
+.recommendation-image-container a {
+    display: block; /* Sikrer at lenken tar opp plassen til containeren */
+    line-height: 0; /* Forhindrer ekstra luft under bildet i noen nettlesere */
+    /* Fjerner standard lenke-styling hvis nettleseren legger det til */
+    text-decoration: none;
+    color: inherit;
+}
+.recommendation-image-container a:hover {
+     opacity: 0.9; /* Liten effekt for å vise at det er klikkbart */
+     transition: opacity 0.2s ease-in-out;
+}
