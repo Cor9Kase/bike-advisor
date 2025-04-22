@@ -4,7 +4,7 @@ body {
     line-height: 1.6;
     margin: 0;
     background-color: #f8f9fa;
-    color: #343a40; /* Standard mørk tekst - beholdes */
+    color: #343a40;
 }
 
 #bike-advisor-container {
@@ -33,8 +33,7 @@ body {
 }
 
 .advisor-header h1 .highlight {
-    /* color: #343a40; */ /* Kan endres til grønn hvis ønskelig, men beholder grå for nøytralitet */
-     color: #198754; /* NY: Grønn highlight i tittelen */
+    color: #343a40; /* Beholder mørk grå for nøytralitet */
 }
 
 .advisor-header p {
@@ -54,10 +53,8 @@ body {
 
 /* Setningsbygger / Oppsummering */
 .summary-box {
-    /* background-color: #e9ecef; */ /* Gammel lys grå */
-    background-color: #e8f3ed; /* NY: Veldig lys grønn */
-    /* color: #343a40; */
-    color: #0a3622; /* NY: Mørkere grønn tekst for kontrast */
+    background-color: #e9ecef; /* Tilbake til lys grå */
+    color: #343a40; /* Standard mørk tekst */
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 30px;
@@ -87,7 +84,7 @@ body {
 
 .summary-box .selected-value {
     /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #198754; /* NY: Mørk grønn */
+    background-color: #0d6efd; /* NY: Lyseblå */
     color: white;
     font-weight: 600;
 }
@@ -131,22 +128,22 @@ body {
 
 .option-button:hover {
     /* border-color: #343a40; */ /* Gammel mørk grå */
-    border-color: #198754; /* NY: Mørk grønn */
+    border-color: #0d6efd; /* NY: Lyseblå */
     /* color: #343a40; */
-    color: #198754; /* NY: Mørk grønn */
+    color: #0d6efd; /* NY: Lyseblå */
     /* box-shadow: 0 2px 5px rgba(52, 58, 64, 0.1); */
-    box-shadow: 0 2px 5px rgba(25, 135, 84, 0.1); /* NY: Grønn skygge */
+    box-shadow: 0 2px 5px rgba(13, 110, 253, 0.1); /* NY: Blå skygge */
 }
 
 .option-button.selected {
     /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #198754; /* NY: Mørk grønn */
+    background-color: #0d6efd; /* NY: Lyseblå */
     color: white;
     /* border-color: #343a40; */
-    border-color: #198754; /* NY: Mørk grønn */
+    border-color: #0d6efd; /* NY: Lyseblå */
     transform: scale(1.02);
     /* box-shadow: 0 4px 8px rgba(52, 58, 64, 0.2); */
-    box-shadow: 0 4px 8px rgba(25, 135, 84, 0.2); /* NY: Grønn skygge */
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2); /* NY: Blå skygge */
 }
 
 .option-button .description {
@@ -160,14 +157,9 @@ body {
 }
 
 /* Spesifikk styling for lastetype-knapper */
-.option-button.cargo-type {
-    display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 150px;
-}
-.option-button.cargo-type img {
-    width: 60px; height: auto; margin-bottom: 10px; opacity: 0.7; transition: opacity 0.2s ease;
-}
-.option-button.cargo-type:hover img,
-.option-button.cargo-type.selected img { opacity: 1; }
+.option-button.cargo-type { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 150px; }
+.option-button.cargo-type img { width: 60px; height: auto; margin-bottom: 10px; opacity: 0.7; transition: opacity 0.2s ease; }
+.option-button.cargo-type:hover img, .option-button.cargo-type.selected img { opacity: 1; }
 
 
 /* Fremdriftsindikator */
@@ -176,7 +168,7 @@ body {
 .progress-bar-inner {
     height: 100%; width: 0%;
     /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #198754; /* NY: Mørk grønn */
+    background-color: #0d6efd; /* NY: Lyseblå */
     border-radius: 4px; transition: width 0.4s ease-out;
 }
 .progress-label { font-size: 0.9em; color: #6c757d; white-space: nowrap; }
@@ -190,14 +182,14 @@ body {
 .button .icon { width: 1.2em; height: 1.2em; }
 
 /* == KNAPPFARGER == */
-.button-primary { /* Brukes nå for "Se detaljer" */
+.button-primary { /* Brukes for "Se detaljer" */
     /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #198754; /* NY: Mørk grønn */
+    background-color: #0d6efd; /* NY: Lyseblå */
     color: white;
 }
 .button-primary:hover {
     /* background-color: #212529; */ /* Gammel mørkere grå */
-    background-color: #146c43; /* NY: Mørkere grønn */
+    background-color: #0b5ed7; /* NY: Mørkere blå */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -215,8 +207,7 @@ body {
 .loading-container { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 20px; min-height: 200px; text-align: center; border: 1px solid #e9ecef; border-radius: 8px; background-color: #f8f9fa; margin-bottom: 30px; }
 .spinner {
     border: 4px solid rgba(0, 0, 0, 0.1); width: 36px; height: 36px; border-radius: 50%;
-    /* border-left-color: #343a40; */ /* Gammel mørk grå */
-    border-left-color: #198754; /* NY: Mørk grønn */
+    border-left-color: #343a40; /* Behold mørk grå for spinner */
     animation: spin 1s ease infinite; margin-bottom: 15px;
 }
 .loading-text { font-size: 1.1em; color: #495057; font-weight: 500; }
@@ -236,8 +227,7 @@ body {
 /* Badge (Topp valg etc.) */
 .recommendation-badge {
     position: absolute; top: 0; right: 0;
-    /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #198754; /* NY: Mørk grønn */
+    background-color: #343a40; /* Behold mørk grå for badge */
     color: white; padding: 5px 12px; border-bottom-left-radius: 8px; font-size: 0.8em; font-weight: bold; z-index: 1;
 }
 
@@ -255,20 +245,18 @@ body {
 
 /* Visuell hint for barn */
 .child-capacity-info { font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-.child-capacity-info svg { width: 1.1em; height: 1.1em; flex-shrink: 0; color: #198754; /* NY: Grønt ikon */ }
+.child-capacity-info svg { width: 1.1em; height: 1.1em; flex-shrink: 0; color: #495057; /* Behold nøytralt ikon */ }
 
 .recommendation-content .description { font-size: 0.95em; color: #6c757d; margin-bottom: 15px; flex-grow: 1; }
 
 /* Nøkkelegenskaper */
 .recommendation-features { margin-bottom: 20px; }
 .recommendation-features h4 { font-size: 1em; font-weight: 600; margin-bottom: 10px; color: #495057; display: flex; align-items: center; gap: 5px; }
-.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #198754; /* NY: Grønt ikon */ }
+.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #495057; /* Behold nøytralt ikon */ }
 .recommendation-features ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #6c757d; }
 .recommendation-features li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; }
 .recommendation-features li::before {
-    content: '✓';
-    /* color: #343a40; */ /* Gammel mørk grå */
-    color: #198754; /* NY: Grønn hake */
+    content: '✓'; color: #343a40; /* Behold mørk grå hake */
     font-weight: bold; display: inline-block; line-height: 1.3;
 }
 
@@ -277,8 +265,7 @@ body {
 .recommendation-price .price-label { font-size: 0.85em; color: #6c757d; display: block; }
 .recommendation-price .price-value {
     font-size: 1.5em; font-weight: bold;
-    /* color: #343a40; */ /* Gammel mørk grå */
-    color: #198754; /* NY: Grønn pris */
+    color: #343a40; /* Behold mørk grå pris */
 }
 
 .recommendation-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
