@@ -33,7 +33,7 @@ body {
 }
 
 .advisor-header h1 .highlight {
-    color: #0d6efd; /* Blå highlight i tittelen */
+    color: #0d6efd; /* Blå highlight */
 }
 
 .advisor-header p {
@@ -82,22 +82,15 @@ body {
     border: 1px dashed #ced4da;
 }
 
-/* === START ENDRING === */
 .summary-box .selected-value {
-    /* background-color: #0d6efd; */ /* FJERNET BLÅ BAKGRUNN */
-    /* color: white; */             /* FJERNET HVIT TEKST */
-    font-weight: 600; /* Behold fet skrift for å markere valget */
-    /* padding: 3px 8px; */ /* Behold padding for litt luft */
-    /* border-radius: 5px; */ /* Behold avrundede hjørner */
-    /* display: inline-block; */ /* Behold display */
-    /* ... andre layout-stiler beholdes ... */
-    border-bottom: 2px solid #0d6efd; /* Alternativ: Understrekning? */
-    padding-bottom: 1px; /* Juster padding for understrekning */
-    border-radius: 0; /* Fjern border-radius hvis understrek brukes */
-    padding-left: 2px;  /* Reduser padding litt for understrekning */
+    /* Fjernet bakgrunn og farge for nøytralt utseende */
+    font-weight: 600; /* Behold fet skrift */
+    border-bottom: 2px solid #0d6efd; /* Blå understrekning */
+    padding-bottom: 1px;
+    border-radius: 0;
+    padding-left: 2px;
     padding-right: 2px;
 }
-/* === SLUTT ENDRING === */
 
 
 /* Alternativ-område */
@@ -254,7 +247,13 @@ body {
 /* Nøkkelegenskaper */
 .recommendation-features { margin-bottom: 20px; }
 .recommendation-features h4 { font-size: 1em; font-weight: 600; margin-bottom: 10px; color: #495057; display: flex; align-items: center; gap: 5px; }
-.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #495057; }
+/* === START ENDRING === */
+.recommendation-features h4 .icon {
+    width: 1.1em; height: 1.1em;
+    /* color: #495057; */ /* Gammel nøytral */
+    color: #198754; /* TILBAKE TIL GRØNN */
+}
+/* === SLUTT ENDRING === */
 .recommendation-features ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #6c757d; }
 .recommendation-features li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; }
 .recommendation-features li::before { content: '✓'; color: #343a40; font-weight: bold; display: inline-block; line-height: 1.3; }
