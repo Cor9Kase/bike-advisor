@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. Data (Komplett katalog med alle 18 sykler) ---
+    // --- 1. Data (Komplett katalog med alle 18 sykler og siste data) ---
     const BikeCatalog = {
         evoOriginal: [
-            // --- Eksisterende + Oppdaterte ---
             {
                 id: 'tern-quick-haul-p9',
                 name: "Quick Haul P9",
@@ -147,23 +146,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-75-vario-familie-2/",
                 frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front', distance_km: [30, 80], maxChildren: 3, preOrdered: false
             },
-             // --- Start: Nye sykler lagt til ---
              {
                 id: 'tern-gsd-s10-gen3',
                 name: "Tern GSD Gen3 S10",
                 purpose: ['transport', 'family', 'bybruk', 'allsidig', 'pendling'],
                 description: "Solid lastesykkel med Bosch Cargo Line-motor. Plass til to barn og stor last. Stabil og allsidig.",
-                features: ["Bosch Cargo Line Gen 4 (85Nm)", "DualBattery-kompatibel (opptil 200km)", "Plass til 2 barneseter / 1 voksen", "Hydrauliske skivebremser m/ ABS", "Brede 20″ dekk, lavt tyngdepunkt", "Total lastekapasitet 210 kg"],
+                features: ["Bosch Cargo Line Gen 4 (85 Nm)", "DualBattery-kompatibel (opptil 200 km)", "Rom for 2 barneseter / 1 voksen", "Hydrauliske skivebremser m/ ABS", "Brede 20″ dekk, lavt tyngdepunkt", "Total lastekapasitet 210 kg"],
                 price: "KR 82.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2025/03/TN-photo-GSD_S10-gen3-olive-profile-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/tern-gsd-gen3-s10/",
-                frame_types: ['cargo-longtail', 'low-step'],
-                speed_kmh: 25,
-                cargo_capacity: 'massive',
-                cargo_location: 'rear',
-                distance_km: [50, 200],
-                maxChildren: 2,
-                preOrdered: false
+                frame_types: ['cargo-longtail', 'low-step'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'rear', distance_km: [50, 200], maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-load4-60-vario-familie',
@@ -172,15 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: "Fulldempet familiesykkel med lavt tyngdepunkt. Plass til to barn og komplett utstyr inkludert.",
                 features: ["Plass til 2 barn", "Enviolo trinnløst navgir", "Beltedrift (Gates)", "Bosch Cargo Line (Gen4, 85Nm)", "Fulldempet", "725 Wh batteri (40-120km)", "Komplett familiepakke (regntelt, etc.)", "Bosch SmartSystem Kiox 300"],
                 price: "KR 104.000",
-                image: "https://evoelsykler.no/wp-content/uploads/2023/01/Load460Green_3000x-640x340.webp", // OBS: Placeholder bilde
+                image: "https://evoelsykler.no/wp-content/uploads/2023/01/Load460Green_3000x-640x340.webp",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-60-vario-familie-2/",
-                frame_types: ['cargo', 'low-step'],
-                speed_kmh: 25,
-                cargo_capacity: 'massive',
-                cargo_location: 'front',
-                distance_km: [40, 120],
-                maxChildren: 2,
-                preOrdered: false
+                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front', distance_km: [40, 120], maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-carrie-touring',
@@ -191,54 +177,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 74.850",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Carrie-touring-m-flex-box-prod-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-carrie-touring-2/",
-                frame_types: ['cargo', 'low-step'],
-                speed_kmh: 25,
-                cargo_capacity: 'large',
-                cargo_location: 'front',
-                distance_km: [25, 70],
-                maxChildren: 2, // Antatt 1-2 barn
-                preOrdered: false
+                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'front', distance_km: [25, 70], maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-carrie-vario',
                 name: "Carrie Vario",
                 purpose: ['transport', 'bybruk', 'allsidig', 'pendling'],
                 description: "Kompakt lastesykkel med trinnløst gir og beltedrift. Smart system og lavt vedlikehold.",
-                features: ["Kompakt lastesykkel", "Stort lasteområde (Flex Box)", "Bosch Performance Line (75Nm)", "545 Wh batteri (oppgraderbar)", "Enviolo navgir (trinnløst)", "Beltedrift", "Vedlikeholdsvennlig", "Bosch SmartSystem Intuvia 100", "Valgfri dempende setepinne"],
+                features: ["Kompakt lastesykkel", "Stort lasteområde (Flex Box)", "Bosch Performance Line (75Nm)", "545 Wh batteri (oppgraderbar)", "Enviolo navgir (trinnløst)", "Beltedrift", "Vedlikeholdsvennlig", "Bosch SmartSystem Intuvia 100"],
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/03/Carrie-Vario-aqua-basic-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-carrie-vario/",
-                frame_types: ['cargo', 'low-step'],
-                speed_kmh: 25,
-                cargo_capacity: 'large',
-                cargo_location: 'front',
-                distance_km: [25, 70],
-                maxChildren: 2, // Antatt 1-2 barn
-                preOrdered: false
+                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'front', distance_km: [25, 70], maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-nevo4-gt-touring-core',
                 name: "Nevo4 GT Touring CORE",
                 purpose: ['bybruk', 'pendling', 'allsidig', 'trekking'],
-                description: "Komfortabel elsykkel med lavt innsteg og 625 Wh batteri. Stabil og brukervennlig i hverdagen.",
-                features: ["Lavt innsteg", "Stabil, trygg, komfortabel", "Bosch Performance CX (85Nm)", "625Wh batteri (opptil 100km)", "Shimano Cues 10-gir", "Setepinnedemping & dempergaffel", "Brede 27,5\" dekk (GT)"],
+                description: "Riese & Müller Nevo4 GT Touring CORE er bysykler med et særegent rammedesign, designet for å kunne brukes av alle, uavhengig av kjønn og alder. Rammedesign med det lave innsteget betyr enkel og komfortabel av- og påstigning. Nevo er stabil, trygg, komfortabel, og på toppen av det hele er den morsom å sykle. En ekte hverdags- og helårssykkel.",
+                features: ["Lavt innsteg", "Stabil, trygg, komfortabel", "Bosch Performance CX (85Nm)", "625Wh batteri (opptil 100km)", "Shimano Cues 10S", "Setepinnedemping & dempergaffel", "Brede 27,5\" dekk (GT)"],
                 price: "KR 59.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Nevo4-GT-Touring-CORE-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-nevo4-gt-touring-core/",
-                frame_types: ['low-step'],
-                speed_kmh: 25,
-                cargo_capacity: 'medium',
-                cargo_location: 'rear',
-                distance_km: [40, 100],
-                maxChildren: 0,
-                preOrdered: false
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear', distance_km: [40, 100], maxChildren: 0, preOrdered: false
             }
-            // --- Slutt: Nye sykler lagt til ---
         ]
     };
 
-
-    // --- State (uten childCapacity) ---
+    // --- State ---
     let currentStep = 1;
     let selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
     let recommendations = [];
@@ -261,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
 
-    // --- Steps definisjon (uten childCapacity, med oppdaterte titler) ---
+    // --- Steps definisjon ---
     const steps = [
         { id: 'purpose', title: 'Jeg ser etter en sykkel for', options: [ { id: 'pendling', label: 'Turer eller pendling til jobb' }, { id: 'bybruk', label: 'Være ute i byen / Koseturer' }, { id: 'terreng', label: 'Bevege meg utenfor veien (sti/grus)' }, { id: 'transport', label: 'Transportere mye (varer/barn)' }, { id: 'allsidig', label: 'En allsidig sykkel til "litt av alt"' } ] },
         { id: 'distance', title: 'Den bør passe til', options: [ { id: 'kort', label: 'Kortere avstander (opptil 20 km)' }, { id: 'medium', label: 'Mellomdistanse (20-50 km)' }, { id: 'lang', label: 'Lange avstander (50+ km)' } ] },
@@ -359,7 +325,33 @@ document.addEventListener('DOMContentLoaded', () => {
              let badgeText = ''; if (index === 0) badgeText = 'TOPPVALG'; else if (index === 1) badgeText = 'GOD MATCH'; else if (index === 2) badgeText = 'ALTERNATIV';
              let childInfoHTML = ''; if (bike.maxChildren && bike.maxChildren > 0) { const t = bike.maxChildren === 1 ? "ett barn" : `${bike.maxChildren} barn`; childInfoHTML = `<p class="child-capacity-info" style="font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.1em; height: 1.1em; flex-shrink: 0;"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z" clip-rule="evenodd" /></svg> Passer for opptil ${t}.</p>`; }
              let featuresHTML = ''; if(bike.features && bike.features.length > 0) { featuresHTML = `<div class="recommendation-features"><h4><svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Nøkkelegenskaper:</h4><ul>${bike.features.map(f => `<li>${f}</li>`).join('')}</ul></div>`; }
-             card.innerHTML = `${badgeText ? `<div class="recommendation-badge">${badgeText}</div>` : ''}<div class="recommendation-image-container"><img src="${bike.image || 'https://via.placeholder.com/300x180.png?text=Bilde+mangler'}" alt="${bike.name}" class="recommendation-image"></div><div class="recommendation-content"><h3>${bike.name}</h3>${childInfoHTML}<p class="description">${bike.description || 'Ingen beskrivelse tilgjengelig.'}</p>${featuresHTML}<div class="recommendation-footer"><div class="recommendation-price">${bike.price ? `<span class="price-label">Fra</span><span class="price-value">${bike.price}</span>` : ''}</div><div class="recommendation-buttons"><a href="${bike.productUrl || '#'}" target="_blank" class="button button-secondary">Se detaljer</a></div></div></div>`;
+
+             // Bilde som lenke
+             const imageLink = document.createElement('a');
+             imageLink.href = bike.productUrl || '#';
+             imageLink.target = '_blank';
+             imageLink.title = `Se detaljer for ${bike.name}`;
+             imageLink.innerHTML = `<img src="${bike.image || 'https://via.placeholder.com/300x180.png?text=Bilde+mangler'}" alt="${bike.name}" class="recommendation-image">`;
+             const imageContainer = document.createElement('div');
+             imageContainer.classList.add('recommendation-image-container');
+             imageContainer.appendChild(imageLink);
+
+             // Primær CTA-knapp
+             const detailsButton = `<a href="${bike.productUrl || '#'}" target="_blank" class="button button-primary">Se detaljer</a>`;
+
+             card.innerHTML = `
+                 ${badgeText ? `<div class="recommendation-badge">${badgeText}</div>` : ''}
+                 ${imageContainer.outerHTML}
+                 <div class="recommendation-content">
+                     <h3>${bike.name}</h3>
+                     ${childInfoHTML}
+                     <p class="description">${bike.description || 'Ingen beskrivelse tilgjengelig.'}</p>
+                     ${featuresHTML}
+                     <div class="recommendation-footer">
+                         <div class="recommendation-price">${bike.price ? `<span class="price-label">Fra</span><span class="price-value">${bike.price}</span>` : ''}</div>
+                         <div class="recommendation-buttons">${detailsButton}</div>
+                     </div>
+                 </div>`;
              recommendationsOutput.appendChild(card);
          });
      }
