@@ -227,7 +227,7 @@ body {
     height: 1.2em;
 }
 
-.button-primary { /* Ikke brukt nå, men justert */
+.button-primary { /* Nå brukt på "Se detaljer" */
     background-color: #343a40; /* Mørk grå */
     color: white;
 }
@@ -343,34 +343,48 @@ body {
     z-index: 1;
 }
 
-/* Bilde Container */
+/* Bilde Container (uten fast høyde) */
 .recommendation-image-container {
-    background-color: #ffffff; /* Hvit bakgrunn */
-    padding: 10px; /* Redusert padding */
+    background-color: #ffffff;    /* Hvit bakgrunn */
+    padding: 10px;                /* Redusert padding */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px; /* Fast høyde */
+    /* height: 200px; */       /* <-- FJERNEDE DENNE */
     border-bottom: 1px solid #e0e0e0;
 }
 .recommendation-image {
     max-width: 100%;
-    max-height: 100%;
+    /* max-height: 100%; */ /* Ikke nødvendig med auto høyde */
+    height: auto;           /* <-- SIKRER KORREKTE PROPORSJONER */
     object-fit: contain;
-    display: block;
+    display: block;         /* Hindrer ekstra bunnmarg */
 }
+
+/* Styling for lenken rundt bildet */
+.recommendation-image-container a {
+    display: block;
+    line-height: 0;
+    text-decoration: none;
+    color: inherit;
+}
+.recommendation-image-container a:hover {
+     opacity: 0.9;
+     transition: opacity 0.2s ease-in-out;
+}
+
 
 .recommendation-content {
     padding: 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    margin-top: 15px;
+    /* margin-top: 15px; */ /* <-- FJERNET DENNE IGJEN */
 }
 .recommendation-content h3 {
     font-size: 1.3em;
     font-weight: 600;
-    margin-top: 0;
+    margin-top: 0; /* Viktig å beholde denne for å nullstille standard h3 margin */
     margin-bottom: 10px;
     color: #343a40;
 }
@@ -497,24 +511,7 @@ body {
     .recommendations-grid .recommendation-card:first-child {
         grid-column: 1 / -1; /* Første kort tar full bredde */
     }
-     /* Sikrer at hvis det KUN er to kort totalt, så tar det andre kortet
-        kun den første kolonnen og sentreres ikke */
     .recommendations-grid .recommendation-card:nth-child(2):last-child {
         grid-column: 1 / 2;
     }
-    /* Kort 3 vil automatisk legge seg i kolonne 2 pga. grid-flyten,
-       trenger ingen egen regel med mindre det er det *siste* kortet. */
-}
-
-/* Legg til denne regelen i style.css */
-.recommendation-image-container a {
-    display: block; /* Sikrer at lenken tar opp plassen til containeren */
-    line-height: 0; /* Forhindrer ekstra luft under bildet i noen nettlesere */
-    /* Fjerner standard lenke-styling hvis nettleseren legger det til */
-    text-decoration: none;
-    color: inherit;
-}
-.recommendation-image-container a:hover {
-     opacity: 0.9; /* Liten effekt for å vise at det er klikkbart */
-     transition: opacity 0.2s ease-in-out;
 }
