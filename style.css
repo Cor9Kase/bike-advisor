@@ -365,6 +365,7 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    margin-top: 15px;
 }
 .recommendation-content h3 {
     font-size: 1.3em;
