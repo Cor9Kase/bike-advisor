@@ -33,7 +33,7 @@ body {
 }
 
 .advisor-header h1 .highlight {
-    color: #343a40; /* Beholder mørk grå for nøytralitet */
+    color: #0d6efd; /* Blå highlight i tittelen */
 }
 
 .advisor-header p {
@@ -53,8 +53,8 @@ body {
 
 /* Setningsbygger / Oppsummering */
 .summary-box {
-    background-color: #e9ecef; /* Tilbake til lys grå */
-    color: #343a40; /* Standard mørk tekst */
+    background-color: #e9ecef;
+    color: #343a40;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 30px;
@@ -82,12 +82,23 @@ body {
     border: 1px dashed #ced4da;
 }
 
+/* === START ENDRING === */
 .summary-box .selected-value {
-    /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #0d6efd; /* NY: Lyseblå */
-    color: white;
-    font-weight: 600;
+    /* background-color: #0d6efd; */ /* FJERNET BLÅ BAKGRUNN */
+    /* color: white; */             /* FJERNET HVIT TEKST */
+    font-weight: 600; /* Behold fet skrift for å markere valget */
+    /* padding: 3px 8px; */ /* Behold padding for litt luft */
+    /* border-radius: 5px; */ /* Behold avrundede hjørner */
+    /* display: inline-block; */ /* Behold display */
+    /* ... andre layout-stiler beholdes ... */
+    border-bottom: 2px solid #0d6efd; /* Alternativ: Understrekning? */
+    padding-bottom: 1px; /* Juster padding for understrekning */
+    border-radius: 0; /* Fjern border-radius hvis understrek brukes */
+    padding-left: 2px;  /* Reduser padding litt for understrekning */
+    padding-right: 2px;
 }
+/* === SLUTT ENDRING === */
+
 
 /* Alternativ-område */
 .options-container {
@@ -127,23 +138,17 @@ body {
 }
 
 .option-button:hover {
-    /* border-color: #343a40; */ /* Gammel mørk grå */
-    border-color: #0d6efd; /* NY: Lyseblå */
-    /* color: #343a40; */
-    color: #0d6efd; /* NY: Lyseblå */
-    /* box-shadow: 0 2px 5px rgba(52, 58, 64, 0.1); */
-    box-shadow: 0 2px 5px rgba(13, 110, 253, 0.1); /* NY: Blå skygge */
+    border-color: #0d6efd; /* Lyseblå */
+    color: #0d6efd; /* Lyseblå */
+    box-shadow: 0 2px 5px rgba(13, 110, 253, 0.1); /* Blå skygge */
 }
 
 .option-button.selected {
-    /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #0d6efd; /* NY: Lyseblå */
+    background-color: #0d6efd; /* Lyseblå */
     color: white;
-    /* border-color: #343a40; */
-    border-color: #0d6efd; /* NY: Lyseblå */
+    border-color: #0d6efd; /* Lyseblå */
     transform: scale(1.02);
-    /* box-shadow: 0 4px 8px rgba(52, 58, 64, 0.2); */
-    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2); /* NY: Blå skygge */
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2); /* Blå skygge */
 }
 
 .option-button .description {
@@ -167,8 +172,7 @@ body {
 .progress-bar-outer { flex-grow: 1; height: 8px; background-color: #e9ecef; border-radius: 4px; overflow: hidden; margin-right: 10px; }
 .progress-bar-inner {
     height: 100%; width: 0%;
-    /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #0d6efd; /* NY: Lyseblå */
+    background-color: #0d6efd; /* Lyseblå */
     border-radius: 4px; transition: width 0.4s ease-out;
 }
 .progress-label { font-size: 0.9em; color: #6c757d; white-space: nowrap; }
@@ -183,13 +187,11 @@ body {
 
 /* == KNAPPFARGER == */
 .button-primary { /* Brukes for "Se detaljer" */
-    /* background-color: #343a40; */ /* Gammel mørk grå */
-    background-color: #0d6efd; /* NY: Lyseblå */
+    background-color: #0d6efd; /* Lyseblå */
     color: white;
 }
 .button-primary:hover {
-    /* background-color: #212529; */ /* Gammel mørkere grå */
-    background-color: #0b5ed7; /* NY: Mørkere blå */
+    background-color: #0b5ed7; /* Mørkere blå */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -207,7 +209,7 @@ body {
 .loading-container { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 20px; min-height: 200px; text-align: center; border: 1px solid #e9ecef; border-radius: 8px; background-color: #f8f9fa; margin-bottom: 30px; }
 .spinner {
     border: 4px solid rgba(0, 0, 0, 0.1); width: 36px; height: 36px; border-radius: 50%;
-    border-left-color: #343a40; /* Behold mørk grå for spinner */
+    border-left-color: #343a40; /* Behold mørk grå */
     animation: spin 1s ease infinite; margin-bottom: 15px;
 }
 .loading-text { font-size: 1.1em; color: #495057; font-weight: 500; }
@@ -227,7 +229,7 @@ body {
 /* Badge (Topp valg etc.) */
 .recommendation-badge {
     position: absolute; top: 0; right: 0;
-    background-color: #343a40; /* Behold mørk grå for badge */
+    background-color: #0d6efd; /* Lyseblå */
     color: white; padding: 5px 12px; border-bottom-left-radius: 8px; font-size: 0.8em; font-weight: bold; z-index: 1;
 }
 
@@ -240,33 +242,27 @@ body {
 .recommendation-image-container a:hover { opacity: 0.9; transition: opacity 0.2s ease-in-out; }
 
 
-.recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; /* margin-top: 15px; <-- Fjernet */ }
+.recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
 .recommendation-content h3 { font-size: 1.3em; font-weight: 600; margin-top: 0; margin-bottom: 10px; color: #343a40; }
 
 /* Visuell hint for barn */
 .child-capacity-info { font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-.child-capacity-info svg { width: 1.1em; height: 1.1em; flex-shrink: 0; color: #495057; /* Behold nøytralt ikon */ }
+.child-capacity-info svg { width: 1.1em; height: 1.1em; flex-shrink: 0; color: #495057; }
 
 .recommendation-content .description { font-size: 0.95em; color: #6c757d; margin-bottom: 15px; flex-grow: 1; }
 
 /* Nøkkelegenskaper */
 .recommendation-features { margin-bottom: 20px; }
 .recommendation-features h4 { font-size: 1em; font-weight: 600; margin-bottom: 10px; color: #495057; display: flex; align-items: center; gap: 5px; }
-.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #495057; /* Behold nøytralt ikon */ }
+.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #495057; }
 .recommendation-features ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #6c757d; }
 .recommendation-features li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; }
-.recommendation-features li::before {
-    content: '✓'; color: #343a40; /* Behold mørk grå hake */
-    font-weight: bold; display: inline-block; line-height: 1.3;
-}
+.recommendation-features li::before { content: '✓'; color: #343a40; font-weight: bold; display: inline-block; line-height: 1.3; }
 
 
 .recommendation-footer { border-top: 1px solid #e9ecef; padding-top: 15px; margin-top: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .recommendation-price .price-label { font-size: 0.85em; color: #6c757d; display: block; }
-.recommendation-price .price-value {
-    font-size: 1.5em; font-weight: bold;
-    color: #343a40; /* Behold mørk grå pris */
-}
+.recommendation-price .price-value { font-size: 1.5em; font-weight: bold; color: #343a40; }
 
 .recommendation-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 .recommendation-buttons .button { padding: 8px 12px; font-size: 0.9em; }
