@@ -1,24 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. Data (Komplett katalog med fulle beskrivelser og rensede features) ---
+    // --- 1. Data (Komplett katalog med alle 18 sykler) ---
     const BikeCatalog = {
         evoOriginal: [
+            // --- Eksisterende + Oppdaterte ---
             {
                 id: 'tern-quick-haul-p9',
                 name: "Quick Haul P9",
                 purpose: ['bybruk', 'transport', 'pendling', 'allsidig', 'family'],
-                description: "Kompakt og kraftig elsykkel med langt bagasjebrett (opptil 50 kg). Perfekt til både hverdag og småtransport – barn, handleposer eller hund. Brukervennlig, tilpassbar og solid bygget.", // Bruker "Kort beskrivelse" som hovedbeskrivelse
+                description: "Kompakt og kraftig elsykkel med langt bagasjebrett (opptil 50 kg). Perfekt til både hverdag og småtransport – barn, handleposer eller hund. Brukervennlig, tilpassbar og solid bygget.",
                 features: ["Kompakt elsykkel", "Bagasjebrett (opptil 50 kg)", "Plass til 1 barn", "Brukervennlig & tilpassbar", "Solid bygget", "Bosch Performance Line motor", "400Wh batteri"],
                 price: "KR 29.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/06/Quick-Haul-H9-gronn-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/tern-quick-haul-p9-400/",
-                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear', distance_km: [20, 70], maxChildren: 1, preOrdered: false // Fjernet preOrdered
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear', distance_km: [20, 70], maxChildren: 1, preOrdered: false
             },
             {
                 id: 'rm-multicharger2-mixte-gt-vario-family',
                 name: "Multicharger Mixte GT vario Family",
                 purpose: ['transport', 'pendling', 'allsidig', 'family', 'trekking'],
-                description: "Kraftig familiesykkel med plass til to barn og cargo foran. Beltedrift, trinnløst gir og 750 Wh batteri gir lang rekkevidde og lite vedlikehold. Lavt innsteg og komfortdemping.", // Bruker "Kort beskrivelse"
+                description: "Kraftig familiesykkel med plass til to barn og cargo foran. Beltedrift, trinnløst gir og 750 Wh batteri gir lang rekkevidde og lite vedlikehold. Lavt innsteg og komfortdemping.",
                 features: ["Plass til 2 barn", "Beltedrift (Gates Carbon)", "Enviolo trinnløst gir", "750 Wh batteri", "Mixte-ramme (lavt innsteg)", "Komfortdemping", "Bosch Performance CX motor"],
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/25_F01186_110402080714_MuCha2_Mixte_GT_Var_47_UGrey-Blk_SafetyBar_Kiox300_Cargo-1024x683.jpg",
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-multicharger2-mixte-gt-touring-family',
                 name: "Multicharger Mixte GT Touring Family",
                 purpose: ['transport', 'pendling', 'allsidig', 'family', 'trekking'],
-                description: "Allsidig elsykkel for familien – trygg transport av barn og last. 750 Wh batteri, Shimano XT-gir og lavt innsteg. Perfekt til både hverdag og helg.", // Bruker "Kort beskrivelse"
+                description: "Allsidig elsykkel for familien – trygg transport av barn og last. 750 Wh batteri, Shimano XT-gir og lavt innsteg. Perfekt til både hverdag og helg.",
                 features: ["Trygg transport (barn/last)", "750 Wh batteri", "Shimano Deore XT 11-gir", "Mixte-ramme (lavt innsteg)", "Family Kit inkludert", "Bosch Performance CX motor"],
                 price: "KR 75.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Multicharger2-Mixte-GT-Vario-svart-prod-640x427.jpg",
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-multitinker-touring-family',
                 name: "Multitinker Touring Family",
                 purpose: ['transport', 'bybruk', 'allsidig', 'family'],
-                description: "Smart bysykkel med plass til to barn eller stor last. Shimano 11-gir og kjededrift gir kraft i motbakker. Kompakt, stabil og tilpasningsdyktig.", // Bruker "Kort beskrivelse"
+                description: "Smart bysykkel med plass til to barn eller stor last. Shimano 11-gir og kjededrift gir kraft i motbakker. Kompakt, stabil og tilpasningsdyktig.",
                 features: ["Plass til 2 barn / stor last", "Shimano Deore 11-gir Linkglide", "Kjededrift", "Kompakt (20\" hjul)", "Stabil & Tilpasningsdyktig", "Bosch Performance CX"],
                 price: "KR 75.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Multitinker-Touring-Family-1536x1024.jpg",
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-multitinker-vario-family',
                 name: "Multitinker Vario Family",
                 purpose: ['transport', 'bybruk', 'allsidig', 'family'],
-                description: "Samme stabile Multitinker med trinnløst gir og beltedrift for enklere vedlikehold. Komfortabel, trygg og bygget for byliv med barn eller varer.", // Bruker "Kort beskrivelse"
+                description: "Samme stabile Multitinker med trinnløst gir og beltedrift for enklere vedlikehold. Komfortabel, trygg og bygget for byliv med barn eller varer.",
                 features: ["Plass til 2 barn / stor last", "Enviolo trinnløst gir", "Beltedrift (Gates)", "Vedlikeholdsvennlig", "Kompakt (20\" hjul)", "Stabil & Trygg", "Bosch Performance CX"],
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/Multitinker-Vario-bla-med-telt-prod-1536x1024.jpg",
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'tern-quick-haul-long-d9',
                 name: "Quick Haul Long D9 400",
                 purpose: ['transport', 'bybruk', 'allsidig', 'family'],
-                description: "Lang og robust elsykkel som kan bære to barn og tung last. Stabil, lett å manøvrere og enkel å dele. 400 Wh batteri og Bosch Cargo Line-motor.", // Bruker "Kort beskrivelse"
+                description: "Lang og robust elsykkel som kan bære to barn og tung last. Stabil, lett å manøvrere og enkel å dele. 400 Wh batteri og Bosch Cargo Line-motor.",
                 features: ["Kompakt lastesykkel (190 kg totalvekt)", "Designet for 2 barn / stor last", "Lavt innsteg & lang akselavstand (stabil)", "Bosch Cargo Line motor (85Nm)", "400 Wh batteri (25-85km)", "Parkerbar vertikalt", "Passer 155–185 cm"],
                 price: "KR 49.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/Quick-Haul-Long-prod-rod-1-1536x1024.jpg",
@@ -73,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-nevo4-gt-vario-core',
                 name: "NEVO4 GT vario CORE",
                 purpose: ['bybruk', 'pendling', 'allsidig', 'trekking'],
-                description: "Hverdagsvennlig elsykkel med lavt innsteg og trinnløst gir. Komfortabel og stabil med 625 Wh batteri og Bosch CX-motor.", // Bruker "Kort beskrivelse"
-                features: ["Lavt innsteg", "Komfortabel sittestilling", "Trinnløst Enviolo-gir", "Gates karbonbelte", "Bosch Performance CX (85Nm)", "625Wh batteri (opptil 100km)", "Setepinnedemping & dempegaffel"],
+                description: "Hverdagsvennlig elsykkel med lavt innsteg og trinnløst gir. Komfortabel og stabil med 625 Wh batteri og Bosch CX-motor.",
+                features: ["Lavt innsteg", "Komfortabel sittestilling", "Enviolo trinnløst gir", "Gates karbonbelte", "Bosch Performance CX (85Nm)", "625Wh batteri (opptil 100km)", "Setepinnedemping & dempegaffel"],
                 price: "KR 63.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Nevo4-GT-vario-CORE-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-nevo4-gt-vario-core/",
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-roadster4-touring',
                 name: "Roadster4 Touring",
                 purpose: ['pendling', 'bybruk'],
-                description: "Lett, elegant og kraftig elsykkel. Perfekt for både by og tur. Integrert batteri og sporty komfort.", // Bruker "Kort beskrivelse"
+                description: "Lett, elegant og kraftig elsykkel. Perfekt for både by og tur. Integrert batteri og sporty komfort.",
                 features: ["Lett og dynamisk design", "Bosch CX-motor (85Nm)", "625 Wh batteri integrert i rammen", "Komfort med dempegaffel", "Brede dekk", "Shimano Deore XT 11-gir"],
                 price: "KR 59.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/25_F01130_0401060913_Rd4_Tou_56_BlkMtt_ChainbagVAUDE_5764-1024x683.jpg",
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'tern-orox-s12',
                 name: "Tern Orox S12 27,5",
                 purpose: ['terreng', 'transport', 'allsidig', 'adventure'],
-                description: "Eventyrsykkel som tåler ekstrem last og terreng. Bosch CX-motor og 800 Wh batteri gir solid kraft og rekkevidde.", // Bruker "Kort beskrivelse"
+                description: "Eventyrsykkel som tåler ekstrem last og terreng. Bosch CX-motor og 800 Wh batteri gir solid kraft og rekkevidde.",
                 features: ["Adventure-lastesykkel", "Terreng & Vinterbruk", "Kan utstyres med to batterier", "Tåler opptil 210 kg last", "Fatbike-dekk", "Bosch Performance CX", "800 Wh batteri"],
                 price: "KR 80.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/12/Otox-S12-275-gronn-prod-1-1536x1024.jpg",
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-load4-75-touring-familie',
                 name: "Load4 75 Touring Familie",
                 purpose: ['transport', 'family', 'pendling', 'allsidig'],
-                description: "Stor familiesykkel med tre barneseter, regntelt og demping foran og bak. Komfortabel og kraftig.", // Bruker "Kort beskrivelse"
+                description: "Stor familiesykkel med tre barneseter, regntelt og demping foran og bak. Komfortabel og kraftig.",
                 features: ["Fullfjæret lastesykkel (høy komfort)", "Transporterer opptil 3 barn", "Komplett utstyr (regntelt, bagasjebrett, belter)", "Bosch Cargo Line (Gen4, 85Nm)", "725 Wh batteri (40-120km)"],
                 price: "KR 108.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/11/Load5-75-touring-famili-prod-1536x1024.jpg",
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-load4-60-touring-familie',
                 name: "Load4 60 Touring Familie",
                 purpose: ['transport', 'family', 'pendling', 'allsidig'],
-                description: "Kompakt familiesykkel med demping, regntelt og to seter. Praktisk, trygg og fullspekket med utstyr.", // Bruker "Kort beskrivelse"
+                description: "Kompakt familiesykkel med demping, regntelt og to seter. Praktisk, trygg og fullspekket med utstyr.",
                 features: ["Demper foran og bak (maks komfort)", "Transporterer 2 barn", "Komplett familiepakke (regntelt, bagasjebrett)", "Bosch Cargo Line (Gen4)", "725 Wh batteri", "Universell størrelse"],
                 price: "KR 99.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/01/Load460Green_3000x-1536x816.webp",
@@ -128,8 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-delite5-gt-pinion',
                 name: "Delite5 GT pinion",
                 purpose: ['pendling', 'terreng', 'trekking', 'adventure', 'allsidig'],
-                description: "Fulldempet elsykkel med integrert gir og motor. Høy ytelse for pendlere og langtur.", // Bruker "Kort beskrivelse"
-                features: ["Integrert Pinion E-Drive System", "Fulldemping (Control Technology)", "Resirkulert aluminiumsramme", "Skjermet drivverk", "Bosch 800 Wh batteri", "Lang rekkevidde", "Dropper-setepinne"],
+                description: "Fulldempet elsykkel med integrert gir og motor. Høy ytelse for pendlere og langtur.",
+                features: ["Integrert Pinion E-Drive System", "Fulldemping (Control Technology)", "Resirkulert alu-ramme", "Skjermet drivverk", "Bosch 800 Wh batteri", "Lang rekkevidde", "Dropper-setepinne", "Bosch Performance CX motor"],
                 price: "KR 105.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/09/25_F01315_040209081506_Delite5_GT_Pinion_51_StoneGrey_2755-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-delite5-gt-pinion/",
@@ -139,22 +140,107 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'rm-load4-75-vario-familie',
                 name: "Load4 75 Vario Familie",
                 purpose: ['transport', 'family', 'pendling', 'allsidig'],
-                description: "Kraftig lastesykkel med beltedrift og plass til tre barn. Komfortabel og robust med demping og regntelt.", // Bruker "Kort beskrivelse"
-                features: ["Fulldempet og lettkjørt (tung last)", "Transport av opptil 3 barn", "Beltedrift (Gates)", "Enviolo trinnløst gir", "Bosch Cargo Line motor", "725 Wh batteri", "Komplett familiepakke (regntelt, etc.)"],
+                description: "Kraftig lastesykkel med beltedrift og plass til tre barn. Komfortabel og robust med demping og regntelt.",
+                features: ["Plass til 3 barn", "Fullfjæret", "Lettkjørt (tung last)", "Beltedrift (Gates)", "Enviolo trinnløst gir", "Bosch Cargo Line motor", "725 Wh batteri", "Komplett familiepakke"],
                 price: "KR 113.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/11/Load4-75-vario-familie-peanut-prod-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-75-vario-familie-2/",
                 frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front', distance_km: [30, 80], maxChildren: 3, preOrdered: false
+            },
+             // --- Start: Nye sykler lagt til ---
+             {
+                id: 'tern-gsd-s10-gen3',
+                name: "Tern GSD Gen3 S10",
+                purpose: ['transport', 'family', 'bybruk', 'allsidig', 'pendling'],
+                description: "Den ultimate lastesykkelen for familien, jobben og alt imellom. Tern GSD S10 Gen 3 er designet for å erstatte bilen – og leverer på alle fronter. Med en kraftig Bosch Cargo Line-motor, plass til to barn og full handlekurv, og ekstrem stabilitet, er dette en av markedets mest gjennomførte og pålitelige lastesykler.",
+                features: ["Bosch Cargo Line Gen 4 (85Nm)", "DualBattery-kompatibel (opptil 200km)", "Plass til 2 barneseter / 1 voksen", "Hydrauliske skivebremser m/ ABS", "Brede 20″ dekk, lavt tyngdepunkt", "Total lastekapasitet 210 kg"],
+                price: "KR 82.000",
+                image: "https://evoelsykler.no/wp-content/uploads/2025/03/TN-photo-GSD_S10-gen3-olive-profile-640x427.jpg",
+                productUrl: "https://evoelsykler.no/produkt/tern-gsd-gen3-s10/",
+                frame_types: ['cargo-longtail', 'low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'massive',
+                cargo_location: 'rear',
+                distance_km: [50, 200],
+                maxChildren: 2,
+                preOrdered: false
+            },
+            {
+                id: 'rm-load4-60-vario-familie',
+                name: "Load4 60 Vario Familie",
+                purpose: ['transport', 'family', 'bybruk', 'allsidig'],
+                description: "Riese & Müller Load4 60 Vario Familie med beltedrift er så fint balansert og så lett å sykle at du ikke tror du sitter på en lastesykkel, der du farer fram med demping både foran og bak. Komfortabel også når du er tungt lastet, det sørger et lavt tyngdepunkt for. Load4 60 vario Familie er en fiks ferdig familiepakke for transport av opptil to barn og inkluderer tilbehøret lave sidevegger, to seter med belte, fotbrønn, regntelt, bagasjebrett og en liten veske med 130 cm kjetting til rammelåsen.",
+                features: ["Plass til 2 barn", "Enviolo trinnløst navgir", "Beltedrift (Gates)", "Bosch Cargo Line (Gen4, 85Nm)", "Fulldempet", "725 Wh batteri (40-120km)", "Komplett familiepakke (regntelt, etc.)", "Bosch SmartSystem Kiox 300"],
+                price: "KR 104.000",
+                image: "https://evoelsykler.no/wp-content/uploads/2023/01/Load460Green_3000x-640x340.webp", // OBS: Placeholder bilde
+                productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-60-vario-familie-2/",
+                frame_types: ['cargo', 'low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'massive',
+                cargo_location: 'front',
+                distance_km: [40, 120],
+                maxChildren: 2,
+                preOrdered: false
+            },
+            {
+                id: 'rm-carrie-touring',
+                name: "Carrie Touring",
+                purpose: ['transport', 'bybruk', 'allsidig'],
+                description: "Riese & Müller Carrie Touring leverer på sitt løfte: vår kompakte lastesykkel tilbyr det størst mulige lasteområdet på så lite plass som mulig. Glem tunge bager eller ryggsekker – du kan velge blant en overflod av transporttilbehør for alle dine behov. Når den er foldet ut, gir den valgfrie Flex Box rikelig med lagringsplass, men du kan enkelt sykle gjennom smale gater og finne parkeringsplass nesten hvor som helst når den er sammenfoldet.",
+                features: ["Kompakt lastesykkel", "Stort lasteområde (Flex Box)", "Bosch Performance Line (75Nm)", "545 Wh batteri (oppgraderbar)", "Microshift 10-trinns gir", "Bosch SmartSystem Intuvia 100", "Valgfri dempende setepinne"],
+                price: "KR 74.850",
+                image: "https://evoelsykler.no/wp-content/uploads/2024/10/Carrie-touring-m-flex-box-prod-640x427.jpg",
+                productUrl: "https://evoelsykler.no/produkt/riese-muller-carrie-touring-2/",
+                frame_types: ['cargo', 'low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'large',
+                cargo_location: 'front',
+                distance_km: [25, 70],
+                maxChildren: 2, // Antatt 1-2 barn
+                preOrdered: false
+            },
+            {
+                id: 'rm-carrie-vario',
+                name: "Carrie Vario",
+                purpose: ['transport', 'bybruk', 'allsidig', 'pendling'],
+                description: "Riese & Müller Carrie Vario leverer på sitt løfte: vår kompakte lastesykkel tilbyr det størst mulige lasteområdet på så lite plass som mulig. Glem tunge bager eller ryggsekker – du kan velge blant en overflod av transporttilbehør for alle dine behov. Når den er foldet ut, gir den valgfrie Flex Box rikelig med lagringsplass, men du kan enkelt sykle gjennom smale gater og finne parkeringsplass nesten hvor som helst når den er sammenfoldet.",
+                features: ["Kompakt lastesykkel", "Stort lasteområde (Flex Box)", "Bosch Performance Line (75Nm)", "545 Wh batteri (oppgraderbar)", "Enviolo navgir (trinnløst)", "Beltedrift", "Vedlikeholdsvennlig", "Bosch SmartSystem Intuvia 100", "Valgfri dempende setepinne"],
+                price: "KR 79.000",
+                image: "https://evoelsykler.no/wp-content/uploads/2024/03/Carrie-Vario-aqua-basic-640x427.jpg",
+                productUrl: "https://evoelsykler.no/produkt/riese-muller-carrie-vario/",
+                frame_types: ['cargo', 'low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'large',
+                cargo_location: 'front',
+                distance_km: [25, 70],
+                maxChildren: 2, // Antatt 1-2 barn
+                preOrdered: false
+            },
+            {
+                id: 'rm-nevo4-gt-touring-core',
+                name: "Nevo4 GT Touring CORE",
+                purpose: ['bybruk', 'pendling', 'allsidig', 'trekking'],
+                description: "Riese & Müller Nevo4 GT Touring CORE er bysykler med et særegent rammedesign, designet for å kunne brukes av alle, uavhengig av kjønn og alder. Rammedesign med det lave innsteget betyr enkel og komfortabel av- og påstigning. Nevo er stabil, trygg, komfortabel, og på toppen av det hele er den morsom å sykle. En ekte hverdags- og helårssykkel.",
+                features: ["Lavt innsteg", "Stabil, trygg, komfortabel", "Bosch Performance CX (85Nm)", "625Wh batteri (opptil 100km)", "Shimano Cues 10-gir", "Setepinnedemping & dempergaffel", "Brede 27,5\" dekk (GT)"],
+                price: "KR 59.900",
+                image: "https://evoelsykler.no/wp-content/uploads/2024/10/Nevo4-GT-Touring-CORE-640x427.jpg",
+                productUrl: "https://evoelsykler.no/produkt/riese-muller-nevo4-gt-touring-core/",
+                frame_types: ['low-step'],
+                speed_kmh: 25,
+                cargo_capacity: 'medium',
+                cargo_location: 'rear',
+                distance_km: [40, 100],
+                maxChildren: 0,
+                preOrdered: false
             }
+            // --- Slutt: Nye sykler lagt til ---
         ]
     };
 
+
     // --- State (uten childCapacity) ---
     let currentStep = 1;
-    let selections = {
-        purpose: null, distance: null, cargo: null,
-        frameType: null, cargoLocation: null
-    };
+    let selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
     let recommendations = [];
     let showRecommendationsView = false;
 
@@ -175,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
 
-    // --- Steps definisjon (med oppdaterte titler, uten childCapacity) ---
+    // --- Steps definisjon (uten childCapacity, med oppdaterte titler) ---
     const steps = [
         { id: 'purpose', title: 'Jeg ser etter en sykkel for', options: [ { id: 'pendling', label: 'Turer eller pendling til jobb' }, { id: 'bybruk', label: 'Være ute i byen / Koseturer' }, { id: 'terreng', label: 'Bevege meg utenfor veien (sti/grus)' }, { id: 'transport', label: 'Transportere mye (varer/barn)' }, { id: 'allsidig', label: 'En allsidig sykkel til "litt av alt"' } ] },
         { id: 'distance', title: 'Den bør passe til', options: [ { id: 'kort', label: 'Kortere avstander (opptil 20 km)' }, { id: 'medium', label: 'Mellomdistanse (20-50 km)' }, { id: 'lang', label: 'Lange avstander (50+ km)' } ] },
@@ -270,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
          }
          recommendations.forEach((bike, index) => {
              const card = document.createElement('div'); card.classList.add('recommendation-card');
-             let badgeText = ''; if (index === 0) badgeText = 'TOPPVALG'; else if (index === 1) badgeText = 'GOD MATCH'; else if (index === 2) badgeText = 'ALTERNATIV'; // Forenklet badge uten preOrdered
+             let badgeText = ''; if (index === 0) badgeText = 'TOPPVALG'; else if (index === 1) badgeText = 'GOD MATCH'; else if (index === 2) badgeText = 'ALTERNATIV';
              let childInfoHTML = ''; if (bike.maxChildren && bike.maxChildren > 0) { const t = bike.maxChildren === 1 ? "ett barn" : `${bike.maxChildren} barn`; childInfoHTML = `<p class="child-capacity-info" style="font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.1em; height: 1.1em; flex-shrink: 0;"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z" clip-rule="evenodd" /></svg> Passer for opptil ${t}.</p>`; }
              let featuresHTML = ''; if(bike.features && bike.features.length > 0) { featuresHTML = `<div class="recommendation-features"><h4><svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Nøkkelegenskaper:</h4><ul>${bike.features.map(f => `<li>${f}</li>`).join('')}</ul></div>`; }
              card.innerHTML = `${badgeText ? `<div class="recommendation-badge">${badgeText}</div>` : ''}<div class="recommendation-image-container"><img src="${bike.image || 'https://via.placeholder.com/300x180.png?text=Bilde+mangler'}" alt="${bike.name}" class="recommendation-image"></div><div class="recommendation-content"><h3>${bike.name}</h3>${childInfoHTML}<p class="description">${bike.description || 'Ingen beskrivelse tilgjengelig.'}</p>${featuresHTML}<div class="recommendation-footer"><div class="recommendation-price">${bike.price ? `<span class="price-label">Fra</span><span class="price-value">${bike.price}</span>` : ''}</div><div class="recommendation-buttons"><a href="${bike.productUrl || '#'}" target="_blank" class="button button-secondary">Se detaljer</a></div></div></div>`;
@@ -284,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateProgress();
      }
 
-    // --- Logikk for Anbefalinger (Med Relaxed Filtering og justert sortering) ---
+    // --- Logikk for Anbefalinger ---
     function generateAndShowRecommendations() {
         console.log("Starter generering av anbefalinger med valg:", JSON.parse(JSON.stringify(selections)));
         relaxedSearchPerformed = false;
@@ -322,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  console.log(`Treff basert kun på formål: ${potentialMatches.length}`);
              }
 
-            // Justert Sortering (uten preOrdered)
+             // Sortering (uten preOrdered)
              potentialMatches.sort((a, b) => {
                  const inferChildNeed = selections.purpose === 'transport' || selections.purpose === 'family' || selections.cargo === 'massiv' || selections.cargo === 'store';
                  const meetsChildReq = (bike, inferNeed) => { if (!inferNeed) return true; return bike.maxChildren !== null && bike.maxChildren > 0; };
@@ -330,9 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (a_meets_child !== b_meets_child) { return a_meets_child ? -1 : 1; }
                  const a_children = a.maxChildren ?? -1; const b_children = b.maxChildren ?? -1;
                  if (a_children !== b_children && inferChildNeed) { return b_children - a_children; }
-                 // Sekundær sortering: Cargo Capacity hvis relevant
                  if (selections.cargo === 'massiv' || selections.cargo === 'store') { const order = { 'small': 1, 'medium': 2, 'large': 3, 'massive': 4 }; const capA = order[a.cargo_capacity] || 0; const capB = order[b.cargo_capacity] || 0; if (capA !== capB) { return capB - capA; } }
-                 return 0; // Returner 0 hvis ingen annen forskjell
+                 return 0;
              });
             console.log(`Sortert med prioritert barnematch, deretter cargo.`);
 
@@ -345,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     }
 
-    // --- Event Handlers (uten childCapacity-logikk) ---
+    // --- Event Handlers ---
     function handleOptionSelect(stepId, value) {
         selections[stepId] = value; console.log("Valg:", stepId, "=", value);
         if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; }
@@ -369,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
      }
      function resetAdvisor() {
         console.log("Reset."); currentStep = 1;
-        selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null }; // Uten childCapacity
+        selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
         recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps(); updateView();
      }
 
