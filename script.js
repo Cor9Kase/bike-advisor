@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         evoOriginal: []
     };
     // VIKTIG: Erstatt med din faktiske Google Apps Script Web App URL
-    const bikeCatalogURL = 'DIN_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HER';
+    const bikeCatalogURL = 'https://script.google.com/macros/s/AKfycbyvNS_87zqRGqlwDi0nu14XblFBSH1BH4y5BbP_pKkbZJOxbXXfc-kukcT_Z8Mj9Ngu/exec';
 
     // --- DOM Referanser (før initialisering som kan trenge data) ---
     const advisorContainer = document.getElementById('bike-advisor-container');
