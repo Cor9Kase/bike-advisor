@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. Data (Komplett katalog med alle 18 sykler og siste data) ---
     const BikeCatalog = {
         evoOriginal: [
+            // ... (din eksisterende BikeCatalog data - ingen endring her) ...
             {
                 id: 'tern-quick-haul-p9',
                 name: "Quick Haul P9",
@@ -226,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
-    const contactEvoSection = document.getElementById('contact-evo-section'); // NY REFERANSE
+    const contactEvoSection = document.getElementById('contact-evo-section');
 
     // --- Steps definisjon ---
     const steps = [
@@ -292,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
           let sentenceParts = [];
           const purposeSpan = createSpan(selections.purpose, 'purpose', 'bruksområde'); if (purposeSpan) sentenceParts.push(`Jeg ser etter en sykkel for ${purposeSpan}.`);
           const distanceSpan = createSpan(selections.distance, 'distance', 'reiseavstand'); if (distanceSpan) sentenceParts.push(`Den bør passe til ${distanceSpan} per tur.`);
-          const cargoSpan = createSpan(selections.cargo, 'cargo', 'lastemengde'); if (cargoSpan) sentenceParts.push(`Jeg trenger å frakte ${cargoSpan}.`);
+          const cargoSpan = createSpan(selections.cargo, 'cargo', 'lastemengde'); if (cargoSpan) sentenceParts.push(`Jeg trenger å fraakte ${cargoSpan}.`);
           const cargoLocationSpan = createSpan(selections.cargoLocation, 'cargoLocation', 'lastetype');
           const cargoLocStepDef = steps.find(s => s.id === 'cargoLocation'); const cargoLocIsActive = cargoLocStepDef && (!cargoLocStepDef.condition || cargoLocStepDef.condition());
           if (cargoLocIsActive && selections.cargoLocation) { sentenceParts.push(`Jeg ser for meg en ${cargoLocationSpan} sykkel.`); }
@@ -310,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
      }
      let relaxedSearchPerformed = false;
      function renderRecommendations() {
-         recommendationsOutput.innerHTML = ''; // Tøm tidligere anbefalinger
+         recommendationsOutput.innerHTML = '';
          if (recommendations.length === 0 && !relaxedSearchPerformed) {
              recommendationsOutput.innerHTML = `<div class="no-results contact-prompt-box">
                 <h3>Ingen perfekt match funnet</h3>
@@ -318,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h4>Hva nå?</h4>
                 <ul>
                     <li>Prøv å gå tilbake og justere ett eller flere av valgene dine.</li>
-                    <li>Vi hjelper deg gjerne personlig! <a href="https://evoelsykler.no/kontakt-oss/" target="_blank">Kontakt oss</a> for full oversikt og veiledning, eller ring oss på <a href="tel:+47EVOSNUMMERHER">EVOS TLF-NUMMER</a>.</li>
+                    <li>Vi hjelper deg gjerne personlig! <a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-contact-link">Kontakt oss</a> for full oversikt og veiledning, eller ring oss på <a href="tel:+47EVOSNUMMERHER" id="track-no-results-call-link">EVOS TLF-NUMMER</a>.</li>
                 </ul>
             </div>`;
              return;
@@ -327,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>Fant ingen modeller</h3>
                 <p>Selv med justerte søkekriterier fant vi ingen passende modeller.</p>
                 <h4>Vi hjelper deg!</h4>
-                <p><a href="https://evoelsykler.no/kontakt-oss/" target="_blank">Kontakt oss</a> gjerne for personlig veiledning, eller ring oss direkte på <a href="tel:+47EVOSNUMMERHER">EVOS TLF-NUMMER</a>.</p>
+                <p><a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-relaxed-contact-link">Kontakt oss</a> gjerne for personlig veiledning, eller ring oss direkte på <a href="tel:+47EVOSNUMMERHER" id="track-no-results-relaxed-call-link">EVOS TLF-NUMMER</a>.</p>
             </div>`;
              return;
          }
@@ -346,12 +347,23 @@ document.addEventListener('DOMContentLoaded', () => {
              imageLink.href = bike.productUrl || '#';
              imageLink.target = '_blank';
              imageLink.title = `Se detaljer for ${bike.name}`;
+             // Legg til data-attributter for sporing på bildelenken
+             imageLink.dataset.trackEvent = 'view_bike_details_image';
+             imageLink.dataset.bikeId = bike.id;
+             imageLink.dataset.bikeName = bike.name;
              imageLink.innerHTML = `<img src="${bike.image || 'https://via.placeholder.com/300x180.png?text=Bilde+mangler'}" alt="${bike.name}" class="recommendation-image">`;
+             
              const imageContainer = document.createElement('div');
              imageContainer.classList.add('recommendation-image-container');
              imageContainer.appendChild(imageLink);
 
-             const detailsButton = `<a href="${bike.productUrl || '#'}" target="_blank" class="button button-primary">Se detaljer</a>`;
+             // Endring for "Se detaljer"-knappen: Legg til data-attributter
+             const detailsButton = `<a href="${bike.productUrl || '#'}" 
+                                       target="_blank" 
+                                       class="button button-primary" 
+                                       data-track-event="view_bike_details_button" 
+                                       data-bike-id="${bike.id}" 
+                                       data-bike-name="${bike.name}">Se detaljer</a>`;
 
              card.innerHTML = `
                  ${badgeText ? `<div class="recommendation-badge">${badgeText}</div>` : ''}
@@ -375,8 +387,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (showRecommendationsView) {
             questionsSection.classList.add('hidden');
             recommendationsSection.classList.remove('hidden');
-            if (contactEvoSection) { // Sjekk om elementet finnes
-                if (recommendations.length > 0) { // Vis kun hvis det ER anbefalinger
+            if (contactEvoSection) {
+                if (recommendations.length > 0) {
                     contactEvoSection.classList.remove('hidden');
                 } else {
                     contactEvoSection.classList.add('hidden');
@@ -385,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             questionsSection.classList.remove('hidden');
             recommendationsSection.classList.add('hidden');
-            if (contactEvoSection) contactEvoSection.classList.add('hidden'); // Skjul alltid ellers
+            if (contactEvoSection) contactEvoSection.classList.add('hidden');
             loadingIndicator.classList.add('hidden');
             recommendationsOutput.classList.add('hidden');
             renderSentence(sentenceBuilder);
@@ -404,8 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
         showRecommendationsView = true;
         questionsSection.classList.add('hidden');
         recommendationsSection.classList.remove('hidden');
-        recommendationsOutput.classList.add('hidden'); // Skjul mens laster
-        if (contactEvoSection) contactEvoSection.classList.add('hidden'); // Skjul kontaktseksjon mens laster
+        recommendationsOutput.classList.add('hidden'); 
+        if (contactEvoSection) contactEvoSection.classList.add('hidden');
         loadingIndicator.classList.remove('hidden');
         renderSentence(summarySentenceFinal);
         recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -417,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`Filtrerer med: relaxFrameType=${relaxFrameType}, relaxDistance=${relaxDistance}, purposeOnly=${purposeOnly}`);
                 if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
                 else if (purposeOnly && selections.purpose) { return bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
-                else if (purposeOnly && !selections.purpose) { return bikesToFilter; } // Return all if no purpose specified for purposeOnly
+                else if (purposeOnly && !selections.purpose) { return bikesToFilter; } 
                 
                 if (!purposeOnly) {
                     if (selections.distance && !relaxDistance) { let min = 0; if (selections.distance === 'medium') min = 20; else if (selections.distance === 'lang') min = 50; bikesToFilter = bikesToFilter.filter(bike => bike.distance_km && bike.distance_km[1] >= min); }
@@ -436,9 +448,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 potentialMatches = filterBikes(true); relaxedSearchPerformed = true;
                 console.log(`Treff etter avslappet rammetype: ${potentialMatches.length}`);
             }
-             if (potentialMatches.length === 0 && selections.purpose) { // Kun hvis formål er valgt
+             if (potentialMatches.length === 0 && selections.purpose) { 
                  console.log("Siste utvei: Viser sykler basert kun på formål...");
-                 potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; // true for purposeOnly
+                 potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; 
                  console.log(`Treff basert kun på formål: ${potentialMatches.length}`);
              }
 
@@ -458,9 +470,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Endelige anbefalinger:", recommendations.map(b => `${b.name} (Kids: ${b.maxChildren ?? 'N/A'})`));
 
             loadingIndicator.classList.add('hidden');
-            renderRecommendations();
+            renderRecommendations(); // Nå vil data-attributter for sporing legges til her
             recommendationsOutput.classList.remove('hidden');
-            if (contactEvoSection) { // Vis kontaktseksjon hvis det er anbefalinger
+            if (contactEvoSection) { 
                 if (recommendations.length > 0) {
                     contactEvoSection.classList.remove('hidden');
                 } else {
@@ -473,40 +485,126 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Handlers ---
     function handleOptionSelect(stepId, value) {
         selections[stepId] = value; console.log("Valg:", stepId, "=", value);
+        // Spor valg av alternativ (kan være nyttig for å se drop-off)
+        trackAdvisorEvent('option_selected', {
+            step_id: stepId,
+            selected_value: value,
+            step_number: calculateCurrentVisibleStep() // Gir nåværende synlige trinn før økning
+        });
+
         if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; }
         currentStep++; let next = steps[currentStep - 1];
         while(next && next.condition && !next.condition()) { console.log(`Hopper over ${currentStep}: ${next.id}`); if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; }
         totalSteps = calculateTotalVisibleSteps(); const nextVis = calculateCurrentVisibleStep();
         console.log("Logisk:", currentStep, "Neste synlige:", nextVis, "Totalt:", totalSteps);
-        if (currentStep > steps.length) { console.log("Ferdig"); generateAndShowRecommendations(); }
-        else { console.log("Neste spørsmål"); updateView(); }
+        if (currentStep > steps.length) { 
+            console.log("Ferdig"); 
+            trackAdvisorEvent('quiz_completed', selections);
+            generateAndShowRecommendations(); 
+        } else { 
+            console.log("Neste spørsmål"); 
+            updateView(); 
+        }
      }
      function handleBack() {
          if (showRecommendationsView) {
              showRecommendationsView = false; let lastVisIdx = -1;
              for (let i = 0; i < steps.length; i++) { const s = steps[i]; if (!s.condition || s.condition()) { lastVisIdx = i; } }
-             currentStep = lastVisIdx + 1; console.log("Tilbake fra resultat ->", currentStep); updateView();
+             currentStep = lastVisIdx + 1; console.log("Tilbake fra resultat ->", currentStep); 
+             trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
+             updateView();
          } else if (currentStep > 1) {
+             const fromStep = calculateCurrentVisibleStep();
              currentStep--; let prev = steps[currentStep - 1];
-             while (currentStep > 1 && prev && prev.condition && !prev.condition()) { console.log(`Hopper bakover ${currentStep}: ${prev.id}`); currentStep--; prev = steps[currentStep - 1]; }
-             console.log("Går tilbake ->", currentStep); updateView();
+             while (currentStep > 1 && prev && prev.condition && !prev.condition()) { console.log(`Hopper bakover ${currentStep}: ${prev.id}`); currentStep--; prev = steps[currentStep -1]; }
+             console.log("Går tilbake ->", currentStep); 
+             trackAdvisorEvent('navigation_back', { from_step_visible: fromStep, to_step_visible: calculateCurrentVisibleStep() });
+             updateView();
          } else { console.log("Kan ikke gå tilbake"); }
      }
      function resetAdvisor() {
-        console.log("Reset."); currentStep = 1;
+        console.log("Reset."); 
+        trackAdvisorEvent('advisor_reset', { from_step: showRecommendationsView ? 'results' : calculateCurrentVisibleStep() });
+        currentStep = 1;
         selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
         recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps();
-        if (contactEvoSection) contactEvoSection.classList.add('hidden'); // Skjul kontaktseksjon ved reset
+        if (contactEvoSection) contactEvoSection.classList.add('hidden');
         updateView();
      }
 
+    // --- START: Sporingsfunksjonalitet ---
+    function trackAdvisorEvent(eventName, eventParameters) {
+        console.log(`EVENT: ${eventName}`, eventParameters || {});
+        // Her ville du lagt inn Meta Pixel (fbq) og/eller GA4 (gtag) kall.
+        // Eksempel:
+        // if (typeof fbq === 'function') {
+        //     fbq('trackCustom', `Advisor_${eventName}`, eventParameters);
+        // }
+        // if (typeof gtag === 'function') {
+        //     gtag('event', `advisor_${eventName.toLowerCase()}`, eventParameters);
+        // }
+    }
+
+    // Global hendelseslytter for sporing av dynamiske og statiske elementer
+    document.body.addEventListener('click', function(event) {
+        const target = event.target;
+        let tracked = false;
+
+        // Spor "Se detaljer" (både bilde og knapp)
+        const detailsLink = target.closest('[data-track-event^="view_bike_details"]');
+        if (detailsLink) {
+            const bikeId = detailsLink.dataset.bikeId;
+            const bikeName = detailsLink.dataset.bikeName;
+            const elementType = detailsLink.dataset.trackEvent === 'view_bike_details_image' ? 'image' : 'button';
+            trackAdvisorEvent('view_bike_details', {
+                bike_id: bikeId,
+                bike_name: bikeName,
+                clicked_element: elementType,
+                // Kan legge til flere parametere her, f.eks. hvilke filtre som var aktive
+                current_selections: { ...selections }
+            });
+            tracked = true;
+        }
+
+        // Spor statiske ID-baserte knapper/lenker
+        const trackableStaticElement = target.closest('[id^="track-"]');
+        if (trackableStaticElement && !tracked) { // !tracked for å unngå dobbeltsporing hvis et element har både data-attributt og ID
+            const elementId = trackableStaticElement.id;
+            let eventName = 'unknown_static_click';
+            let params = { element_id: elementId };
+
+            if (elementId === 'track-contact-page-button') {
+                eventName = 'contact_page_button_click';
+            } else if (elementId === 'track-call-button') {
+                eventName = 'call_button_click';
+                params.phone_number = trackableStaticElement.href; // F.eks. 'tel:+4712345678'
+            } else if (elementId === 'track-footer-contact-link') {
+                eventName = 'footer_contact_link_click';
+            } else if (elementId === 'track-footer-call-link') {
+                eventName = 'footer_call_link_click';
+                params.phone_number = trackableStaticElement.href;
+            } else if (elementId.startsWith('track-no-results')) {
+                eventName = 'no_results_interaction';
+                params.interaction_type = elementId.includes('contact') ? 'contact_link_click' : 'call_link_click';
+                params.search_type = elementId.includes('relaxed') ? 'relaxed' : 'strict';
+            }
+            // Legg til flere 'else if' for andre ID-er du vil spore
+
+            trackAdvisorEvent(eventName, params);
+            tracked = true;
+        }
+    });
+    // --- SLUTT: Sporingsfunksjonalitet ---
+
+
     // --- 9. Initialisering ---
-    if(backButton) backButton.addEventListener('click', handleBack);
-    if(resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
-    if(resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor);
+    if(backButton) backButton.addEventListener('click', handleBack); // Sporing for 'back' håndteres i handleBack
+    if(resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor); // Sporing for 'reset' håndteres i resetAdvisor
+    if(resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor); // Samme som over
     if(currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 
     totalSteps = calculateTotalVisibleSteps();
+    trackAdvisorEvent('advisor_loaded'); // Spor at rådgiveren er lastet
     updateView(); // Vis første trinn
 
 }); // Slutt på DOMContentLoaded
