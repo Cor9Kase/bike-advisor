@@ -35,24 +35,22 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         // Vis loader og skjul spørsmål
         if (initialLoader) initialLoader.classList.remove('hidden');
         if (questionsSection) questionsSection.classList.add('hidden');
-        // Sørg for at wheelie-klassen er fjernet ved start
-        if (bikeImageElement) bikeImageElement.classList.remove('doing-a-wheelie');
+        // Sørg for at wheelie-klassen er fjernet ved start (selv om den nå styres av CSS-animasjon)
+        if (bikeImageElement) bikeImageElement.classList.remove('doing-a-wheelie'); // For sikkerhets skyld
 
-        // Timer for Wheelie-effekt
-        let wheelieTimer = null;
-        const wheelieDelay = 4000; // 4 sekunder før wheelie
-
-        wheelieTimer = setTimeout(() => {
-            if (bikeImageElement && initialLoader && !initialLoader.classList.contains('hidden')) {
-                console.log("Loading took a while, doing a wheelie!");
-                bikeImageElement.classList.add('doing-a-wheelie');
-            }
-        }, wheelieDelay);
+        // Timer for Wheelie-effekt (fra tidligere, kan beholdes for moro skyld)
+        // let wheelieTimer = null;
+        // const wheelieDelay = 4000; // 4 sekunder før wheelie
+        // wheelieTimer = setTimeout(() => {
+        //     if (bikeImageElement && initialLoader && !initialLoader.classList.contains('hidden')) {
+        //         console.log("Loading took a while, doing a wheelie!");
+        //         bikeImageElement.classList.add('doing-a-wheelie');
+        //     }
+        // }, wheelieDelay);
 
         try {
             const response = await fetch(bikeCatalogURL);
-            // Fjern timer så snart responsen er mottatt (før sjekk/parsing)
-            clearTimeout(wheelieTimer);
+            // clearTimeout(wheelieTimer); // Fjern hvis wheelie er permanent i CSS
 
             if (!response.ok) {
                 const errorData = await response.text();
@@ -87,8 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             console.log("Sykkelkatalog lastet fra Google Sheet:", BikeCatalog.evoOriginal.length, "sykler funnet.");
             return true; // Suksess
         } catch (error) {
-            // Fjern timer også ved feil
-            clearTimeout(wheelieTimer);
+            // clearTimeout(wheelieTimer); // Fjern hvis wheelie er permanent i CSS
             console.error("Feil ved henting av sykkelkatalog:", error);
             // Vis feilmelding i loader-diven
             if (initialLoader) {
@@ -100,9 +97,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             if(questionsSection) questionsSection.classList.add('hidden'); // Hold spørsmål skjult ved feil
             return false; // Feil
         } finally {
-            // Sikkerhetsnett for å fjerne timer og wheelie-klasse uansett utfall
-            clearTimeout(wheelieTimer);
-            if (bikeImageElement) bikeImageElement.classList.remove('doing-a-wheelie');
+            // clearTimeout(wheelieTimer); // Fjern hvis wheelie er permanent i CSS
+            // if (bikeImageElement) bikeImageElement.classList.remove('doing-a-wheelie'); // Fjern hvis wheelie er permanent i CSS
 
             // Skjul loader KUN hvis det IKKE ble vist en feilmelding inni den
              if (initialLoader && !initialLoader.querySelector('.error-message')) {
@@ -133,93 +129,24 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     let totalSteps; // Initialiseres i initializeAdvisor
 
     // --- Hjelpefunksjoner ---
-    function getStepDefinition(stepNum) {
-        let visibleStepIndex = 0;
-        for (const stepDef of steps) {
-            const isConditional = typeof stepDef.condition === 'function';
-            if (!isConditional || stepDef.condition()) {
-                visibleStepIndex++;
-                if (visibleStepIndex === stepNum) { return stepDef; }
-            }
-        }
-        return null;
-     }
-     function getLabelById(optionsArray, id) {
-        if (!optionsArray || !id) return `[mangler data]`;
-        const option = optionsArray.find(opt => opt.id === id);
-        return option ? option.label : `[${id}]`;
-     }
-     function updateProgress() {
-        const currentVisibleStep = calculateCurrentVisibleStep();
-        const totalVisibleSteps = calculateTotalVisibleSteps();
-        const progressPercentage = totalVisibleSteps > 0 ? (currentVisibleStep / totalVisibleSteps) * 100 : 0;
-        if (progressBar) progressBar.style.width = `${Math.min(100, progressPercentage)}%`;
-        if (progressText) progressText.textContent = `Trinn ${currentVisibleStep}/${totalVisibleSteps}`;
-     }
-     function calculateCurrentVisibleStep() {
-        let visibleStepCount = 0; let logicalStepIndex = 0;
-        while (logicalStepIndex < currentStep && logicalStepIndex < steps.length) {
-            const stepDef = steps[logicalStepIndex];
-            if (!stepDef || !stepDef.condition || stepDef.condition()) { visibleStepCount++; }
-            logicalStepIndex++;
-        }
-        const totalVisible = calculateTotalVisibleSteps();
-        if (currentStep > steps.length && totalVisible > 0) { return totalVisible; }
-        return Math.min(Math.max(1, visibleStepCount), totalVisible > 0 ? totalVisible : 1);
-     }
-     function calculateTotalVisibleSteps() {
-          let totalVisible = 0;
-          steps.forEach(step => { if (!step.condition || step.condition()) { totalVisible++; } });
-          return totalVisible;
-     }
+    function getStepDefinition(stepNum) { /* ... */ }
+    function getLabelById(optionsArray, id) { /* ... */ }
+    function updateProgress() { /* ... */ }
+    function calculateCurrentVisibleStep() { /* ... */ }
+    function calculateTotalVisibleSteps() { /* ... */ }
+    // (Innholdet i hjelpefunksjonene er uendret)
+    function getStepDefinition(stepNum) { let visibleStepIndex = 0; for (const stepDef of steps) { const isConditional = typeof stepDef.condition === 'function'; if (!isConditional || stepDef.condition()) { visibleStepIndex++; if (visibleStepIndex === stepNum) { return stepDef; } } } return null; } function getLabelById(optionsArray, id) { if (!optionsArray || !id) return `[mangler data]`; const option = optionsArray.find(opt => opt.id === id); return option ? option.label : `[${id}]`; } function updateProgress() { const currentVisibleStep = calculateCurrentVisibleStep(); const totalVisibleSteps = calculateTotalVisibleSteps(); const progressPercentage = totalVisibleSteps > 0 ? (currentVisibleStep / totalVisibleSteps) * 100 : 0; if (progressBar) progressBar.style.width = `${Math.min(100, progressPercentage)}%`; if (progressText) progressText.textContent = `Trinn ${currentVisibleStep}/${totalVisibleSteps}`; } function calculateCurrentVisibleStep() { let visibleStepCount = 0; let logicalStepIndex = 0; while (logicalStepIndex < currentStep && logicalStepIndex < steps.length) { const stepDef = steps[logicalStepIndex]; if (!stepDef || !stepDef.condition || stepDef.condition()) { visibleStepCount++; } logicalStepIndex++; } const totalVisible = calculateTotalVisibleSteps(); if (currentStep > steps.length && totalVisible > 0) { return totalVisible; } return Math.min(Math.max(1, visibleStepCount), totalVisible > 0 ? totalVisible : 1); } function calculateTotalVisibleSteps() { let totalVisible = 0; steps.forEach(step => { if (!step.condition || step.condition()) { totalVisible++; } }); return totalVisible; }
+
 
     // --- Rendering Funksjoner ---
-     function renderSentence(targetElement) {
-         const createSpan = (selectionValue, stepId, placeholderText) => {
-              const stepDef = steps.find(s => s.id === stepId);
-              if (!stepDef) return `<span class="placeholder">[${stepId}?]</span>`;
-              const isActive = !stepDef.condition || stepDef.condition();
-              if (selectionValue && isActive) { return `<span class="selected-value">${getLabelById(stepDef.options, selectionValue)}</span>`; }
-              else if (isActive) { return `<span class="placeholder">${placeholderText}</span>`; }
-              return '';
-          };
-          let sentenceParts = [];
-          const purposeSpan = createSpan(selections.purpose, 'purpose', 'bruksområde'); if (purposeSpan) sentenceParts.push(`Jeg ser etter en sykkel for ${purposeSpan}.`);
-          const distanceSpan = createSpan(selections.distance, 'distance', 'reiseavstand'); if (distanceSpan) sentenceParts.push(`Den bør passe til ${distanceSpan} per tur.`);
-          const cargoSpan = createSpan(selections.cargo, 'cargo', 'lastemengde'); if (cargoSpan) sentenceParts.push(`Jeg trenger å fraakte ${cargoSpan}.`);
-          const cargoLocationSpan = createSpan(selections.cargoLocation, 'cargoLocation', 'lastetype');
-          const cargoLocStepDef = steps.find(s => s.id === 'cargoLocation'); const cargoLocIsActive = cargoLocStepDef && (!cargoLocStepDef.condition || cargoLocStepDef.condition());
-          if (cargoLocIsActive && selections.cargoLocation) { sentenceParts.push(`Jeg ser for meg en ${cargoLocationSpan} sykkel.`); }
-          const frameTypeSpan = createSpan(selections.frameType, 'frameType', 'rammetype'); if (frameTypeSpan) sentenceParts.push(`Jeg foretrekker en ramme med ${frameTypeSpan}.`);
-          if (targetElement) targetElement.innerHTML = `<p>${sentenceParts.join(' ').replace(/\s{2,}/g, ' ')}</p>`;
-     }
-     function renderOptions() {
-         const currentVisibleStepNum = calculateCurrentVisibleStep();
-         if (currentStep > steps.length) { if (!showRecommendationsView) { generateAndShowRecommendations(); } return; }
-         const stepDef = getStepDefinition(currentVisibleStepNum);
-         if (!stepDef) { if (!showRecommendationsView) { generateAndShowRecommendations(); } return; }
-         if (stepTitle) stepTitle.textContent = stepDef.title;
-         if (stepOptions) stepOptions.innerHTML = ''; else return;
-
-         stepDef.options.forEach(option => {
-             const button = document.createElement('button');
-             button.classList.add('option-button');
-             if(option.className) { button.classList.add(option.className); }
-             button.dataset.value = option.id;
-             if (option.className === 'cargo-type') {
-                 button.innerHTML = `${option.image ? `<img src="${option.image}" alt="${option.label}">` : ''}<div><div>${option.label}</div>${option.description ? `<div class="description">${option.description}</div>` : ''}</div>`;
-             } else {
-                 button.innerHTML = `<div>${option.label}</div>${option.description ? `<div class="description">${option.description}</div>` : ''}`;
-             }
-             if (selections[stepDef.id] === option.id) { button.classList.add('selected'); }
-             button.addEventListener('click', () => handleOptionSelect(stepDef.id, option.id));
-             stepOptions.appendChild(button);
-         });
-         updateProgress();
-     }
+     function renderSentence(targetElement) { /* ... */ }
+     function renderOptions() { /* ... */ }
+     // ----- START: OPPDATERT renderRecommendations -----
      function renderRecommendations() {
         if (!recommendationsOutput) return;
-        recommendationsOutput.innerHTML = '';
+        recommendationsOutput.innerHTML = ''; // Tøm tidligere
+
+        // Meldinger for INGEN resultater i det hele tatt (beholdes)
         if (recommendations.length === 0 && !relaxedSearchPerformed) {
              recommendationsOutput.innerHTML = `<div class="no-results contact-prompt-box">
                 <h3>Ingen perfekt match funnet</h3>
@@ -241,13 +168,27 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
              return;
          }
 
-         if (relaxedSearchPerformed) {
-            const notice = document.createElement('p'); notice.textContent = "Ingen sykler passet 100% til alle dine valg, så her er de nærmeste alternativene:"; notice.style.cssText = 'font-size: 0.9em; font-style: italic; margin-bottom: 15px; color: #6c757d; text-align: left;'; recommendationsOutput.appendChild(notice);
-         }
+         // Fjernet <p>-notisen om at søket var avslappet
 
+         // Loop gjennom anbefalingene og lag kort
          recommendations.forEach((bike, index) => {
              const card = document.createElement('div'); card.classList.add('recommendation-card');
-             let badgeText = ''; if (index === 0) badgeText = 'TOPPVALG'; else if (index === 1) badgeText = 'GOD MATCH'; else if (index === 2) badgeText = 'ALTERNATIV';
+
+             // Justert Badge-logikk
+             let badgeText = '';
+             if (relaxedSearchPerformed) {
+                 // Badges når søket var "relaxed"
+                 if (index === 0) badgeText = 'NÆRMESTE VALG';
+                 else if (index === 1) badgeText = 'GODT ALTERNATIV';
+                 else if (index === 2) badgeText = 'ALTERNATIV';
+             } else {
+                 // Badges når søket var et perfekt (strengt) treff
+                 if (index === 0) badgeText = 'TOPPVALG';
+                 else if (index === 1) badgeText = 'GOD MATCH';
+                 else if (index === 2) badgeText = 'ALTERNATIV';
+             }
+
+             // Resten av kort-genereringen er uendret
              let childInfoHTML = ''; if (bike.maxChildren && bike.maxChildren > 0) { const t = bike.maxChildren === 1 ? "ett barn" : `${bike.maxChildren} barn`; childInfoHTML = `<p class="child-capacity-info"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.1em; height: 1.1em; flex-shrink: 0;"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z" clip-rule="evenodd" /></svg> Passer for opptil ${t}.</p>`; }
              let featuresHTML = ''; if(bike.features && bike.features.length > 0) { featuresHTML = `<div class="recommendation-features"><h4><svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Nøkkelegenskaper:</h4><ul>${bike.features.map(f => `<li>${f}</li>`).join('')}</ul></div>`; }
 
@@ -287,6 +228,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
              recommendationsOutput.appendChild(card);
          });
      }
+     // ----- SLUTT: OPPDATERT renderRecommendations -----
+
 
     // --- updateView Funksjon ---
     function updateView() {
@@ -314,9 +257,10 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         updateProgress();
      }
 
+
     // --- Logikk for Anbefalinger ---
      function generateAndShowRecommendations() {
-        relaxedSearchPerformed = false;
+        relaxedSearchPerformed = false; // Reset flagget før hvert søk
         showRecommendationsView = true;
         if(questionsSection) questionsSection.classList.add('hidden');
         if(recommendationsSection) {
@@ -328,9 +272,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         if(loadingIndicator) loadingIndicator.classList.remove('hidden');
         renderSentence(summarySentenceFinal);
 
-        setTimeout(() => { // Timeout simulere litt prosesseringstid
+        setTimeout(() => { // Timeout for å vise spinner
             const filterBikes = (relaxFrameType = false, relaxDistance = false, purposeOnly = false) => {
-                // ... filtreringslogikk ...
                 let bikesToFilter = [...BikeCatalog.evoOriginal];
                 if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
                 else if (purposeOnly && selections.purpose) { return bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
@@ -345,11 +288,10 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 return bikesToFilter;
             };
             let potentialMatches = filterBikes();
-            if (potentialMatches.length === 0) { potentialMatches = filterBikes(true); relaxedSearchPerformed = true; }
-            if (potentialMatches.length === 0 && selections.purpose) { potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; }
+            if (potentialMatches.length === 0) { potentialMatches = filterBikes(true); relaxedSearchPerformed = true; } // Prøv avslappet ramme
+            if (potentialMatches.length === 0 && selections.purpose) { potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; } // Prøv kun formål
 
-             potentialMatches.sort((a, b) => {
-                 // ... sorteringslogikk ...
+             potentialMatches.sort((a, b) => { // Sortering
                  const inferChildNeed = selections.purpose === 'transport' || selections.purpose === 'family' || selections.cargo === 'massiv' || selections.cargo === 'store';
                  const meetsChildReq = (bike, inferNeed) => { if (!inferNeed) return true; return bike.maxChildren !== null && bike.maxChildren > 0; };
                  const a_meets_child = meetsChildReq(a, inferChildNeed); const b_meets_child = meetsChildReq(b, inferChildNeed);
@@ -360,11 +302,11 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                  return 0;
              });
 
-            recommendations = potentialMatches.slice(0, 3);
-            console.log("Endelige anbefalinger:", recommendations.map(b => `${b.name} (ID: ${b.id}, Kids: ${b.maxChildren ?? 'N/A'})`));
+            recommendations = potentialMatches.slice(0, 3); // Ta de topp 3
+            console.log("Endelige anbefalinger:", recommendations.map(b => `${b.name} (Relaxed: ${relaxedSearchPerformed})`));
 
             if(loadingIndicator) loadingIndicator.classList.add('hidden');
-            renderRecommendations(); // Rendrer anbefalingene
+            renderRecommendations(); // Kall rendering med de siste resultatene og flagget
             if(recommendationsOutput) recommendationsOutput.classList.remove('hidden');
             if (contactEvoSection) {
                 if (recommendations.length > 0) { contactEvoSection.classList.remove('hidden'); }
@@ -374,41 +316,12 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     }
 
     // --- Event Handlers ---
-    function handleOptionSelect(stepId, value) {
-        selections[stepId] = value;
-        trackAdvisorEvent('option_selected', { step_id: stepId, selected_value: value, step_number: calculateCurrentVisibleStep() });
-        if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; }
-        currentStep++; let next = steps[currentStep - 1];
-        while(next && next.condition && !next.condition()) { if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; }
-        totalSteps = calculateTotalVisibleSteps();
-        if (currentStep > steps.length) {
-            trackAdvisorEvent('quiz_completed', selections);
-            generateAndShowRecommendations();
-        } else { updateView(); }
-     }
-     function handleBack() {
-         if (showRecommendationsView) {
-             showRecommendationsView = false; let lastVisIdx = -1;
-             for (let i = 0; i < steps.length; i++) { const s = steps[i]; if (!s.condition || s.condition()) { lastVisIdx = i; } }
-             currentStep = lastVisIdx + 1;
-             trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
-             updateView();
-         } else if (currentStep > 1) {
-             const fromStep = calculateCurrentVisibleStep();
-             currentStep--; let prev = steps[currentStep - 1];
-             while (currentStep > 1 && prev && prev.condition && !prev.condition()) { currentStep--; prev = steps[currentStep -1]; }
-             trackAdvisorEvent('navigation_back', { from_step_visible: fromStep, to_step_visible: calculateCurrentVisibleStep() });
-             updateView();
-         }
-     }
-     function resetAdvisor() {
-        trackAdvisorEvent('advisor_reset', { from_step: showRecommendationsView ? 'results' : calculateCurrentVisibleStep() });
-        currentStep = 1;
-        selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
-        recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps();
-        if (contactEvoSection) contactEvoSection.classList.add('hidden');
-        updateView();
-     }
+    function handleOptionSelect(stepId, value) { /* ... */ }
+    function handleBack() { /* ... */ }
+    function resetAdvisor() { /* ... */ }
+    // (Innholdet i event handlers er uendret)
+    function handleOptionSelect(stepId, value) { selections[stepId] = value; trackAdvisorEvent('option_selected', { step_id: stepId, selected_value: value, step_number: calculateCurrentVisibleStep() }); if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; } currentStep++; let next = steps[currentStep - 1]; while(next && next.condition && !next.condition()) { if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; } totalSteps = calculateTotalVisibleSteps(); if (currentStep > steps.length) { trackAdvisorEvent('quiz_completed', selections); generateAndShowRecommendations(); } else { updateView(); } } function handleBack() { if (showRecommendationsView) { showRecommendationsView = false; let lastVisIdx = -1; for (let i = 0; i < steps.length; i++) { const s = steps[i]; if (!s.condition || s.condition()) { lastVisIdx = i; } } currentStep = lastVisIdx + 1; trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep }); updateView(); } else if (currentStep > 1) { const fromStep = calculateCurrentVisibleStep(); currentStep--; let prev = steps[currentStep - 1]; while (currentStep > 1 && prev && prev.condition && !prev.condition()) { currentStep--; prev = steps[currentStep -1]; } trackAdvisorEvent('navigation_back', { from_step_visible: fromStep, to_step_visible: calculateCurrentVisibleStep() }); updateView(); } } function resetAdvisor() { trackAdvisorEvent('advisor_reset', { from_step: showRecommendationsView ? 'results' : calculateCurrentVisibleStep() }); currentStep = 1; selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null }; recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps(); if (contactEvoSection) contactEvoSection.classList.add('hidden'); updateView(); }
+
 
     // --- START: Sporingsfunksjonalitet ---
     function trackAdvisorEvent(eventName, eventParameters) {
@@ -417,33 +330,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     }
 
     document.body.addEventListener('click', function(event) {
-        const target = event.target;
-        let tracked = false;
-        const detailsLink = target.closest('[data-track-event^="view_bike_details"]');
-        if (detailsLink) {
-            const bikeId = detailsLink.dataset.bikeId;
-            const bikeName = detailsLink.dataset.bikeName;
-            const elementType = detailsLink.dataset.trackEvent === 'view_bike_details_image' ? 'image' : 'button';
-            trackAdvisorEvent('view_bike_details', { bike_id: bikeId, bike_name: bikeName, clicked_element: elementType, current_selections: { ...selections } });
-            tracked = true;
-        }
-        const trackableStaticElement = target.closest('[id^="track-"]');
-        if (trackableStaticElement && !tracked) {
-            const elementId = trackableStaticElement.id;
-            let eventName = 'unknown_static_click';
-            let params = { element_id: elementId };
-             if (elementId === 'track-contact-email-button') { eventName = 'contact_button_click'; params.contact_method = 'email_button_main'; }
-            else if (elementId === 'track-call-button') { eventName = 'call_button_click'; params.contact_method = 'phone_button_main'; params.phone_number = trackableStaticElement.href; }
-            else if (elementId === 'track-footer-contact-email-link') { eventName = 'footer_contact_link_click'; params.contact_method = 'email_link_footer'; }
-            else if (elementId === 'track-footer-call-link') { eventName = 'footer_call_link_click'; params.contact_method = 'phone_link_footer'; params.phone_number = trackableStaticElement.href; }
-            else if (elementId.startsWith('track-no-results')) {
-                eventName = 'no_results_interaction';
-                params.interaction_type = elementId.includes('contact') ? 'contact_link_click' : 'call_link_click';
-                params.search_context = elementId.includes('relaxed') ? 'relaxed_search' : 'strict_search';
-                params.contact_method = elementId.includes('call') ? 'phone' : 'contact_page_or_email';
-            }
-            trackAdvisorEvent(eventName, params);
-        }
+        // ... (sporingslogikk for klikk forblir den samme) ...
+        const target = event.target; let tracked = false; const detailsLink = target.closest('[data-track-event^="view_bike_details"]'); if (detailsLink) { const bikeId = detailsLink.dataset.bikeId; const bikeName = detailsLink.dataset.bikeName; const elementType = detailsLink.dataset.trackEvent === 'view_bike_details_image' ? 'image' : 'button'; trackAdvisorEvent('view_bike_details', { bike_id: bikeId, bike_name: bikeName, clicked_element: elementType, current_selections: { ...selections } }); tracked = true; } const trackableStaticElement = target.closest('[id^="track-"]'); if (trackableStaticElement && !tracked) { const elementId = trackableStaticElement.id; let eventName = 'unknown_static_click'; let params = { element_id: elementId }; if (elementId === 'track-contact-email-button') { eventName = 'contact_button_click'; params.contact_method = 'email_button_main'; } else if (elementId === 'track-call-button') { eventName = 'call_button_click'; params.contact_method = 'phone_button_main'; params.phone_number = trackableStaticElement.href; } else if (elementId === 'track-footer-contact-email-link') { eventName = 'footer_contact_link_click'; params.contact_method = 'email_link_footer'; } else if (elementId === 'track-footer-call-link') { eventName = 'footer_call_link_click'; params.contact_method = 'phone_link_footer'; params.phone_number = trackableStaticElement.href; } else if (elementId.startsWith('track-no-results')) { eventName = 'no_results_interaction'; params.interaction_type = elementId.includes('contact') ? 'contact_link_click' : 'call_link_click'; params.search_context = elementId.includes('relaxed') ? 'relaxed_search' : 'strict_search'; params.contact_method = elementId.includes('call') ? 'phone' : 'contact_page_or_email'; } trackAdvisorEvent(eventName, params); }
     });
     // --- SLUTT: Sporingsfunksjonalitet ---
 
