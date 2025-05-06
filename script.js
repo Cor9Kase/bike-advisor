@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     const recommendationsSection = document.getElementById('recommendations-section');
     const initialLoader = document.getElementById('initial-loader'); // Referanse til den nye loaderen i HTML
     const initialLoaderText = document.getElementById('bike-loading-text-element'); // Referanse til teksten inni loaderen
+    const bikeImageElement = initialLoader ? initialLoader.querySelector('.bike-loader-png') : null; // Referanse til PNG-bildet inni loaderen
     const sentenceBuilder = document.getElementById('sentence-builder');
     const summarySentenceFinal = document.getElementById('summary-sentence-final');
     const stepTitle = document.getElementById('step-title');
@@ -31,12 +32,28 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
 
     // Funksjon for å hente sykkeldata
     async function fetchBikeCatalog() {
-        // Vis den HTML-baserte loaderen
+        // Vis loader og skjul spørsmål
         if (initialLoader) initialLoader.classList.remove('hidden');
-        if (questionsSection) questionsSection.classList.add('hidden'); // Hold spørsmål skjult
+        if (questionsSection) questionsSection.classList.add('hidden');
+        // Sørg for at wheelie-klassen er fjernet ved start
+        if (bikeImageElement) bikeImageElement.classList.remove('doing-a-wheelie');
+
+        // Timer for Wheelie-effekt
+        let wheelieTimer = null;
+        const wheelieDelay = 4000; // 4 sekunder før wheelie
+
+        wheelieTimer = setTimeout(() => {
+            if (bikeImageElement && initialLoader && !initialLoader.classList.contains('hidden')) {
+                console.log("Loading took a while, doing a wheelie!");
+                bikeImageElement.classList.add('doing-a-wheelie');
+            }
+        }, wheelieDelay);
 
         try {
             const response = await fetch(bikeCatalogURL);
+            // Fjern timer så snart responsen er mottatt (før sjekk/parsing)
+            clearTimeout(wheelieTimer);
+
             if (!response.ok) {
                 const errorData = await response.text();
                 throw new Error(`HTTP error! status: ${response.status} - Kunne ikke hente sykkelkatalog. Respons: ${errorData}`);
@@ -70,6 +87,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             console.log("Sykkelkatalog lastet fra Google Sheet:", BikeCatalog.evoOriginal.length, "sykler funnet.");
             return true; // Suksess
         } catch (error) {
+            // Fjern timer også ved feil
+            clearTimeout(wheelieTimer);
             console.error("Feil ved henting av sykkelkatalog:", error);
             // Vis feilmelding i loader-diven
             if (initialLoader) {
@@ -81,7 +100,11 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             if(questionsSection) questionsSection.classList.add('hidden'); // Hold spørsmål skjult ved feil
             return false; // Feil
         } finally {
-            // Skjul loaderen KUN hvis det IKKE ble vist en feilmelding inni den
+            // Sikkerhetsnett for å fjerne timer og wheelie-klasse uansett utfall
+            clearTimeout(wheelieTimer);
+            if (bikeImageElement) bikeImageElement.classList.remove('doing-a-wheelie');
+
+            // Skjul loader KUN hvis det IKKE ble vist en feilmelding inni den
              if (initialLoader && !initialLoader.querySelector('.error-message')) {
                  initialLoader.classList.add('hidden');
              }
@@ -163,7 +186,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
           let sentenceParts = [];
           const purposeSpan = createSpan(selections.purpose, 'purpose', 'bruksområde'); if (purposeSpan) sentenceParts.push(`Jeg ser etter en sykkel for ${purposeSpan}.`);
           const distanceSpan = createSpan(selections.distance, 'distance', 'reiseavstand'); if (distanceSpan) sentenceParts.push(`Den bør passe til ${distanceSpan} per tur.`);
-          const cargoSpan = createSpan(selections.cargo, 'cargo', 'lastemengde'); if (cargoSpan) sentenceParts.push(`Jeg trenger å frakte ${cargoSpan}.`);
+          const cargoSpan = createSpan(selections.cargo, 'cargo', 'lastemengde'); if (cargoSpan) sentenceParts.push(`Jeg trenger å fraakte ${cargoSpan}.`);
           const cargoLocationSpan = createSpan(selections.cargoLocation, 'cargoLocation', 'lastetype');
           const cargoLocStepDef = steps.find(s => s.id === 'cargoLocation'); const cargoLocIsActive = cargoLocStepDef && (!cargoLocStepDef.condition || cargoLocStepDef.condition());
           if (cargoLocIsActive && selections.cargoLocation) { sentenceParts.push(`Jeg ser for meg en ${cargoLocationSpan} sykkel.`); }
@@ -206,7 +229,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                     <li>Prøv å gå tilbake og justere ett eller flere av valgene dine.</li>
                     <li>Vi hjelper deg gjerne personlig! <a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-contact-link">Kontakt oss</a> for full oversikt og veiledning, eller ring oss på <a href="tel:+4723905555" id="track-no-results-call-link">23 90 55 55</a>.</li>
                 </ul>
-            </div>`; // Oppdatert med faktisk tlf
+            </div>`;
              return;
          } else if (recommendations.length === 0 && relaxedSearchPerformed) {
               recommendationsOutput.innerHTML = `<div class="no-results contact-prompt-box">
@@ -214,7 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 <p>Selv med justerte søkekriterier fant vi ingen passende modeller.</p>
                 <h4>Vi hjelper deg!</h4>
                 <p><a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-relaxed-contact-link">Kontakt oss</a> gjerne for personlig veiledning, eller ring oss direkte på <a href="tel:+4723905555" id="track-no-results-relaxed-call-link">23 90 55 55</a>.</p>
-            </div>`; // Oppdatert med faktisk tlf
+            </div>`;
              return;
          }
 
@@ -272,32 +295,24 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             if(questionsSection) questionsSection.classList.add('hidden');
             if(recommendationsSection) recommendationsSection.classList.remove('hidden');
             if (contactEvoSection) {
-                if (recommendations.length > 0) {
-                    contactEvoSection.classList.remove('hidden');
-                } else {
-                    contactEvoSection.classList.add('hidden');
-                }
+                if (recommendations.length > 0) { contactEvoSection.classList.remove('hidden'); }
+                else { contactEvoSection.classList.add('hidden'); }
             }
         } else {
-            // Bare vis spørsmål hvis katalogen er lastet OG IKKE tom
             if (BikeCatalog.evoOriginal && BikeCatalog.evoOriginal.length > 0) {
                 if(questionsSection) questionsSection.classList.remove('hidden');
-            } else {
-                 if(questionsSection) questionsSection.classList.add('hidden'); // Hold skjult hvis katalogen er tom/ikke lastet
-            }
-
+            } else { if(questionsSection) questionsSection.classList.add('hidden'); }
             if(recommendationsSection) recommendationsSection.classList.add('hidden');
             if (contactEvoSection) contactEvoSection.classList.add('hidden');
             if(loadingIndicator) loadingIndicator.classList.add('hidden');
             if(recommendationsOutput) recommendationsOutput.classList.add('hidden');
             renderSentence(sentenceBuilder);
-            renderOptions(); // Kalles for å rendre alternativer for gjeldende trinn
+            renderOptions();
             const currentVisible = calculateCurrentVisibleStep();
             if(backButton) backButton.classList.toggle('hidden', currentVisible <= 1 && currentStep <= 1);
         }
-        updateProgress(); // Oppdaterer progressbar uansett
+        updateProgress();
      }
-
 
     // --- Logikk for Anbefalinger ---
      function generateAndShowRecommendations() {
@@ -315,6 +330,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
 
         setTimeout(() => { // Timeout simulere litt prosesseringstid
             const filterBikes = (relaxFrameType = false, relaxDistance = false, purposeOnly = false) => {
+                // ... filtreringslogikk ...
                 let bikesToFilter = [...BikeCatalog.evoOriginal];
                 if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
                 else if (purposeOnly && selections.purpose) { return bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
@@ -328,12 +344,12 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 }
                 return bikesToFilter;
             };
-
             let potentialMatches = filterBikes();
             if (potentialMatches.length === 0) { potentialMatches = filterBikes(true); relaxedSearchPerformed = true; }
             if (potentialMatches.length === 0 && selections.purpose) { potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; }
 
              potentialMatches.sort((a, b) => {
+                 // ... sorteringslogikk ...
                  const inferChildNeed = selections.purpose === 'transport' || selections.purpose === 'family' || selections.cargo === 'massiv' || selections.cargo === 'store';
                  const meetsChildReq = (bike, inferNeed) => { if (!inferNeed) return true; return bike.maxChildren !== null && bike.maxChildren > 0; };
                  const a_meets_child = meetsChildReq(a, inferChildNeed); const b_meets_child = meetsChildReq(b, inferChildNeed);
@@ -354,7 +370,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 if (recommendations.length > 0) { contactEvoSection.classList.remove('hidden'); }
                 else { contactEvoSection.classList.add('hidden'); }
             }
-        }, 300); // Redusert timeout litt
+        }, 300);
     }
 
     // --- Event Handlers ---
@@ -364,11 +380,11 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; }
         currentStep++; let next = steps[currentStep - 1];
         while(next && next.condition && !next.condition()) { if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; }
-        totalSteps = calculateTotalVisibleSteps(); // Sørg for at totalSteps er oppdatert
+        totalSteps = calculateTotalVisibleSteps();
         if (currentStep > steps.length) {
             trackAdvisorEvent('quiz_completed', selections);
             generateAndShowRecommendations();
-        } else { updateView(); } // Kall updateView for å vise neste steg
+        } else { updateView(); }
      }
      function handleBack() {
          if (showRecommendationsView) {
@@ -376,13 +392,13 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
              for (let i = 0; i < steps.length; i++) { const s = steps[i]; if (!s.condition || s.condition()) { lastVisIdx = i; } }
              currentStep = lastVisIdx + 1;
              trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
-             updateView(); // Kall updateView for å gå tilbake til spørsmål
+             updateView();
          } else if (currentStep > 1) {
              const fromStep = calculateCurrentVisibleStep();
              currentStep--; let prev = steps[currentStep - 1];
              while (currentStep > 1 && prev && prev.condition && !prev.condition()) { currentStep--; prev = steps[currentStep -1]; }
              trackAdvisorEvent('navigation_back', { from_step_visible: fromStep, to_step_visible: calculateCurrentVisibleStep() });
-             updateView(); // Kall updateView for å vise forrige steg
+             updateView();
          }
      }
      function resetAdvisor() {
@@ -391,21 +407,18 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
         recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps();
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
-        updateView(); // Kall updateView for å starte på nytt
+        updateView();
      }
 
     // --- START: Sporingsfunksjonalitet ---
     function trackAdvisorEvent(eventName, eventParameters) {
         console.log(`TRACKING EVENT: ${eventName}`, eventParameters || {});
-        // Her implementeres Meta Pixel / GA4 kall
-        // if (typeof fbq === 'function') { ... }
-        // if (typeof gtag === 'function') { ... }
+        // Implementer sporing her
     }
 
     document.body.addEventListener('click', function(event) {
         const target = event.target;
         let tracked = false;
-
         const detailsLink = target.closest('[data-track-event^="view_bike_details"]');
         if (detailsLink) {
             const bikeId = detailsLink.dataset.bikeId;
@@ -414,14 +427,12 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             trackAdvisorEvent('view_bike_details', { bike_id: bikeId, bike_name: bikeName, clicked_element: elementType, current_selections: { ...selections } });
             tracked = true;
         }
-
         const trackableStaticElement = target.closest('[id^="track-"]');
         if (trackableStaticElement && !tracked) {
             const elementId = trackableStaticElement.id;
             let eventName = 'unknown_static_click';
             let params = { element_id: elementId };
-
-            if (elementId === 'track-contact-email-button') { eventName = 'contact_button_click'; params.contact_method = 'email_button_main'; }
+             if (elementId === 'track-contact-email-button') { eventName = 'contact_button_click'; params.contact_method = 'email_button_main'; }
             else if (elementId === 'track-call-button') { eventName = 'call_button_click'; params.contact_method = 'phone_button_main'; params.phone_number = trackableStaticElement.href; }
             else if (elementId === 'track-footer-contact-email-link') { eventName = 'footer_contact_link_click'; params.contact_method = 'email_link_footer'; }
             else if (elementId === 'track-footer-call-link') { eventName = 'footer_call_link_click'; params.contact_method = 'phone_link_footer'; params.phone_number = trackableStaticElement.href; }
@@ -443,7 +454,6 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         if (catalogLoaded && BikeCatalog.evoOriginal.length > 0) {
             totalSteps = calculateTotalVisibleSteps();
 
-            // Sett opp event listeners ETTER at data er lastet og vi vet at UI skal vises
             if(backButton) backButton.addEventListener('click', handleBack);
             if(resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
             if(resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor);
@@ -452,13 +462,16 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             trackAdvisorEvent('advisor_ui_ready');
             updateView(); // Kall for å vise første trinn
         } else if (catalogLoaded && BikeCatalog.evoOriginal.length === 0) {
-            // Feilmelding vises allerede av fetchBikeCatalog hvis den er tom
-            console.warn("Sykkelkatalog lastet, men den er tom.");
+             if (initialLoader) { // Vis melding om tom katalog
+                initialLoader.innerHTML = `<div class="error-message" style="width:100%;">Beklager, sykkelkatalogen er tom for øyeblikket. Prøv igjen senere.</div>`;
+                initialLoader.classList.remove('hidden');
+             }
+            if(questionsSection) questionsSection.classList.add('hidden');
         }
-        // Hvis catalogLoaded er false, er feilmelding allerede vist av fetchBikeCatalog
+        // Hvis catalogLoaded er false, er feilmelding allerede vist
     }
 
-    // Kall initialiseringsfunksjonen for å starte hele prosessen
+    // Kall initialiseringsfunksjonen
     initializeAdvisor();
 
 }); // Slutt på DOMContentLoaded
