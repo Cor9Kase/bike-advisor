@@ -14,7 +14,7 @@ body {
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    overflow: visible; /* La loaderen kunne "gå utenfor" uten å bli klippet av container */
+    overflow: visible; /* Tillater loader å gå utenfor visuelt om nødvendig, men #initial-loader har overflow:hidden */
 }
 
 /* Header */
@@ -52,12 +52,11 @@ body {
     display: none !important;
 }
 
-/* --- START: Styling for Sykkel-laster (PNG Versjon) --- */
+/* --- START: Styling for Sykkel-laster (PNG Versjon - Konstant Wheelie via Keyframes) --- */
 
 /* Container for animasjonen */
 #initial-loader {
-  /* display: flex; fjernet, JS styrer synlighet via 'hidden' klassen */
-  display: flex; /* Gjeninnført for flex-egenskaper, men kontrolleres av .hidden */
+  display: flex; /* Brukes for flex-justering, men synlighet styres av .hidden */
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -68,28 +67,22 @@ body {
   border-radius: 8px;
   background-color: #f8f9fa;
   margin-bottom: 30px;
-  overflow: hidden; /* Viktig for å skjule sykkelen når den går utenfor */
-  position: relative; /* Nødvendig for absolutt posisjonering av bilde */
+  overflow: hidden; /* Viktig: Skjul sykkelen når den går utenfor denne boksen */
+  position: relative;
 }
 
 /* Selve PNG-sykkelen */
 .bike-loader-png {
-  width: 60px; /* Juster bredden etter ønske */
-  height: auto; /* Beholder proporsjoner */
+  width: 60px; /* Juster bredden */
+  height: auto;
   display: block;
   position: absolute;
-  bottom: 50px; /* Juster vertikal plassering over teksten */
-  left: 0; /* Startposisjon for animasjon */
-  animation: rideAcrossPng 2.5s linear infinite; /* Kortere varighet for raskere */
-  transition: transform 0.3s ease-out; /* For jevn wheelie-rotasjon */
-  transform-origin: 85% 95%; /* Ca. bakhjul - juster dette ved behov! */
+  bottom: 50px; /* Juster vertikal posisjon */
+  left: 0; /* Startposisjon for keyframes */
+  animation: rideWheelieAcross 2.5s linear infinite; /* Bruker nytt keyframe-navn */
+  transform-origin: 85% 95%; /* Ca. bakhjulspunkt - juster dette! */
+  /* Ingen statisk transform her - alt håndteres av keyframes */
 }
-
-/* Klasse for wheelie-effekt */
-.bike-loader-png.doing-a-wheelie {
-  transform: rotate(-18deg); /* Roterer litt bakover. Juster vinkelen */
-}
-
 
 /* Teksten under sykkelen */
 .bike-loading-text {
@@ -99,23 +92,25 @@ body {
   margin-top: 70px; /* Plass under animasjonsområdet */
 }
 
-/* Keyframes for sykkelens bevegelse */
-@keyframes rideAcrossPng {
+/* Keyframes som inkluderer BÅDE bevegelse OG konstant rotasjon */
+@keyframes rideWheelieAcross {
   0% {
-    transform: translateX(-80px); /* Start utenfor */
+    /* Start utenfor til venstre, rotert, usynlig */
+    transform: translateX(-80px) rotate(-18deg);
     opacity: 0;
   }
-  10% {
-    opacity: 1;
-  }
-  90% {
+  10%, 90% {
+    /* Fade inn/ut, behold rotasjon. Posisjon interpoleres. */
+     transform: rotate(-18deg); /* Kun rotasjon spesifisert her lar translateX interpolere */
     opacity: 1;
   }
   100% {
-    transform: translateX(calc(100% + 80px)); /* Kjør helt ut */
+    /* Slutt utenfor til høyre, rotert, usynlig */
+    transform: translateX(calc(100% + 80px)) rotate(-18deg);
     opacity: 0;
   }
 }
+
 
 /* Spinner-styling (for lasteindikator når anbefalinger genereres) */
 .spinner {
@@ -127,7 +122,9 @@ body {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-.loading-text { /* Gjelder begge loadere nå */
+/* Bruker .bike-loading-text for tekst i initial-loader,
+   men beholder .loading-text for spinner-kontekst */
+.loading-text {
     font-size: 1.1em; color: #495057; font-weight: 500;
 }
 .loading-container { /* Kun for anbefalings-loader */
@@ -138,7 +135,7 @@ body {
 .loading-container .spinner { margin-bottom: 15px; }
 
 
-/* Feilmeldingsstyling (brukes i initial-loader) */
+/* Feilmeldingsstyling (brukes i initial-loader og potensielt andre steder) */
 .error-message {
     background-color: #fff3f3;
     color: #b71c1c;
@@ -374,7 +371,7 @@ body {
     .contact-prompt-box p { font-size: 0.95em; }
     .contact-options .button { width: 100%; min-width: unset; }
     #initial-loader { min-height: 160px; }
-    .bike-loader-png { width: 50px; bottom: 45px; }
+    .bike-loader-png { width: 50px; bottom: 45px; } /* Justert størrelse for mobil */
     .bike-loading-text { font-size: 1em; margin-top: 60px; }
 }
 
