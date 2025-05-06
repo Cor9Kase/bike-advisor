@@ -9,9 +9,11 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
 
     // --- DOM Referanser (før initialisering som kan trenge data) ---
     const advisorContainer = document.getElementById('bike-advisor-container');
-    const advisorContent = document.getElementById('advisor-content'); // Lagt til referanse
+    const advisorContent = document.getElementById('advisor-content'); // Referanse til innholds-div
     const questionsSection = document.getElementById('questions-section');
     const recommendationsSection = document.getElementById('recommendations-section');
+    const initialLoader = document.getElementById('initial-loader'); // Referanse til den nye loaderen i HTML
+    const initialLoaderText = document.getElementById('bike-loading-text-element'); // Referanse til teksten inni loaderen
     const sentenceBuilder = document.getElementById('sentence-builder');
     const summarySentenceFinal = document.getElementById('summary-sentence-final');
     const stepTitle = document.getElementById('step-title');
@@ -23,32 +25,15 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
-    const loadingIndicator = document.getElementById('loading-indicator'); // Brukes for anbefalinger
+    const loadingIndicator = document.getElementById('loading-indicator'); // Spinner for anbefalinger
     const contactEvoSection = document.getElementById('contact-evo-section');
-
-    const initialLoadingMessageContainer = document.createElement('div'); // Container for lastemelding
-    initialLoadingMessageContainer.style.cssText = 'display: flex; justify-content: center; align-items: center; padding: 40px 20px; min-height: 150px; text-align: center; border: 1px solid #e9ecef; border-radius: 8px; background-color: #f8f9fa; margin-bottom: 30px;';
-    const initialSpinner = document.createElement('div');
-    initialSpinner.className = 'spinner'; // Bruk eksisterende spinner-klasse
-    const initialLoadingText = document.createElement('p');
-    initialLoadingText.className = 'loading-text'; // Bruk eksisterende loading-text-klasse
-    initialLoadingText.textContent = 'Laster sykkeldata, vennligst vent...';
-    initialLoadingText.style.marginLeft = '15px';
-    initialLoadingMessageContainer.appendChild(initialSpinner);
-    initialLoadingMessageContainer.appendChild(initialLoadingText);
 
 
     // Funksjon for å hente sykkeldata
     async function fetchBikeCatalog() {
-        // Bruk advisorContent som forelder for innsetting
-        if (questionsSection && advisorContent) { // Sjekk at begge finnes
-             advisorContent.insertBefore(initialLoadingMessageContainer, questionsSection); // Rettet
-             questionsSection.classList.add('hidden'); // Skjul spørsmål mens data lastes
-        } else if (advisorContent) { // Fallback
-            advisorContent.appendChild(initialLoadingMessageContainer);
-        } else if (advisorContainer){ // Absolutt fallback
-             advisorContainer.appendChild(initialLoadingMessageContainer);
-        }
+        // Vis den HTML-baserte loaderen
+        if (initialLoader) initialLoader.classList.remove('hidden');
+        if (questionsSection) questionsSection.classList.add('hidden'); // Hold spørsmål skjult
 
         try {
             const response = await fetch(bikeCatalogURL);
@@ -58,12 +43,12 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             }
             const data = await response.json();
 
-            if (data.error) {
+            if (data.error) { // Sjekk for feilmelding fra Apps Script
                 throw new Error(`Feil fra Google Apps Script: ${data.message}`);
             }
 
+            // Behandle og valider hentet data
             BikeCatalog.evoOriginal = data.map(bike => {
-                // Sikre at alle nødvendige felt har fornuftige defaults
                 return {
                     id: String(bike.id || `unknown-id-${Math.random().toString(36).substr(2, 9)}`),
                     name: String(bike.name || "Ukjent sykkelnavn"),
@@ -83,19 +68,24 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 };
             });
             console.log("Sykkelkatalog lastet fra Google Sheet:", BikeCatalog.evoOriginal.length, "sykler funnet.");
-            return true;
+            return true; // Suksess
         } catch (error) {
             console.error("Feil ved henting av sykkelkatalog:", error);
-            initialLoadingMessageContainer.innerHTML = `<div class="error-message" style="width:100%;">
-                Beklager, det oppstod en feil under lasting av sykkeldata. Prøv å laste siden på nytt. <br><small>${error.message}</small>
-            </div>`;
-            if(questionsSection) questionsSection.classList.add('hidden');
-            return false;
-        } finally {
-            if (initialLoadingMessageContainer.querySelector && !initialLoadingMessageContainer.querySelector('.error-message')) {
-                initialLoadingMessageContainer.remove();
+            // Vis feilmelding i loader-diven
+            if (initialLoader) {
+                initialLoader.innerHTML = `<div class="error-message" style="width:100%;">
+                    Beklager, det oppstod en feil under lasting av sykkeldata. Prøv å laste siden på nytt. <br><small>${error.message}</small>
+                </div>`;
+                initialLoader.classList.remove('hidden'); // Sørg for at feilmeldingen er synlig
             }
-            // Vis spørsmål igjen KUN hvis lasting var vellykket OG det finnes sykler
+            if(questionsSection) questionsSection.classList.add('hidden'); // Hold spørsmål skjult ved feil
+            return false; // Feil
+        } finally {
+            // Skjul loaderen KUN hvis det IKKE ble vist en feilmelding inni den
+             if (initialLoader && !initialLoader.querySelector('.error-message')) {
+                 initialLoader.classList.add('hidden');
+             }
+            // Vis spørsmål igjen hvis lasting var vellykket OG det finnes sykler
             if(questionsSection && BikeCatalog.evoOriginal.length > 0) {
                  questionsSection.classList.remove('hidden');
             }
@@ -107,6 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     let selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
     let recommendations = [];
     let showRecommendationsView = false;
+    let relaxedSearchPerformed = false; // Definert globalt
 
     // --- Steps definisjon ---
     const steps = [
@@ -119,7 +110,6 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     let totalSteps; // Initialiseres i initializeAdvisor
 
     // --- Hjelpefunksjoner ---
-    // (getStepDefinition, getLabelById, etc. inkluderes her)
     function getStepDefinition(stepNum) {
         let visibleStepIndex = 0;
         for (const stepDef of steps) {
@@ -138,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
      }
      function updateProgress() {
         const currentVisibleStep = calculateCurrentVisibleStep();
-        const totalVisibleSteps = calculateTotalVisibleSteps(); // Sørg for at totalSteps er satt
+        const totalVisibleSteps = calculateTotalVisibleSteps();
         const progressPercentage = totalVisibleSteps > 0 ? (currentVisibleStep / totalVisibleSteps) * 100 : 0;
         if (progressBar) progressBar.style.width = `${Math.min(100, progressPercentage)}%`;
         if (progressText) progressText.textContent = `Trinn ${currentVisibleStep}/${totalVisibleSteps}`;
@@ -151,8 +141,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             logicalStepIndex++;
         }
         const totalVisible = calculateTotalVisibleSteps();
-        if (currentStep > steps.length && totalVisible > 0) { return totalVisible; } // Justert logikk
-        return Math.min(Math.max(1, visibleStepCount), totalVisible > 0 ? totalVisible : 1); // Unngå 0 i nevner
+        if (currentStep > steps.length && totalVisible > 0) { return totalVisible; }
+        return Math.min(Math.max(1, visibleStepCount), totalVisible > 0 ? totalVisible : 1);
      }
      function calculateTotalVisibleSteps() {
           let totalVisible = 0;
@@ -161,7 +151,6 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
      }
 
     // --- Rendering Funksjoner ---
-    // (renderSentence, renderOptions, renderRecommendations inkluderes her)
      function renderSentence(targetElement) {
          const createSpan = (selectionValue, stepId, placeholderText) => {
               const stepDef = steps.find(s => s.id === stepId);
@@ -183,43 +172,28 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
      }
      function renderOptions() {
          const currentVisibleStepNum = calculateCurrentVisibleStep();
-         // Sjekk om vi er ferdige FØR vi prøver å hente stepDef
-         if (currentStep > steps.length) { 
-             if (!showRecommendationsView) { 
-                 generateAndShowRecommendations(); 
-             } 
-             return; 
-         }
-
+         if (currentStep > steps.length) { if (!showRecommendationsView) { generateAndShowRecommendations(); } return; }
          const stepDef = getStepDefinition(currentVisibleStepNum);
-         if (!stepDef) { // Skal ikke skje hvis currentStep <= steps.length, men greit med sjekk
-              if (!showRecommendationsView) { 
-                  generateAndShowRecommendations(); 
-              }
-              return; 
-         } 
-         
-         if (stepTitle) stepTitle.textContent = stepDef.title; 
-         if (stepOptions) stepOptions.innerHTML = '';
-         else return; // Avbryt hvis stepOptions ikke finnes
+         if (!stepDef) { if (!showRecommendationsView) { generateAndShowRecommendations(); } return; }
+         if (stepTitle) stepTitle.textContent = stepDef.title;
+         if (stepOptions) stepOptions.innerHTML = ''; else return;
 
-         stepDef.options.forEach(option => { 
-             const button = document.createElement('button'); 
-             button.classList.add('option-button'); 
-             if(option.className) { button.classList.add(option.className); } 
-             button.dataset.value = option.id; 
-             if (option.className === 'cargo-type') { 
-                 button.innerHTML = `${option.image ? `<img src="${option.image}" alt="${option.label}">` : ''}<div><div>${option.label}</div>${option.description ? `<div class="description">${option.description}</div>` : ''}</div>`; 
-             } else { 
-                 button.innerHTML = `<div>${option.label}</div>${option.description ? `<div class="description">${option.description}</div>` : ''}`; 
-             } 
-             if (selections[stepDef.id] === option.id) { button.classList.add('selected'); } 
-             button.addEventListener('click', () => handleOptionSelect(stepDef.id, option.id)); 
-             stepOptions.appendChild(button); 
+         stepDef.options.forEach(option => {
+             const button = document.createElement('button');
+             button.classList.add('option-button');
+             if(option.className) { button.classList.add(option.className); }
+             button.dataset.value = option.id;
+             if (option.className === 'cargo-type') {
+                 button.innerHTML = `${option.image ? `<img src="${option.image}" alt="${option.label}">` : ''}<div><div>${option.label}</div>${option.description ? `<div class="description">${option.description}</div>` : ''}</div>`;
+             } else {
+                 button.innerHTML = `<div>${option.label}</div>${option.description ? `<div class="description">${option.description}</div>` : ''}`;
+             }
+             if (selections[stepDef.id] === option.id) { button.classList.add('selected'); }
+             button.addEventListener('click', () => handleOptionSelect(stepDef.id, option.id));
+             stepOptions.appendChild(button);
          });
          updateProgress();
      }
-     let relaxedSearchPerformed = false;
      function renderRecommendations() {
         if (!recommendationsOutput) return;
         recommendationsOutput.innerHTML = '';
@@ -230,17 +204,17 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 <h4>Hva nå?</h4>
                 <ul>
                     <li>Prøv å gå tilbake og justere ett eller flere av valgene dine.</li>
-                    <li>Vi hjelper deg gjerne personlig! <a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-contact-link">Kontakt oss</a> for full oversikt og veiledning, eller ring oss på <a href="tel:+47EVOSNUMMERHER" id="track-no-results-call-link">EVOS TLF-NUMMER</a>.</li>
+                    <li>Vi hjelper deg gjerne personlig! <a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-contact-link">Kontakt oss</a> for full oversikt og veiledning, eller ring oss på <a href="tel:+4723905555" id="track-no-results-call-link">23 90 55 55</a>.</li>
                 </ul>
-            </div>`; // HUSK Å ERSTATTE PLASSHOLDERE
+            </div>`; // Oppdatert med faktisk tlf
              return;
          } else if (recommendations.length === 0 && relaxedSearchPerformed) {
               recommendationsOutput.innerHTML = `<div class="no-results contact-prompt-box">
                 <h3>Fant ingen modeller</h3>
                 <p>Selv med justerte søkekriterier fant vi ingen passende modeller.</p>
                 <h4>Vi hjelper deg!</h4>
-                <p><a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-relaxed-contact-link">Kontakt oss</a> gjerne for personlig veiledning, eller ring oss direkte på <a href="tel:+47EVOSNUMMERHER" id="track-no-results-relaxed-call-link">EVOS TLF-NUMMER</a>.</p>
-            </div>`; // HUSK Å ERSTATTE PLASSHOLDERE
+                <p><a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-relaxed-contact-link">Kontakt oss</a> gjerne for personlig veiledning, eller ring oss direkte på <a href="tel:+4723905555" id="track-no-results-relaxed-call-link">23 90 55 55</a>.</p>
+            </div>`; // Oppdatert med faktisk tlf
              return;
          }
 
@@ -262,16 +236,16 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
              imageLink.dataset.bikeId = bike.id;
              imageLink.dataset.bikeName = bike.name;
              imageLink.innerHTML = `<img src="${bike.image || 'https://via.placeholder.com/300x180.png?text=Bilde+mangler'}" alt="${bike.name}" class="recommendation-image">`;
-             
+
              const imageContainer = document.createElement('div');
              imageContainer.classList.add('recommendation-image-container');
              imageContainer.appendChild(imageLink);
 
-             const detailsButton = `<a href="${bike.productUrl || '#'}" 
-                                       target="_blank" 
-                                       class="button button-primary" 
-                                       data-track-event="view_bike_details_button" 
-                                       data-bike-id="${bike.id}" 
+             const detailsButton = `<a href="${bike.productUrl || '#'}"
+                                       target="_blank"
+                                       class="button button-primary"
+                                       data-track-event="view_bike_details_button"
+                                       data-bike-id="${bike.id}"
                                        data-bike-name="${bike.name}">Se detaljer</a>`;
 
              card.innerHTML = `
@@ -293,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
 
     // --- updateView Funksjon ---
     function updateView() {
-        totalSteps = calculateTotalVisibleSteps(); // Sørg for at totalSteps er oppdatert
+        totalSteps = calculateTotalVisibleSteps();
         if (showRecommendationsView) {
             if(questionsSection) questionsSection.classList.add('hidden');
             if(recommendationsSection) recommendationsSection.classList.remove('hidden');
@@ -305,17 +279,23 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 }
             }
         } else {
-            if(questionsSection) questionsSection.classList.remove('hidden');
+            // Bare vis spørsmål hvis katalogen er lastet OG IKKE tom
+            if (BikeCatalog.evoOriginal && BikeCatalog.evoOriginal.length > 0) {
+                if(questionsSection) questionsSection.classList.remove('hidden');
+            } else {
+                 if(questionsSection) questionsSection.classList.add('hidden'); // Hold skjult hvis katalogen er tom/ikke lastet
+            }
+
             if(recommendationsSection) recommendationsSection.classList.add('hidden');
             if (contactEvoSection) contactEvoSection.classList.add('hidden');
-            if(loadingIndicator) loadingIndicator.classList.add('hidden'); // Lasteindikator for anbefalinger
+            if(loadingIndicator) loadingIndicator.classList.add('hidden');
             if(recommendationsOutput) recommendationsOutput.classList.add('hidden');
             renderSentence(sentenceBuilder);
-            renderOptions(); // VIKTIG: Sørger for at alternativer rendres
+            renderOptions(); // Kalles for å rendre alternativer for gjeldende trinn
             const currentVisible = calculateCurrentVisibleStep();
             if(backButton) backButton.classList.toggle('hidden', currentVisible <= 1 && currentStep <= 1);
         }
-        updateProgress();
+        updateProgress(); // Oppdaterer progressbar uansett
      }
 
 
@@ -333,7 +313,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         if(loadingIndicator) loadingIndicator.classList.remove('hidden');
         renderSentence(summarySentenceFinal);
 
-        setTimeout(() => {
+        setTimeout(() => { // Timeout simulere litt prosesseringstid
             const filterBikes = (relaxFrameType = false, relaxDistance = false, purposeOnly = false) => {
                 let bikesToFilter = [...BikeCatalog.evoOriginal];
                 if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
@@ -368,13 +348,13 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             console.log("Endelige anbefalinger:", recommendations.map(b => `${b.name} (ID: ${b.id}, Kids: ${b.maxChildren ?? 'N/A'})`));
 
             if(loadingIndicator) loadingIndicator.classList.add('hidden');
-            renderRecommendations();
+            renderRecommendations(); // Rendrer anbefalingene
             if(recommendationsOutput) recommendationsOutput.classList.remove('hidden');
             if (contactEvoSection) {
                 if (recommendations.length > 0) { contactEvoSection.classList.remove('hidden'); }
                 else { contactEvoSection.classList.add('hidden'); }
             }
-        }, 500);
+        }, 300); // Redusert timeout litt
     }
 
     // --- Event Handlers ---
@@ -384,11 +364,11 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; }
         currentStep++; let next = steps[currentStep - 1];
         while(next && next.condition && !next.condition()) { if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; }
-        totalSteps = calculateTotalVisibleSteps();
+        totalSteps = calculateTotalVisibleSteps(); // Sørg for at totalSteps er oppdatert
         if (currentStep > steps.length) {
             trackAdvisorEvent('quiz_completed', selections);
             generateAndShowRecommendations();
-        } else { updateView(); }
+        } else { updateView(); } // Kall updateView for å vise neste steg
      }
      function handleBack() {
          if (showRecommendationsView) {
@@ -396,13 +376,13 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
              for (let i = 0; i < steps.length; i++) { const s = steps[i]; if (!s.condition || s.condition()) { lastVisIdx = i; } }
              currentStep = lastVisIdx + 1;
              trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
-             updateView();
+             updateView(); // Kall updateView for å gå tilbake til spørsmål
          } else if (currentStep > 1) {
              const fromStep = calculateCurrentVisibleStep();
              currentStep--; let prev = steps[currentStep - 1];
              while (currentStep > 1 && prev && prev.condition && !prev.condition()) { currentStep--; prev = steps[currentStep -1]; }
              trackAdvisorEvent('navigation_back', { from_step_visible: fromStep, to_step_visible: calculateCurrentVisibleStep() });
-             updateView();
+             updateView(); // Kall updateView for å vise forrige steg
          }
      }
      function resetAdvisor() {
@@ -411,13 +391,15 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
         recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps();
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
-        updateView();
+        updateView(); // Kall updateView for å starte på nytt
      }
 
     // --- START: Sporingsfunksjonalitet ---
     function trackAdvisorEvent(eventName, eventParameters) {
         console.log(`TRACKING EVENT: ${eventName}`, eventParameters || {});
         // Her implementeres Meta Pixel / GA4 kall
+        // if (typeof fbq === 'function') { ... }
+        // if (typeof gtag === 'function') { ... }
     }
 
     document.body.addEventListener('click', function(event) {
@@ -461,18 +443,17 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         if (catalogLoaded && BikeCatalog.evoOriginal.length > 0) {
             totalSteps = calculateTotalVisibleSteps();
 
+            // Sett opp event listeners ETTER at data er lastet og vi vet at UI skal vises
             if(backButton) backButton.addEventListener('click', handleBack);
             if(resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
             if(resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor);
             if(currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 
             trackAdvisorEvent('advisor_ui_ready');
-            updateView(); // <<<< Kall til updateView for å vise første steg
+            updateView(); // Kall for å vise første trinn
         } else if (catalogLoaded && BikeCatalog.evoOriginal.length === 0) {
-            initialLoadingMessageContainer.innerHTML = `<div class="error-message" style="width:100%;">
-                Beklager, sykkelkatalogen er tom for øyeblikket. Prøv igjen senere.
-            </div>`;
-            if(questionsSection) questionsSection.classList.add('hidden');
+            // Feilmelding vises allerede av fetchBikeCatalog hvis den er tom
+            console.warn("Sykkelkatalog lastet, men den er tom.");
         }
         // Hvis catalogLoaded er false, er feilmelding allerede vist av fetchBikeCatalog
     }
