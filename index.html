@@ -5,15 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evo Elsykkel Rådgiver</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Legg til sporingsskript her (f.eks. Meta Pixel, GA4, GTM) -->
+    <!-- Eksempel GTM:
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','DIN_GTM_ID');</script>
+    -->
 </head>
 <body>
+    <!-- Eksempel GTM (noscript):
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=DIN_GTM_ID"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    -->
 
     <div id="bike-advisor-container">
 
         <header class="advisor-header">
             <h1>EVO <span class="highlight">Sykkelrådgivning</span></h1>
             <p>Finn din perfekte elsykkel basert på dine behov.</p>
-            <!-- <img src="path/to/evo-logo.png" alt="EVO Elsykler Logo"> -->
         </header>
 
         <div id="advisor-content">
@@ -33,13 +44,14 @@
                 <!-- Selve anbefalingene - Header MED knapp -->
                 <div class="recommendations-header">
                      <h2 class="recommendations-title">Din anbefaling</h2>
+                     <!-- "Start på nytt"-knappen her har allerede ID "reset-button-final", som blir fanget opp av JS-logikken i resetAdvisor -->
                      <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
                 </div>
 
                 <!-- Anbefalings-Grid -->
                 <div id="recommendations-output" class="recommendations-grid hidden">
                     <!-- Anbefalte sykler lastes inn her -->
-                    <!-- Meldinger om "ingen resultater" vil også vises her -->
+                    <!-- Meldinger om "ingen resultater" vil også vises her (med sporings-ID-er lagt til via JS) -->
                 </div>
 
                 <!-- START: Ny Kontakt Oss Seksjon (Vises kun hvis det er anbefalinger) -->
@@ -47,23 +59,22 @@
                     <h2>Har du spørsmål eller ønsker å bestille?</h2>
                     <p>Våre eksperter står klare til å hjelpe deg med å finne den perfekte elsykkelen, svare på spørsmål om modellene, eller veilede deg gjennom kjøpsprosessen.</p>
                     <div class="contact-options">
-                        <a href="mailto:POST@EVOELSYKLER.NO" target="_blank" class="button button-primary">
+                        <a href="mailto:POST@EVOELSYKLER.NO" 
+                           target="_blank" 
+                           class="button button-primary"
+                           id="track-contact-email-button"> <!-- NY ID -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
                             Kontakt oss
                         </a>
-                        <a href="tel:+47 23 90 55 55" class="button button-secondary"> <!-- HUSK Å ERSTATTE TLF-NUMMER -->
+                        <a href="tel:+4723905555"  class="button button-secondary" id="track-call-button"> <!-- NY ID, endret fra +47 23 90 55 55 til +4723905555 -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 6.75Z" /></svg>
-                            Ring oss: 23 90 55 55 <!-- HUSK Å ERSTATTE TLF-NUMMER -->
+                            Ring oss: 23 90 55 55
                         </a>
-                        <!-- Du kan også legge til e-post hvis ønskelig -->
-                        <!-- <a href="mailto:salg@evoelsykler.no" class="button button-secondary">Send E-post</a> -->
                     </div>
                 </div>
                 <!-- SLUTT: Ny Kontakt Oss Seksjon -->
 
-                <!-- Knapper under anbefalinger (NÅ TOM, da reset er flyttet opp) -->
                 <div class="recommendations-actions">
-                     <!-- reset-button-final er fjernet herfra -->
                 </div>
             </div>
 
@@ -78,7 +89,6 @@
                     <div id="step-options">
                         <!-- Alternativknapper lastes inn her -->
                     </div>
-                     <!-- Fremdriftsindikator -->
                      <div id="step-progress" class="progress-indicator">
                         <div class="progress-bar-outer">
                            <div id="progress-bar" class="progress-bar-inner"></div>
@@ -87,14 +97,15 @@
                     </div>
                 </div>
 
-                <!-- Navigasjonsknapper -->
                 <div class="navigation-buttons">
+                    <!-- "Tilbake"-knappen har allerede ID "back-button", som blir fanget opp av JS-logikken i handleBack -->
                     <button id="back-button" class="button button-secondary hidden">
                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                          </svg>
                         Tilbake
                     </button>
+                    <!-- "Start på nytt"-knappen her har allerede ID "reset-button-step", som blir fanget opp av JS-logikken i resetAdvisor -->
                     <button id="reset-button-step" class="button button-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -108,8 +119,12 @@
 
         <footer class="advisor-footer">
              <p>© <span id="current-year"></span> Evo Elsykler
-                <span class="footer-separator">|</span> <a href="mailto:POST@EVOELSYKLER.NO" target="_blank">Kontakt oss</a> <!-- HUSK Å SJEKKE/ERSTATTE URL -->
-                <span class="footer-separator">|</span> Tlf: <a href="tel:+47 23 90 55 55">23 90 55 55</a> <!-- HUSK Å ERSTATTE TLF-NUMMER -->
+                <span class="footer-separator">|</span> 
+                <a href="mailto:POST@EVOELSYKLER.NO" 
+                   target="_blank" 
+                   id="track-footer-contact-email-link">Kontakt oss</a> <!-- NY ID -->
+                <span class="footer-separator">|</span> Tlf: 
+                <a href="tel:+4723905555" id="track-footer-call-link">23 90 55 55</a> <!-- NY ID, endret fra +47 23 90 55 55 til +4723905555 -->
              </p>
         </footer>
 
