@@ -29,13 +29,24 @@
 
         <div id="advisor-content">
 
+            <!-- START: Initial Bike Loader (med PNG) -->
+            <div id="initial-loader" class="hidden"> <!-- Skjult som standard, vises av JS -->
+                <!-- Bilde-element for sykkelen -->
+                <img src="https://evoelsykler.no/wp-content/uploads/2025/05/free-bicycle-icon-1054-thumb.png"
+                     alt="Laster..."
+                     class="bike-loader-png">
+                <!-- Tekst (med en ID for å kunne endre den ved feil) -->
+                <p id="bike-loading-text-element" class="bike-loading-text">Laster sykkeldata, vennligst vent...</p>
+            </div>
+            <!-- SLUTT: Initial Bike Loader -->
+
             <!-- Seksjon for anbefalinger (vises til slutt) -->
             <div id="recommendations-section" class="hidden">
                 <div id="summary-sentence-final" class="summary-box">
                     <!-- Den ferdige setningen vises her -->
                 </div>
 
-                <!-- Lasteindikator -->
+                <!-- Lasteindikator FOR ANBEFALINGER (den gamle spinneren) -->
                 <div id="loading-indicator" class="loading-container hidden">
                     <div class="spinner"></div>
                     <p class="loading-text">Konfigurerer dine anbefalinger...</p>
@@ -44,7 +55,6 @@
                 <!-- Selve anbefalingene - Header MED knapp -->
                 <div class="recommendations-header">
                      <h2 class="recommendations-title">Din anbefaling</h2>
-                     <!-- "Start på nytt"-knappen her har allerede ID "reset-button-final", som blir fanget opp av JS-logikken i resetAdvisor -->
                      <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
                 </div>
 
@@ -59,14 +69,14 @@
                     <h2>Har du spørsmål eller ønsker å bestille?</h2>
                     <p>Våre eksperter står klare til å hjelpe deg med å finne den perfekte elsykkelen, svare på spørsmål om modellene, eller veilede deg gjennom kjøpsprosessen.</p>
                     <div class="contact-options">
-                        <a href="mailto:POST@EVOELSYKLER.NO" 
-                           target="_blank" 
+                        <a href="mailto:POST@EVOELSYKLER.NO"
+                           target="_blank"
                            class="button button-primary"
-                           id="track-contact-email-button"> <!-- NY ID -->
+                           id="track-contact-email-button">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
                             Kontakt oss
                         </a>
-                        <a href="tel:+4723905555"  class="button button-secondary" id="track-call-button"> <!-- NY ID, endret fra +47 23 90 55 55 til +4723905555 -->
+                        <a href="tel:+4723905555" class="button button-secondary" id="track-call-button">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 6.75Z" /></svg>
                             Ring oss: 23 90 55 55
                         </a>
@@ -78,8 +88,8 @@
                 </div>
             </div>
 
-            <!-- Seksjon for spørsmål (vises underveis) -->
-            <div id="questions-section">
+            <!-- Seksjon for spørsmål (vises etter lasting) -->
+            <div id="questions-section" class="hidden"> <!-- Skjult som standard, vises av JS etter lasting -->
                 <div id="sentence-builder" class="summary-box">
                     <!-- Setningen bygges opp her -->
                 </div>
@@ -98,14 +108,12 @@
                 </div>
 
                 <div class="navigation-buttons">
-                    <!-- "Tilbake"-knappen har allerede ID "back-button", som blir fanget opp av JS-logikken i handleBack -->
                     <button id="back-button" class="button button-secondary hidden">
                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                          </svg>
                         Tilbake
                     </button>
-                    <!-- "Start på nytt"-knappen her har allerede ID "reset-button-step", som blir fanget opp av JS-logikken i resetAdvisor -->
                     <button id="reset-button-step" class="button button-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -119,12 +127,12 @@
 
         <footer class="advisor-footer">
              <p>© <span id="current-year"></span> Evo Elsykler
-                <span class="footer-separator">|</span> 
-                <a href="mailto:POST@EVOELSYKLER.NO" 
-                   target="_blank" 
-                   id="track-footer-contact-email-link">Kontakt oss</a> <!-- NY ID -->
-                <span class="footer-separator">|</span> Tlf: 
-                <a href="tel:+4723905555" id="track-footer-call-link">23 90 55 55</a> <!-- NY ID, endret fra +47 23 90 55 55 til +4723905555 -->
+                <span class="footer-separator">|</span>
+                <a href="mailto:POST@EVOELSYKLER.NO"
+                   target="_blank"
+                   id="track-footer-contact-email-link">Kontakt oss</a>
+                <span class="footer-separator">|</span> Tlf:
+                <a href="tel:+4723905555" id="track-footer-call-link">23 90 55 55</a>
              </p>
         </footer>
 
