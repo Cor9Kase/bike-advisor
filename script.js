@@ -226,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
+    const contactEvoSection = document.getElementById('contact-evo-section'); // NY REFERANSE
 
     // --- Steps definisjon ---
     const steps = [
@@ -309,24 +310,38 @@ document.addEventListener('DOMContentLoaded', () => {
      }
      let relaxedSearchPerformed = false;
      function renderRecommendations() {
-         recommendationsOutput.innerHTML = '';
+         recommendationsOutput.innerHTML = ''; // Tøm tidligere anbefalinger
          if (recommendations.length === 0 && !relaxedSearchPerformed) {
-             recommendationsOutput.innerHTML = `<div class="no-results" style="padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f8f9fa;"><h3>Ingen perfekt match funnet</h3><p>Basert på dine spesifikke valg, fant vi dessverre ingen sykler som passet 100% blant våre anbefalte modeller akkurat nå.</p><p>Forslag:</p><ul style="margin-left: 20px; list-style: disc;"><li>Prøv å gå tilbake og justere ett eller flere av valgene dine (f.eks. rammetype).</li><li>De anbefalte syklene er prioritert. Det kan finnes andre modeller som passer – <a href="#kontakt-oss-link">kontakt oss</a> gjerne direkte for full oversikt!</li></ul></div>`;
+             recommendationsOutput.innerHTML = `<div class="no-results contact-prompt-box">
+                <h3>Ingen perfekt match funnet</h3>
+                <p>Basert på dine spesifikke valg, fant vi dessverre ingen sykler som passet 100% blant våre anbefalte modeller akkurat nå.</p>
+                <h4>Hva nå?</h4>
+                <ul>
+                    <li>Prøv å gå tilbake og justere ett eller flere av valgene dine.</li>
+                    <li>Vi hjelper deg gjerne personlig! <a href="https://evoelsykler.no/kontakt-oss/" target="_blank">Kontakt oss</a> for full oversikt og veiledning, eller ring oss på <a href="tel:+47EVOSNUMMERHER">EVOS TLF-NUMMER</a>.</li>
+                </ul>
+            </div>`;
              return;
          } else if (recommendations.length === 0 && relaxedSearchPerformed) {
-              recommendationsOutput.innerHTML = `<div class="no-results" style="padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #f8f9fa;"><h3>Fant ingen modeller</h3><p>Selv med justerte søkekriterier fant vi ingen passende modeller. <a href="#kontakt-oss-link">Kontakt oss</a> gjerne for personlig veiledning!</p></div>`;
+              recommendationsOutput.innerHTML = `<div class="no-results contact-prompt-box">
+                <h3>Fant ingen modeller</h3>
+                <p>Selv med justerte søkekriterier fant vi ingen passende modeller.</p>
+                <h4>Vi hjelper deg!</h4>
+                <p><a href="https://evoelsykler.no/kontakt-oss/" target="_blank">Kontakt oss</a> gjerne for personlig veiledning, eller ring oss direkte på <a href="tel:+47EVOSNUMMERHER">EVOS TLF-NUMMER</a>.</p>
+            </div>`;
              return;
          }
+
          if (relaxedSearchPerformed) {
-            const notice = document.createElement('p'); notice.textContent = "Ingen sykler passet 100% til alle dine valg, så her er de nærmeste alternativene:"; notice.style.cssText = 'font-size: 0.9em; font-style: italic; margin-bottom: 15px; color: #6c757d;'; recommendationsOutput.appendChild(notice);
+            const notice = document.createElement('p'); notice.textContent = "Ingen sykler passet 100% til alle dine valg, så her er de nærmeste alternativene:"; notice.style.cssText = 'font-size: 0.9em; font-style: italic; margin-bottom: 15px; color: #6c757d; text-align: left;'; recommendationsOutput.appendChild(notice);
          }
+
          recommendations.forEach((bike, index) => {
              const card = document.createElement('div'); card.classList.add('recommendation-card');
              let badgeText = ''; if (index === 0) badgeText = 'TOPPVALG'; else if (index === 1) badgeText = 'GOD MATCH'; else if (index === 2) badgeText = 'ALTERNATIV';
              let childInfoHTML = ''; if (bike.maxChildren && bike.maxChildren > 0) { const t = bike.maxChildren === 1 ? "ett barn" : `${bike.maxChildren} barn`; childInfoHTML = `<p class="child-capacity-info" style="font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.1em; height: 1.1em; flex-shrink: 0;"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z" clip-rule="evenodd" /></svg> Passer for opptil ${t}.</p>`; }
              let featuresHTML = ''; if(bike.features && bike.features.length > 0) { featuresHTML = `<div class="recommendation-features"><h4><svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Nøkkelegenskaper:</h4><ul>${bike.features.map(f => `<li>${f}</li>`).join('')}</ul></div>`; }
 
-             // Bilde som lenke
              const imageLink = document.createElement('a');
              imageLink.href = bike.productUrl || '#';
              imageLink.target = '_blank';
@@ -336,7 +351,6 @@ document.addEventListener('DOMContentLoaded', () => {
              imageContainer.classList.add('recommendation-image-container');
              imageContainer.appendChild(imageLink);
 
-             // Primær CTA-knapp
              const detailsButton = `<a href="${bike.productUrl || '#'}" target="_blank" class="button button-primary">Se detaljer</a>`;
 
              card.innerHTML = `
@@ -355,10 +369,30 @@ document.addEventListener('DOMContentLoaded', () => {
              recommendationsOutput.appendChild(card);
          });
      }
+
      function updateView() {
         totalSteps = calculateTotalVisibleSteps();
-        if (showRecommendationsView) { questionsSection.classList.add('hidden'); recommendationsSection.classList.remove('hidden'); }
-        else { questionsSection.classList.remove('hidden'); recommendationsSection.classList.add('hidden'); loadingIndicator.classList.add('hidden'); recommendationsOutput.classList.add('hidden'); renderSentence(sentenceBuilder); renderOptions(); const currentVisible = calculateCurrentVisibleStep(); backButton.classList.toggle('hidden', currentVisible <= 1 && currentStep <= 1); }
+        if (showRecommendationsView) {
+            questionsSection.classList.add('hidden');
+            recommendationsSection.classList.remove('hidden');
+            if (contactEvoSection) { // Sjekk om elementet finnes
+                if (recommendations.length > 0) { // Vis kun hvis det ER anbefalinger
+                    contactEvoSection.classList.remove('hidden');
+                } else {
+                    contactEvoSection.classList.add('hidden');
+                }
+            }
+        } else {
+            questionsSection.classList.remove('hidden');
+            recommendationsSection.classList.add('hidden');
+            if (contactEvoSection) contactEvoSection.classList.add('hidden'); // Skjul alltid ellers
+            loadingIndicator.classList.add('hidden');
+            recommendationsOutput.classList.add('hidden');
+            renderSentence(sentenceBuilder);
+            renderOptions();
+            const currentVisible = calculateCurrentVisibleStep();
+            backButton.classList.toggle('hidden', currentVisible <= 1 && currentStep <= 1);
+        }
         updateProgress();
      }
 
@@ -367,7 +401,14 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Starter generering av anbefalinger med valg:", JSON.parse(JSON.stringify(selections)));
         relaxedSearchPerformed = false;
 
-        showRecommendationsView = true; questionsSection.classList.add('hidden'); recommendationsSection.classList.remove('hidden'); recommendationsOutput.classList.add('hidden'); loadingIndicator.classList.remove('hidden'); renderSentence(summarySentenceFinal); recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showRecommendationsView = true;
+        questionsSection.classList.add('hidden');
+        recommendationsSection.classList.remove('hidden');
+        recommendationsOutput.classList.add('hidden'); // Skjul mens laster
+        if (contactEvoSection) contactEvoSection.classList.add('hidden'); // Skjul kontaktseksjon mens laster
+        loadingIndicator.classList.remove('hidden');
+        renderSentence(summarySentenceFinal);
+        recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         setTimeout(() => {
             console.log("Utfører filtrering og sortering...");
@@ -376,7 +417,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`Filtrerer med: relaxFrameType=${relaxFrameType}, relaxDistance=${relaxDistance}, purposeOnly=${purposeOnly}`);
                 if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
                 else if (purposeOnly && selections.purpose) { return bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
-                else if (purposeOnly && !selections.purpose) { return bikesToFilter; }
+                else if (purposeOnly && !selections.purpose) { return bikesToFilter; } // Return all if no purpose specified for purposeOnly
+                
                 if (!purposeOnly) {
                     if (selections.distance && !relaxDistance) { let min = 0; if (selections.distance === 'medium') min = 20; else if (selections.distance === 'lang') min = 50; bikesToFilter = bikesToFilter.filter(bike => bike.distance_km && bike.distance_km[1] >= min); }
                     if (selections.cargo) { let cap = []; if (selections.cargo === 'små') cap = ['small', 'medium', 'large', 'massive']; else if (selections.cargo === 'store') cap = ['medium', 'large', 'massive']; else if (selections.cargo === 'massiv') cap = ['large', 'massive']; bikesToFilter = bikesToFilter.filter(bike => bike.cargo_capacity && cap.includes(bike.cargo_capacity)); }
@@ -394,13 +436,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 potentialMatches = filterBikes(true); relaxedSearchPerformed = true;
                 console.log(`Treff etter avslappet rammetype: ${potentialMatches.length}`);
             }
-             if (potentialMatches.length === 0 && selections.purpose) {
+             if (potentialMatches.length === 0 && selections.purpose) { // Kun hvis formål er valgt
                  console.log("Siste utvei: Viser sykler basert kun på formål...");
-                 potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true;
+                 potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; // true for purposeOnly
                  console.log(`Treff basert kun på formål: ${potentialMatches.length}`);
              }
 
-             // Sortering (uten preOrdered)
              potentialMatches.sort((a, b) => {
                  const inferChildNeed = selections.purpose === 'transport' || selections.purpose === 'family' || selections.cargo === 'massiv' || selections.cargo === 'store';
                  const meetsChildReq = (bike, inferNeed) => { if (!inferNeed) return true; return bike.maxChildren !== null && bike.maxChildren > 0; };
@@ -419,6 +460,13 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingIndicator.classList.add('hidden');
             renderRecommendations();
             recommendationsOutput.classList.remove('hidden');
+            if (contactEvoSection) { // Vis kontaktseksjon hvis det er anbefalinger
+                if (recommendations.length > 0) {
+                    contactEvoSection.classList.remove('hidden');
+                } else {
+                    contactEvoSection.classList.add('hidden');
+                }
+            }
         }, 500);
     }
 
@@ -447,7 +495,9 @@ document.addEventListener('DOMContentLoaded', () => {
      function resetAdvisor() {
         console.log("Reset."); currentStep = 1;
         selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
-        recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps(); updateView();
+        recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps();
+        if (contactEvoSection) contactEvoSection.classList.add('hidden'); // Skjul kontaktseksjon ved reset
+        updateView();
      }
 
     // --- 9. Initialisering ---
