@@ -14,7 +14,7 @@ body {
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
+    overflow: hidden; /* Endret fra hidden for å unngå at loader klippes? Nei, behold for loader. */
 }
 
 /* Header */
@@ -44,12 +44,114 @@ body {
 /* Innholdsområde */
 #advisor-content {
     padding: 10px 20px;
+    position: relative; /* Hjelper med absolutt posisjonering inni */
 }
 
 /* Skjult klasse */
 .hidden {
     display: none !important;
 }
+
+/* --- START: Styling for Sykkel-laster (PNG Versjon) --- */
+
+/* Container for animasjonen */
+#initial-loader {
+  /* display: flex; fjernet, JS styrer synlighet via 'hidden' klassen */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 180px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  margin-bottom: 30px;
+  overflow: hidden; /* Viktig for å skjule sykkelen utenfor */
+  position: relative; /* Nødvendig for absolutt posisjonering av bilde */
+}
+
+/* Selve PNG-sykkelen */
+.bike-loader-png {
+  width: 60px; /* Juster bredden etter ønske */
+  height: auto; /* Beholder proporsjoner */
+  display: block;
+  position: absolute;
+  bottom: 50px; /* Juster vertikal plassering over teksten */
+  left: 0; /* Startposisjon for animasjon */
+  /* --- ENDRING: Bruker samme animasjon for bevegelse --- */
+  animation: rideAcrossPng 3.5s linear infinite;
+}
+
+/* Teksten under sykkelen */
+.bike-loading-text {
+  font-size: 1.1em;
+  color: #495057;
+  font-weight: 500;
+  margin-top: 70px; /* Sørg for at teksten er under animasjonsområdet */
+}
+
+/* Keyframes for sykkelens bevegelse (tilpasset PNG) */
+@keyframes rideAcrossPng {
+  0% {
+    transform: translateX(-80px); /* Start utenfor (juster basert på bredde) */
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    /* La den kjøre til litt utenfor høyre kant av containeren */
+    /* Bruker 100% av containerbredde + litt ekstra for å sikre at den forsvinner helt */
+    /* Calc() trenger ikke her, kan bruke % + px. Juster 80px etter behov */
+    transform: translateX(calc(100% + 80px));
+    opacity: 0;
+  }
+}
+
+/* Spinner-styling (for lasteindikator når anbefalinger genereres) */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1); width: 36px; height: 36px; border-radius: 50%;
+    border-left-color: #343a40;
+    animation: spin 1s linear infinite; /* Endret til linear for jevnere spinn */
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.loading-text { /* Styling for tekst sammen med spinner */
+    font-size: 1.1em; color: #495057; font-weight: 500;
+}
+.loading-container { /* Container for spinner + tekst */
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 40px 20px; min-height: 200px; text-align: center;
+    border: 1px solid #e9ecef; border-radius: 8px; background-color: #f8f9fa; margin-bottom: 30px;
+}
+.loading-container .spinner { margin-bottom: 15px; }
+
+
+/* Feilmeldingsstyling (brukes i begge loadere) */
+.error-message {
+    background-color: #fff3f3;
+    color: #b71c1c;
+    border: 1px solid #ef9a9a;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%; /* Tar full bredde av containeren den er i */
+}
+.error-message small {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: #c62828;
+}
+
+/* --- SLUTT: Styling for Sykkel-laster --- */
+
 
 /* Setningsbygger / Oppsummering */
 .summary-box {
@@ -193,18 +295,8 @@ body {
 .button-secondary:hover { background-color: #e9ecef; border-color: #adb5bd; }
 
 
-/* Anbefalingsseksjon & Lasteindikator */
+/* Anbefalingsseksjon */
 #recommendations-section { }
-
-/* Lasteindikator */
-.loading-container { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 20px; min-height: 200px; text-align: center; border: 1px solid #e9ecef; border-radius: 8px; background-color: #f8f9fa; margin-bottom: 30px; }
-.spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1); width: 36px; height: 36px; border-radius: 50%;
-    border-left-color: #343a40;
-    animation: spin 1s ease infinite; margin-bottom: 15px;
-}
-.loading-text { font-size: 1.1em; color: #495057; font-weight: 500; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* Anbefalinger Header */
 .recommendations-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e9ecef; }
@@ -242,7 +334,7 @@ body {
 .recommendation-features h4 { font-size: 1em; font-weight: 600; margin-bottom: 10px; color: #495057; display: flex; align-items: center; gap: 5px; }
 .recommendation-features h4 .icon {
     width: 1.1em; height: 1.1em;
-    color: #198754; /* Grønn for checkmark-ikonet */
+    color: #198754;
 }
 .recommendation-features ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #6c757d; }
 .recommendation-features li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; }
@@ -256,11 +348,10 @@ body {
 .recommendation-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 .recommendation-buttons .button { padding: 8px 12px; font-size: 0.9em; }
 
-/* Skjuler den gamle actions-diven (hvis den ikke brukes til annet) */
-.recommendations-actions { display: none; /* Eller fjern den helt fra HTML hvis den ikke trengs */ }
+.recommendations-actions { display: none; }
 
 
-/* --- START: NY CSS FOR KONTAKTSEKSJON OG "INGEN RESULTATER" --- */
+/* Kontakt Oss Seksjon & "Ingen Resultater" */
 .contact-prompt-box {
     background-color: #f8f9fa;
     padding: 25px;
@@ -271,107 +362,53 @@ body {
     border: 1px solid #e0e0e0;
 }
 
-/* Styling for H2 i den dedikerte kontaktboksen under anbefalinger */
 #contact-evo-section.contact-prompt-box h2 {
-    font-size: 1.8em;
-    color: #343a40;
-    margin-bottom: 15px;
+    font-size: 1.8em; color: #343a40; margin-bottom: 15px;
 }
 
-/* Styling for H3 i "ingen resultater" boksene (som nå bruker .contact-prompt-box) */
 .recommendations-grid .no-results.contact-prompt-box h3 {
-    font-size: 1.5em;
-    color: #343a40;
-    margin-top: 0; /* Fjerner eventuell toppmargen fra generell h3 */
-    margin-bottom: 10px;
+    font-size: 1.5em; color: #343a40; margin-top: 0; margin-bottom: 10px;
 }
 
-.contact-prompt-box h4 { /* For "Hva nå?" / "Vi hjelper deg!" i "ingen resultater" */
-    font-size: 1.2em;
-    color: #495057;
-    margin-top: 20px;
-    margin-bottom: 8px;
+.contact-prompt-box h4 {
+    font-size: 1.2em; color: #495057; margin-top: 20px; margin-bottom: 8px;
 }
 
 .contact-prompt-box p {
-    font-size: 1.05em;
-    color: #495057;
-    line-height: 1.7;
-    max-width: 650px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 25px;
+    font-size: 1.05em; color: #495057; line-height: 1.7;
+    max-width: 650px; margin-left: auto; margin-right: auto; margin-bottom: 25px;
 }
 
 .contact-prompt-box ul {
-    list-style: disc;
-    /* margin-left: 20px; Fjernet for bedre sentrering/kontroll */
-    padding-left: 0; /* Start fra null */
-    text-align: left;
-    margin-bottom: 20px;
-    display: inline-block; /* For å sentrere listen basert på innholdet */
+    list-style: disc; padding-left: 0; text-align: left;
+    margin-bottom: 20px; display: inline-block;
 }
-.contact-prompt-box ul li {
-    margin-bottom: 8px;
-    margin-left: 20px; /* Indentér listeelementene */
-}
+.contact-prompt-box ul li { margin-bottom: 8px; margin-left: 20px; }
 
-.contact-prompt-box a:not(.button) { /* Stil kun for vanlige tekstlenker, ikke knapper */
-    color: #0d6efd;
-    text-decoration: underline;
-}
-.contact-prompt-box a:not(.button):hover {
-    color: #0b5ed7;
-}
+.contact-prompt-box a:not(.button) { color: #0d6efd; text-decoration: underline; }
+.contact-prompt-box a:not(.button):hover { color: #0b5ed7; }
 
-.contact-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-}
+.contact-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+.contact-options .button { min-width: 200px; }
 
-.contact-options .button {
-    min-width: 200px;
-}
-
-/* Justeringer for "ingen resultater" boksen når den er inne i recommendations-output */
 #recommendations-output .no-results.contact-prompt-box {
-    margin-top: 0; /* Fjerner toppmargen når den er direkte i output */
-    grid-column: 1 / -1; /* Sørger for at den tar full bredde i grid */
+    margin-top: 0; grid-column: 1 / -1;
 }
 #recommendations-output .no-results.contact-prompt-box p,
 #recommendations-output .no-results.contact-prompt-box ul {
-  max-width: 100%; /* Unngå sentrering av tekst i no-results */
-  text-align: left;
+  max-width: 100%; text-align: left;
 }
-#recommendations-output .no-results.contact-prompt-box ul {
-    display: block; /* Tilbake til standard block for ul her */
-}
-
-/* --- SLUTT: NY CSS FOR KONTAKTSEKSJON OG "INGEN RESULTATER" --- */
+#recommendations-output .no-results.contact-prompt-box ul { display: block; }
 
 
 /* Footer */
 .advisor-footer {
-    text-align: center;
-    margin-top: 30px;
-    padding: 15px;
-    font-size: 0.9em;
-    color: #6c757d;
-    border-top: 1px solid #e9ecef;
+    text-align: center; margin-top: 30px; padding: 15px;
+    font-size: 0.9em; color: #6c757d; border-top: 1px solid #e9ecef;
 }
-.advisor-footer .footer-separator {
-    margin: 0 8px;
-    color: #ced4da;
-}
-.advisor-footer a {
-    color: #0d6efd;
-    text-decoration: none;
-}
-.advisor-footer a:hover {
-    text-decoration: underline;
-}
+.advisor-footer .footer-separator { margin: 0 8px; color: #ced4da; }
+.advisor-footer a { color: #0d6efd; text-decoration: none; }
+.advisor-footer a:hover { text-decoration: underline; }
 
 
 /* Responsivitet */
@@ -388,29 +425,29 @@ body {
     .recommendation-buttons { width: 100%; justify-content: flex-start; }
 
     /* Responsivitet for kontaktboks */
-    .contact-prompt-box h2 { font-size: 1.5em; }
+    #contact-evo-section.contact-prompt-box h2 { font-size: 1.5em; }
     #recommendations-output .no-results.contact-prompt-box h3 { font-size: 1.3em; }
     .contact-prompt-box p { font-size: 0.95em; }
     .contact-options .button { width: 100%; min-width: unset; }
+
+    /* Responsivitet for initial loader */
+    #initial-loader { min-height: 160px; }
+    .bike-loader-png { width: 50px; bottom: 45px; }
+    .bike-loading-text { font-size: 1em; margin-top: 60px; }
 }
 
 /* Grid justering for større skjermer */
 @media (min-width: 768px) {
     .recommendations-grid { grid-template-columns: 1fr 1fr; }
-    /* Hvis det er en "ingen resultater" boks, skal den fortsatt ta full bredde */
     .recommendations-grid .no-results.contact-prompt-box { grid-column: 1 / -1; }
-
-    /* Første anbefalingskort tar full bredde hvis det er det eneste eller det er 3+ kort */
-    .recommendations-grid .recommendation-card:first-child:nth-last-child(n+3), /* Første av 3 eller flere */
-    .recommendations-grid .recommendation-card:first-child:nth-last-child(1) /* Første og eneste */ {
+    .recommendations-grid .recommendation-card:first-child:nth-last-child(n+3),
+    .recommendations-grid .recommendation-card:first-child:nth-last-child(1) {
         grid-column: 1 / -1;
     }
-
-    /* Hvis det er nøyaktig TO kort, skal de dele plassen */
-    .recommendations-grid .recommendation-card:first-child:nth-last-child(2) { /* Første av to */
+    .recommendations-grid .recommendation-card:first-child:nth-last-child(2) {
       grid-column: 1 / 2;
     }
-    .recommendations-grid .recommendation-card:nth-child(2):nth-last-child(1) { /* Andre av to */
+    .recommendations-grid .recommendation-card:nth-child(2):nth-last-child(1) {
       grid-column: 2 / 3;
     }
 }
