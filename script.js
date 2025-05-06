@@ -1,9 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. Data (Komplett katalog med alle 18 sykler og siste data) ---
+    // OCR Data for referanse (fra bildet sist):
+    // ID | Navn                                      | Produkt-URL                                             | Formål                                                 | Beskrivelse (forkortet)                                | Nøkkelegenskaper (forkortet)                                                                                                                            | Pris      | Ramme               | Maks Fart | Lastekapasitet | Lastelokasjon | Rekkevidde (km) | Maks Barn | Bilde-URL
+    // ---|-------------------------------------------|---------------------------------------------------------|--------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|---------------------|-----------|----------------|---------------|-----------------|-----------|----------
+    // tern-Quick Haul P9                          | ...                                                     | ...bybruk, transport, pendling, allsidig, family       | Kompakt midtail...                                     | Kompakt elsykkel; Bagasjebrett (50kg); Plass 1 barn; Brukervennlig; Solid; Bosch Performance Line 65nm; 400Wh                                         | KR 29.900 | low-step            | 25        | medium         | rear          | 40-80 km        | 1         | ...
+    // rm-n Multicharger Mixte GT vario Family       | ...                                                     | ...transport, pendling, allsidig, family, trekking     | Kraftig familiesykkel...                               | Plass 2 barn; Beltedrift; Enviolo; 750Wh; Mixte; Komfortdemping; Bosch Perf CX                                                                         | KR 79.000 | mid-step            | 25        | large          | rear          | 60-150 km       | 2         | ...
+    // rm-n Multicharger Mixte GT Touring Family   | ...                                                     | ...transport, pendling, allsidig, family, trekking     | Allsidig elsykkel for familien...                      | Trygg transport; 750Wh; Shimano XT 11g; Mixte; Family Kit; Bosch Perf CX                                                                                | KR 75.000 | mid-step            | 25        | large          | rear          | 60-150 km       | 2         | ...
+    // rm-n Multitinker Touring Family             | ...                                                     | ...transport, bybruk, allsidig, family                 | Smart bysykkel...                                      | Plass 2 barn/last; Shimano Deore 11g Linkglide; Kjede; Kompakt 20"; Stabil; Bosch Perf CX                                                                | KR 75.000 | low-step            | 25        | large          | rear          | 40-120 km       | 2         | ...
+    // rm-n Multitinker Vario Family               | ...                                                     | ...transport, bybruk, allsidig, family                 | Samme stabile Multitinker...                           | Plass 2 barn/last; Enviolo; Belt; Vedlikeholdsvennlig; Kompakt 20"; Stabil; Bosch Perf CX                                                                | KR 79.000 | low-step            | 25        | large          | rear          | 40-120 km       | 2         | ...
+    // tern- Quick Haul Long D9 400                | ...                                                     | ...transport, bybruk, allsidig, family                 | Lang og robust elsykkel...                             | Kompakt lastesykkel (190kg total); 2 barn/last; Lavt innsteg; Bosch Cargo Line 85Nm; 400Wh (25-85km); Parkerbar vertikalt; Passer 155-185cm              | KR 49.900 | low-step            | 25        | large          | rear          | 35-85 km        | 2         | ...
+    // rm-n NEVO4 GT vario CORE                    | ...                                                     | ...bybruk, pendling, allsidig, trekking                | Hverdagsvennlig elsykkel...                            | Lavt innsteg; Komfortabel; Enviolo; Gates; Bosch Perf CX 85Nm; 625Wh (opptil 100km); Setepinnedemping & dempegaffel                                     | KR 63.000 | low-step            | 25        | medium         | rear          | 40-120 km       | 0         | ...
+    // rm-ro Roadster4 Touring                     | ...                                                     | ...pendling, bybruk                                    | Lett, elegant og kraftig...                            | Lett design; Bosch CX 85Nm; 625Wh integrert; Komfort dempegaffel; Brede dekk; Shimano Deore XT 11g                                                    | KR 59.000 | high-step, mid-st   | 25        | small          | rear          | 35-90 km        | 0         | ...
+    // rm-lo Load4 75 Touring Familie              | ...                                                     | ...transport, family, pendling, allsidig               | Stor familiesykkel...                                  | Fullfjæret; 3 barn; Komplett utstyr; Bosch Cargo Line 85Nm; 725Wh (40-120km)                                                                           | KR 108.000| cargo               | 25        | massive        | front         | 40-120 km       | 3         | ...
+    // rm-lo Load4 60 Touring Familie              | ...                                                     | ...transport, family, pendling, allsidig               | Kompakt familiesykkel...                               | Demper foran/bak; 2 barn; Komplett familiepakke; Bosch Cargo Line; 725Wh; Universell størrelse                                                         | KR 99.000 | cargo               | 25        | massive        | front         | 40-100 km       | 2         | ...
+    // rm-d Delite5 GT pinion                      | ...                                                     | ...pendling, terreng, trekking, adventure, allsidig    | Fulldempet elsykkel...                                 | Pinion E-Drive; Fulldemping; Resirkulert alu; Skjermet drivverk; Bosch 800Wh; Lang rekkevidde; Dropper; Bosch Perf CX                                    | KR 105.000| high-step, mid-st   | 25        | small          | rear          | 50-150 km       | 0         | ...
+    // rm-lo Load4 75 Vario Familie                | ...                                                     | ...transport, family, pendling, allsidig               | Kraftig lastesykkel...                                 | Plass 3 barn; Fullfjæret; Lettkjørt; Beltedrift; Enviolo; Bosch Cargo Line; 725Wh; Komplett familiepakke                                                | KR 113.000| cargo               | 25        | massive        | front         | 40-120 km       | 3         | ...
+    // tern-Tern GSD Gen3 S10                      | ...                                                     | ...transport, family, bybruk, allsidig, pendling       | Solid lastesykkel...                                   | Bosch Cargo Line Gen4 85Nm; DualBattery (opptil 200km); 2 barneseter/1 voksen; Hydraulisk brems m/ABS; Brede 20" dekk; Total last 210kg                 | KR 82.000 | cargo-longtail, lov | 25        | massive        | rear          | 50-200 km       | 2         | ...
+    // rm-lo Load4 60 Vario Familie                | ...                                                     | ...transport, family, bybruk, allsidig                 | Fulldempet familiesykkel...                            | Plass 2 barn; Enviolo; Beltedrift; Bosch Cargo Line 85Nm; Fulldempet; 725Wh (40-120km); Komplett familiepakke; Bosch SmartSystem Kiox 300               | KR 104.000| cargo, low-step     | 25        | massive        | front         | 40-120 km       | 2         | ...
+    // rm-c Carrie Touring                         | ...                                                     | ...transport, bybruk, allsidig                         | Kompakt lastesykkel...                                 | Kompakt; Stort lasteområde (Flex Box); Bosch Perf Line 75Nm; 545Wh (oppgraderbar); Microshift 10g; Bosch SmartSystem Intuvia 100; Valgfri demp setepinne | KR 74.850 | cargo, low-step     | 25        | large          | front         | 35-80 km        | 2         | ...
+    // rm-c Carrie Vario                           | ...                                                     | ...transport, bybruk, allsidig, pendling               | Kompakt lastesykkel...                                 | Kompakt; Stort lasteområde (Flex Box); Bosch Perf Line 75Nm; 545Wh (oppgraderbar); Enviolo; Beltedrift; Vedlikeholdsvennlig; Bosch SmartSystem Intuvia 100 | KR 79.000 | cargo, low-step     | 25        | large          | front         | 35-80 km        | 2         | ...
+    // rm-n Nevo4 GT Touring CORE                  | ...                                                     | ...bybruk, pendling, allsidig, trekking                | Kompakt lastesykkel med trinnløst... (Beskrivelse feil i OCR, bruker eksisterende) | Lavt innsteg; Stabil; Bosch Perf CX 85Nm; 625Wh (opptil 100km); Shimano Cues 10S; Setepinnedemping & dempegaffel; Brede 27.5" dekk (GT)             | KR 59.900 | low-step            | 25        | medium         | rear          | 50-120 km       | 0         | ...
+
     const BikeCatalog = {
         evoOriginal: [
-            // ... (din eksisterende BikeCatalog data - ingen endring her) ...
             {
                 id: 'tern-quick-haul-p9',
                 name: "Quick Haul P9",
@@ -13,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 29.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/06/Quick-Haul-H9-gronn-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/tern-quick-haul-p9-400/",
-                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear', distance_km: [20, 70], maxChildren: 1, preOrdered: false
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear',
+                distance_km: [40, 80], // Var [20, 70]
+                maxChildren: 1, preOrdered: false
             },
             {
                 id: 'rm-multicharger2-mixte-gt-vario-family',
@@ -24,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/25_F01186_110402080714_MuCha2_Mixte_GT_Var_47_UGrey-Blk_SafetyBar_Kiox300_Cargo-1024x683.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-multicharger2-mixte-gt-vario-family/",
-                frame_types: ['mid-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear', distance_km: [40, 110], maxChildren: 2, preOrdered: false
+                frame_types: ['mid-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear',
+                distance_km: [60, 150], // Var [40, 110]
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-multicharger2-mixte-gt-touring-family',
@@ -35,7 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 75.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Multicharger2-Mixte-GT-Vario-svart-prod-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-multicharger2-mixte-gt-touring-family/",
-                frame_types: ['mid-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear', distance_km: [40, 110], maxChildren: 2, preOrdered: false
+                frame_types: ['mid-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear',
+                distance_km: [60, 150], // Var [40, 110]
+                maxChildren: 2, preOrdered: false
             },
              {
                 id: 'rm-multitinker-touring-family',
@@ -46,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 75.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Multitinker-Touring-Family-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-multitinker-touring-family/",
-                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear', distance_km: [30, 80], maxChildren: 2, preOrdered: false
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear',
+                distance_km: [40, 120], // Var [30, 80]
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-multitinker-vario-family',
@@ -57,7 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/Multitinker-Vario-bla-med-telt-prod-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-multitinker-vario-family/",
-                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear', distance_km: [30, 80], maxChildren: 2, preOrdered: false
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear',
+                distance_km: [40, 120], // Var [30, 80]
+                maxChildren: 2, preOrdered: false
             },
              {
                 id: 'tern-quick-haul-long-d9',
@@ -68,7 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 49.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/11/Quick-Haul-Long-prod-rod-1-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/tern-quick-haul-long-d9-400/",
-                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear', distance_km: [25, 85], maxChildren: 2, preOrdered: false
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'rear',
+                distance_km: [35, 85], // Var [25, 85]
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-nevo4-gt-vario-core',
@@ -79,7 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 63.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Nevo4-GT-vario-CORE-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-nevo4-gt-vario-core/",
-                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear', distance_km: [40, 100], maxChildren: 0, preOrdered: false
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear',
+                distance_km: [40, 120], // Var [40, 100]
+                maxChildren: 0, preOrdered: false
             },
             {
                 id: 'rm-roadster4-touring',
@@ -90,18 +124,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 59.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/25_F01130_0401060913_Rd4_Tou_56_BlkMtt_ChainbagVAUDE_5764-1024x683.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-roadster4-touring/",
-                frame_types: ['high-step', 'mid-step'], speed_kmh: 25, cargo_capacity: 'small', cargo_location: 'rear', distance_km: [35, 90], maxChildren: 0, preOrdered: false
+                frame_types: ['high-step', 'mid-step'],
+                speed_kmh: 25, cargo_capacity: 'small', cargo_location: 'rear',
+                distance_km: [35, 90], // Samme som OCR
+                maxChildren: 0, preOrdered: false
             },
-            {
-                id: 'tern-orox-s12',
-                name: "Tern Orox S12 27,5",
-                purpose: ['terreng', 'transport', 'allsidig', 'adventure'],
-                description: "Eventyrsykkel som tåler ekstrem last og terreng. Bosch CX-motor og 800 Wh batteri gir solid kraft og rekkevidde.",
-                features: ["Adventure-lastesykkel", "Terreng & Vinterbruk", "Kan utstyres med to batterier", "Tåler opptil 210 kg last", "Fatbike-dekk", "Bosch Performance CX", "800 Wh batteri"],
-                price: "KR 80.000",
-                image: "https://evoelsykler.no/wp-content/uploads/2024/12/Otox-S12-275-gronn-prod-1-1536x1024.jpg",
-                productUrl: "https://evoelsykler.no/produkt/tern-orox-s12-275/",
-                frame_types: ['high-step'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'rear', distance_km: [50, 150], maxChildren: 2, preOrdered: false
+            { // OPPDATERT: Riese & Müller Delite4 GT Touring
+                id: 'rm-delite4-gt-touring',
+                name: "Delite4 GT Touring",
+                purpose: ['terreng', 'allsidig', 'adventure', 'pendling', 'trekking'],
+                description: "Delite4 er i stand til å overvinne enhver utfordring – enten det er lange turer, krevende skogsstier eller bratte stigninger. Eksepsjonelt design, Riese & Müller Control Technology og kraftig Bosch Performance Line CX-motor med 750Wh batteri gir frihet og fleksibilitet.",
+                features: [
+                    "Riese & Müller Control Technology (fullfjæring)",
+                    "Bosch Performance Line CX motor (85Nm)",
+                    "Bosch PowerTube 750Wh batteri",
+                    "Bosch Smart System med Kiox 300 display & eBike Flow app",
+                    "Shimano Deore XT 11-S Linkglide girsystem (Touring)",
+                    "Magura MT5/MT4 hydrauliske skivebremser",
+                    "GX-option standard i Norge (Fox Float 140mm gaffel, Schwalbe Johnny Watts dekk)",
+                    "Bremselys integrert i baklykt",
+                    "Mulighet for ABS-bremser og Range Extender (ekstra)"
+                ],
+                price: "KR 86.000",
+                image: "https://evoelsykler.no/wp-content/uploads/2023/11/Delite4-GT-Touirng-coal-grey-24-1200x2000-1-1440x750-1.jpg",
+                productUrl: "https://evoelsykler.no/produkt/riese-muller-delite4-gt-touring/",
+                frame_types: ['high-step', 'mid-step'], // Dobbeltsjekk om 'mid-step' faktisk er tilgjengelig
+                speed_kmh: 25,
+                cargo_capacity: 'small',
+                cargo_location: 'rear',
+                distance_km: [50, 140], // Basert på 750Wh batteri
+                maxChildren: 0,
+                preOrdered: false
             },
             {
                 id: 'rm-load4-75-touring-familie',
@@ -112,7 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 108.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/11/Load5-75-touring-famili-prod-1536x1024.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-75-touring-familie-2/",
-                frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front', distance_km: [40, 120], maxChildren: 3, preOrdered: false
+                frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front',
+                distance_km: [40, 120], // Samme som OCR
+                maxChildren: 3, preOrdered: false
             },
             {
                 id: 'rm-load4-60-touring-familie',
@@ -123,7 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 99.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/01/Load460Green_3000x-1536x816.webp",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-60-touring-familie-2/",
-                frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front', distance_km: [30, 80], maxChildren: 2, preOrdered: false
+                frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front',
+                distance_km: [40, 100], // Var [30, 80]
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-delite5-gt-pinion',
@@ -134,7 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 105.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/09/25_F01315_040209081506_Delite5_GT_Pinion_51_StoneGrey_2755-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-delite5-gt-pinion/",
-                frame_types: ['high-step', 'mid-step'], speed_kmh: 25, cargo_capacity: 'small', cargo_location: 'rear', distance_km: [50, 150], maxChildren: 0, preOrdered: false
+                frame_types: ['high-step', 'mid-step'],
+                speed_kmh: 25, cargo_capacity: 'small', cargo_location: 'rear',
+                distance_km: [50, 150], // Samme som OCR
+                maxChildren: 0, preOrdered: false
             },
             {
                 id: 'rm-load4-75-vario-familie',
@@ -145,7 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 113.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/11/Load4-75-vario-familie-peanut-prod-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-75-vario-familie-2/",
-                frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front', distance_km: [30, 80], maxChildren: 3, preOrdered: false
+                frame_types: ['cargo'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front',
+                distance_km: [40, 120], // Var [30, 80]
+                maxChildren: 3, preOrdered: false
             },
              {
                 id: 'tern-gsd-s10-gen3',
@@ -156,7 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 82.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2025/03/TN-photo-GSD_S10-gen3-olive-profile-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/tern-gsd-gen3-s10/",
-                frame_types: ['cargo-longtail', 'low-step'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'rear', distance_km: [50, 200], maxChildren: 2, preOrdered: false
+                frame_types: ['cargo-longtail', 'low-step'], // OCR sa "lov", antar "low-step"
+                speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'rear',
+                distance_km: [50, 200], // Samme som OCR
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-load4-60-vario-familie',
@@ -167,7 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 104.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2023/01/Load460Green_3000x-640x340.webp",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-load4-60-vario-familie-2/",
-                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front', distance_km: [40, 120], maxChildren: 2, preOrdered: false
+                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'massive', cargo_location: 'front',
+                distance_km: [40, 120], // Samme som OCR
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-carrie-touring',
@@ -178,7 +245,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 74.850",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Carrie-touring-m-flex-box-prod-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-carrie-touring-2/",
-                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'front', distance_km: [25, 70], maxChildren: 2, preOrdered: false
+                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'front',
+                distance_km: [35, 80], // Var [25, 70]
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-carrie-vario',
@@ -189,7 +258,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 79.000",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/03/Carrie-Vario-aqua-basic-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-carrie-vario/",
-                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'front', distance_km: [25, 70], maxChildren: 2, preOrdered: false
+                frame_types: ['cargo', 'low-step'], speed_kmh: 25, cargo_capacity: 'large', cargo_location: 'front',
+                distance_km: [35, 80], // Var [25, 70]
+                maxChildren: 2, preOrdered: false
             },
             {
                 id: 'rm-nevo4-gt-touring-core',
@@ -200,7 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 price: "KR 59.900",
                 image: "https://evoelsykler.no/wp-content/uploads/2024/10/Nevo4-GT-Touring-CORE-640x427.jpg",
                 productUrl: "https://evoelsykler.no/produkt/riese-muller-nevo4-gt-touring-core/",
-                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear', distance_km: [40, 100], maxChildren: 0, preOrdered: false
+                frame_types: ['low-step'], speed_kmh: 25, cargo_capacity: 'medium', cargo_location: 'rear',
+                distance_km: [50, 120], // Var [40, 100]
+                maxChildren: 0, preOrdered: false
             }
         ]
     };
@@ -321,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li>Prøv å gå tilbake og justere ett eller flere av valgene dine.</li>
                     <li>Vi hjelper deg gjerne personlig! <a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-contact-link">Kontakt oss</a> for full oversikt og veiledning, eller ring oss på <a href="tel:+47EVOSNUMMERHER" id="track-no-results-call-link">EVOS TLF-NUMMER</a>.</li>
                 </ul>
-            </div>`;
+            </div>`; // HUSK Å ERSTATTE PLASSHOLDERE FOR TLF/URL
              return;
          } else if (recommendations.length === 0 && relaxedSearchPerformed) {
               recommendationsOutput.innerHTML = `<div class="no-results contact-prompt-box">
@@ -329,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Selv med justerte søkekriterier fant vi ingen passende modeller.</p>
                 <h4>Vi hjelper deg!</h4>
                 <p><a href="https://evoelsykler.no/kontakt-oss/" target="_blank" id="track-no-results-relaxed-contact-link">Kontakt oss</a> gjerne for personlig veiledning, eller ring oss direkte på <a href="tel:+47EVOSNUMMERHER" id="track-no-results-relaxed-call-link">EVOS TLF-NUMMER</a>.</p>
-            </div>`;
+            </div>`; // HUSK Å ERSTATTE PLASSHOLDERE FOR TLF/URL
              return;
          }
 
@@ -340,14 +413,13 @@ document.addEventListener('DOMContentLoaded', () => {
          recommendations.forEach((bike, index) => {
              const card = document.createElement('div'); card.classList.add('recommendation-card');
              let badgeText = ''; if (index === 0) badgeText = 'TOPPVALG'; else if (index === 1) badgeText = 'GOD MATCH'; else if (index === 2) badgeText = 'ALTERNATIV';
-             let childInfoHTML = ''; if (bike.maxChildren && bike.maxChildren > 0) { const t = bike.maxChildren === 1 ? "ett barn" : `${bike.maxChildren} barn`; childInfoHTML = `<p class="child-capacity-info" style="font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.1em; height: 1.1em; flex-shrink: 0;"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z" clip-rule="evenodd" /></svg> Passer for opptil ${t}.</p>`; }
+             let childInfoHTML = ''; if (bike.maxChildren && bike.maxChildren > 0) { const t = bike.maxChildren === 1 ? "ett barn" : `${bike.maxChildren} barn`; childInfoHTML = `<p class="child-capacity-info"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.1em; height: 1.1em; flex-shrink: 0;"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z" clip-rule="evenodd" /></svg> Passer for opptil ${t}.</p>`; }
              let featuresHTML = ''; if(bike.features && bike.features.length > 0) { featuresHTML = `<div class="recommendation-features"><h4><svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Nøkkelegenskaper:</h4><ul>${bike.features.map(f => `<li>${f}</li>`).join('')}</ul></div>`; }
 
              const imageLink = document.createElement('a');
              imageLink.href = bike.productUrl || '#';
              imageLink.target = '_blank';
              imageLink.title = `Se detaljer for ${bike.name}`;
-             // Legg til data-attributter for sporing på bildelenken
              imageLink.dataset.trackEvent = 'view_bike_details_image';
              imageLink.dataset.bikeId = bike.id;
              imageLink.dataset.bikeName = bike.name;
@@ -357,7 +429,6 @@ document.addEventListener('DOMContentLoaded', () => {
              imageContainer.classList.add('recommendation-image-container');
              imageContainer.appendChild(imageLink);
 
-             // Endring for "Se detaljer"-knappen: Legg til data-attributter
              const detailsButton = `<a href="${bike.productUrl || '#'}" 
                                        target="_blank" 
                                        class="button button-primary" 
@@ -426,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Utfører filtrering og sortering...");
             const filterBikes = (relaxFrameType = false, relaxDistance = false, purposeOnly = false) => {
                 let bikesToFilter = [...BikeCatalog.evoOriginal];
-                console.log(`Filtrerer med: relaxFrameType=${relaxFrameType}, relaxDistance=${relaxDistance}, purposeOnly=${purposeOnly}`);
+                // console.log(`Filtrerer med: relaxFrameType=${relaxFrameType}, relaxDistance=${relaxDistance}, purposeOnly=${purposeOnly}`); // Kan reduseres for mindre støy i loggen
                 if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
                 else if (purposeOnly && selections.purpose) { return bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); }
                 else if (purposeOnly && !selections.purpose) { return bikesToFilter; } 
@@ -442,16 +513,16 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             let potentialMatches = filterBikes();
-            console.log(`Treff etter streng filtrering: ${potentialMatches.length}`);
+            // console.log(`Treff etter streng filtrering: ${potentialMatches.length}`);
             if (potentialMatches.length === 0) {
-                console.log("Ingen treff, slapper av rammetype-filteret...");
+                // console.log("Ingen treff, slapper av rammetype-filteret...");
                 potentialMatches = filterBikes(true); relaxedSearchPerformed = true;
-                console.log(`Treff etter avslappet rammetype: ${potentialMatches.length}`);
+                // console.log(`Treff etter avslappet rammetype: ${potentialMatches.length}`);
             }
              if (potentialMatches.length === 0 && selections.purpose) { 
-                 console.log("Siste utvei: Viser sykler basert kun på formål...");
+                //  console.log("Siste utvei: Viser sykler basert kun på formål...");
                  potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; 
-                 console.log(`Treff basert kun på formål: ${potentialMatches.length}`);
+                //  console.log(`Treff basert kun på formål: ${potentialMatches.length}`);
              }
 
              potentialMatches.sort((a, b) => {
@@ -464,13 +535,13 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (selections.cargo === 'massiv' || selections.cargo === 'store') { const order = { 'small': 1, 'medium': 2, 'large': 3, 'massive': 4 }; const capA = order[a.cargo_capacity] || 0; const capB = order[b.cargo_capacity] || 0; if (capA !== capB) { return capB - capA; } }
                  return 0;
              });
-            console.log(`Sortert med prioritert barnematch, deretter cargo.`);
+            // console.log(`Sortert med prioritert barnematch, deretter cargo.`);
 
             recommendations = potentialMatches.slice(0, 3);
-            console.log("Endelige anbefalinger:", recommendations.map(b => `${b.name} (Kids: ${b.maxChildren ?? 'N/A'})`));
+            console.log("Endelige anbefalinger:", recommendations.map(b => `${b.name} (ID: ${b.id}, Kids: ${b.maxChildren ?? 'N/A'})`));
 
             loadingIndicator.classList.add('hidden');
-            renderRecommendations(); // Nå vil data-attributter for sporing legges til her
+            renderRecommendations();
             recommendationsOutput.classList.remove('hidden');
             if (contactEvoSection) { 
                 if (recommendations.length > 0) {
@@ -484,25 +555,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Handlers ---
     function handleOptionSelect(stepId, value) {
-        selections[stepId] = value; console.log("Valg:", stepId, "=", value);
-        // Spor valg av alternativ (kan være nyttig for å se drop-off)
+        selections[stepId] = value; // console.log("Valg:", stepId, "=", value);
         trackAdvisorEvent('option_selected', {
             step_id: stepId,
             selected_value: value,
-            step_number: calculateCurrentVisibleStep() // Gir nåværende synlige trinn før økning
+            step_number: calculateCurrentVisibleStep() 
         });
 
         if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; }
         currentStep++; let next = steps[currentStep - 1];
-        while(next && next.condition && !next.condition()) { console.log(`Hopper over ${currentStep}: ${next.id}`); if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; }
-        totalSteps = calculateTotalVisibleSteps(); const nextVis = calculateCurrentVisibleStep();
-        console.log("Logisk:", currentStep, "Neste synlige:", nextVis, "Totalt:", totalSteps);
+        while(next && next.condition && !next.condition()) { /*console.log(`Hopper over ${currentStep}: ${next.id}`);*/ if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; }
+        totalSteps = calculateTotalVisibleSteps();
+        // console.log("Logisk:", currentStep, "Neste synlige:", calculateCurrentVisibleStep(), "Totalt:", totalSteps);
         if (currentStep > steps.length) { 
-            console.log("Ferdig"); 
+            // console.log("Ferdig"); 
             trackAdvisorEvent('quiz_completed', selections);
             generateAndShowRecommendations(); 
         } else { 
-            console.log("Neste spørsmål"); 
+            // console.log("Neste spørsmål"); 
             updateView(); 
         }
      }
@@ -510,20 +580,20 @@ document.addEventListener('DOMContentLoaded', () => {
          if (showRecommendationsView) {
              showRecommendationsView = false; let lastVisIdx = -1;
              for (let i = 0; i < steps.length; i++) { const s = steps[i]; if (!s.condition || s.condition()) { lastVisIdx = i; } }
-             currentStep = lastVisIdx + 1; console.log("Tilbake fra resultat ->", currentStep); 
+             currentStep = lastVisIdx + 1; // console.log("Tilbake fra resultat ->", currentStep); 
              trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
              updateView();
          } else if (currentStep > 1) {
              const fromStep = calculateCurrentVisibleStep();
              currentStep--; let prev = steps[currentStep - 1];
-             while (currentStep > 1 && prev && prev.condition && !prev.condition()) { console.log(`Hopper bakover ${currentStep}: ${prev.id}`); currentStep--; prev = steps[currentStep -1]; }
-             console.log("Går tilbake ->", currentStep); 
+             while (currentStep > 1 && prev && prev.condition && !prev.condition()) { /*console.log(`Hopper bakover ${currentStep}: ${prev.id}`);*/ currentStep--; prev = steps[currentStep -1]; }
+             // console.log("Går tilbake ->", currentStep); 
              trackAdvisorEvent('navigation_back', { from_step_visible: fromStep, to_step_visible: calculateCurrentVisibleStep() });
              updateView();
-         } else { console.log("Kan ikke gå tilbake"); }
+         } // else { console.log("Kan ikke gå tilbake"); }
      }
      function resetAdvisor() {
-        console.log("Reset."); 
+        // console.log("Reset."); 
         trackAdvisorEvent('advisor_reset', { from_step: showRecommendationsView ? 'results' : calculateCurrentVisibleStep() });
         currentStep = 1;
         selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
@@ -534,23 +604,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- START: Sporingsfunksjonalitet ---
     function trackAdvisorEvent(eventName, eventParameters) {
-        console.log(`EVENT: ${eventName}`, eventParameters || {});
-        // Her ville du lagt inn Meta Pixel (fbq) og/eller GA4 (gtag) kall.
-        // Eksempel:
+        console.log(`TRACKING EVENT: ${eventName}`, eventParameters || {}); // Endret logg for tydelighet
+        // Eksempel for Meta Pixel (krever at fbq er definert globalt)
         // if (typeof fbq === 'function') {
-        //     fbq('trackCustom', `Advisor_${eventName}`, eventParameters);
+        //     const metaEventName = `Advisor_${eventName}`;
+        //     const paramsToSend = eventParameters && Object.keys(eventParameters).length > 0 ? { ...eventParameters } : {};
+        //     // For 'quiz_completed' og 'view_bike_details', kan man vurdere standard events
+        //     if (eventName === 'quiz_completed') fbq('track', 'Lead', paramsToSend); // Eksempel
+        //     else if (eventName === 'view_bike_details') fbq('track', 'ViewContent', paramsToSend); // Eksempel
+        //     else fbq('trackCustom', metaEventName, paramsToSend);
         // }
+        // Eksempel for GA4 (krever at gtag er definert globalt)
         // if (typeof gtag === 'function') {
-        //     gtag('event', `advisor_${eventName.toLowerCase()}`, eventParameters);
+        //     const ga4EventName = `advisor_${eventName.toLowerCase()}`;
+        //     const paramsToSend = eventParameters && Object.keys(eventParameters).length > 0 ? { ...eventParameters } : {};
+        //     gtag('event', ga4EventName, paramsToSend);
         // }
     }
 
-    // Global hendelseslytter for sporing av dynamiske og statiske elementer
     document.body.addEventListener('click', function(event) {
         const target = event.target;
         let tracked = false;
 
-        // Spor "Se detaljer" (både bilde og knapp)
         const detailsLink = target.closest('[data-track-event^="view_bike_details"]');
         if (detailsLink) {
             const bikeId = detailsLink.dataset.bikeId;
@@ -560,51 +635,52 @@ document.addEventListener('DOMContentLoaded', () => {
                 bike_id: bikeId,
                 bike_name: bikeName,
                 clicked_element: elementType,
-                // Kan legge til flere parametere her, f.eks. hvilke filtre som var aktive
                 current_selections: { ...selections }
             });
             tracked = true;
         }
 
-        // Spor statiske ID-baserte knapper/lenker
         const trackableStaticElement = target.closest('[id^="track-"]');
-        if (trackableStaticElement && !tracked) { // !tracked for å unngå dobbeltsporing hvis et element har både data-attributt og ID
+        if (trackableStaticElement && !tracked) {
             const elementId = trackableStaticElement.id;
             let eventName = 'unknown_static_click';
             let params = { element_id: elementId };
 
-            if (elementId === 'track-contact-page-button') {
-                eventName = 'contact_page_button_click';
+            if (elementId === 'track-contact-email-button') {
+                eventName = 'contact_button_click';
+                params.contact_method = 'email_button_main'; // Mer spesifikk
             } else if (elementId === 'track-call-button') {
                 eventName = 'call_button_click';
-                params.phone_number = trackableStaticElement.href; // F.eks. 'tel:+4712345678'
-            } else if (elementId === 'track-footer-contact-link') {
+                params.contact_method = 'phone_button_main'; // Mer spesifikk
+                params.phone_number = trackableStaticElement.href;
+            } else if (elementId === 'track-footer-contact-email-link') {
                 eventName = 'footer_contact_link_click';
+                params.contact_method = 'email_link_footer'; // Mer spesifikk
             } else if (elementId === 'track-footer-call-link') {
                 eventName = 'footer_call_link_click';
+                params.contact_method = 'phone_link_footer'; // Mer spesifikk
                 params.phone_number = trackableStaticElement.href;
             } else if (elementId.startsWith('track-no-results')) {
                 eventName = 'no_results_interaction';
                 params.interaction_type = elementId.includes('contact') ? 'contact_link_click' : 'call_link_click';
-                params.search_type = elementId.includes('relaxed') ? 'relaxed' : 'strict';
+                params.search_context = elementId.includes('relaxed') ? 'relaxed_search' : 'strict_search';
+                params.contact_method = elementId.includes('call') ? 'phone' : 'contact_page_or_email';
             }
-            // Legg til flere 'else if' for andre ID-er du vil spore
-
+            
             trackAdvisorEvent(eventName, params);
             tracked = true;
         }
     });
     // --- SLUTT: Sporingsfunksjonalitet ---
 
-
     // --- 9. Initialisering ---
-    if(backButton) backButton.addEventListener('click', handleBack); // Sporing for 'back' håndteres i handleBack
-    if(resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor); // Sporing for 'reset' håndteres i resetAdvisor
-    if(resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor); // Samme som over
+    if(backButton) backButton.addEventListener('click', handleBack);
+    if(resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
+    if(resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor);
     if(currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 
     totalSteps = calculateTotalVisibleSteps();
-    trackAdvisorEvent('advisor_loaded'); // Spor at rådgiveren er lastet
-    updateView(); // Vis første trinn
+    trackAdvisorEvent('advisor_loaded');
+    updateView();
 
-}); // Slutt på DOMContentLoaded
+});
