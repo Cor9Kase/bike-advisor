@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evo Elsykkel Rådgiver</title>
     <link rel="stylesheet" href="style.css">
-    </head>
+</head>
 <body>
     <div id="bike-advisor-container">
 
@@ -42,27 +42,31 @@
                     </div>
 
                 <div id="newsletter-section" class="contact-prompt-box hidden">
-                    <h2>Få sykkelforslaget tilsendt på e-post</h2>
-                    <form id="newsletter-form" class="newsletter-form">
-                        <label for="newsletter-name" class="visually-hidden">Navn</label>
-                        <input type="text" id="newsletter-name" name="name" required placeholder="Ditt navn">
+                    <div id="newsletter-form-wrapper">
+                        <h2>Få sykkelforslaget tilsendt på e-post</h2>
+                        <form id="newsletter-form" class="newsletter-form">
+                            <label for="newsletter-name" class="visually-hidden">Navn</label>
+                            <input type="text" id="newsletter-name" name="name" required placeholder="Ditt navn">
 
-                        <label for="newsletter-email" class="visually-hidden">E-postadresse</label>
-                        <input type="email" id="newsletter-email" name="email" required placeholder="Din e-postadresse">
-                        
-                        <div class="consent-checkbox-container">
-                            <input type="checkbox" id="newsletter-consent" name="consent" required>
-                            <label for="newsletter-consent" class="consent-label">
-                                Ja, jeg ønsker å motta sykkelforslaget på e-post og godtar at Evo Elsykler lagrer min e-postadresse for dette formålet. Jeg kan når som helst melde meg av.
-                            </label>
+                            <label for="newsletter-email" class="visually-hidden">E-postadresse</label>
+                            <input type="email" id="newsletter-email" name="email" required placeholder="Din e-postadresse">
+
+                            <div class="consent-checkbox-container">
+                                <input type="checkbox" id="newsletter-consent" name="consent" required>
+                                <label for="newsletter-consent" class="consent-label">
+                                    Ja, jeg ønsker å motta sykkelforslaget på e-post og godtar at Evo Elsykler lagrer min e-postadresse for dette formålet. Jeg kan når som helst melde meg av.
+                                </label>
+                            </div>
+                            <button type="submit" class="button button-primary">Send meg sykkelforslaget</button>
+                        </form>
+                        <p id="newsletter-message" class="newsletter-message"></p>
+                    </div>
+
+                    <div id="newsletter-thankyou-wrapper" class="hidden" style="text-align: center; padding: 20px 0;">
                         </div>
-                        
-                        <button type="submit" class="button button-primary">Send meg sykkelforslaget</button>
-                    </form>
-                    <p id="newsletter-message" class="newsletter-message"></p>
                 </div>
                 <div class="recommendations-actions">
-                </div>
+                    </div>
             </div>
 
             <div id="questions-section" class="hidden">
@@ -111,6 +115,7 @@
         </footer>
 
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
