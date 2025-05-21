@@ -234,7 +234,7 @@ body {
 .recommendation-price .price-value { font-size: 1.5em; font-weight: bold; color: #343a40; } /* Prisvisning */
 .recommendation-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 .recommendation-buttons .button { padding: 8px 12px; font-size: 0.9em; }
-.recommendations-actions { display: none; } /* Skjult som standard, kan brukes senere */
+.recommendations-actions { display: block; } /* Skjult som standard, kan brukes senere */
 
 /* Kontakt Oss Seksjon & "Ingen Resultater" Melding */
 /* .contact-prompt-box er nå brukt av #newsletter-section før, men den fjernes for modal.
