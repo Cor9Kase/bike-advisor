@@ -207,6 +207,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             newsletterPopupModal.classList.remove('hidden');
             newsletterModalShownThisSession = true;
+            try {
+                parent.postMessage({ type: 'modalOpen' }, '*');
+            } catch (e) {
+                console.error('Failed to postMessage modalOpen:', e);
+            }
         }
     }
 
@@ -219,6 +224,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 modalNewsletterThankyouWrapper.classList.add('hidden');
                 modalNewsletterThankyouWrapper.innerHTML = ''; // Tøm takkemelding
                  if(modalNewsletterMessage) modalNewsletterMessage.textContent = ''; // Tøm også feilmeldinger
+            }
+            try {
+                parent.postMessage({ type: 'modalClose' }, '*');
+            } catch (e) {
+                console.error('Failed to postMessage modalClose:', e);
             }
         }
     }
