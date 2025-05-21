@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     };
     // VIKTIG: Erstatt med din faktiske Google Apps Script Web App URL
     const bikeCatalogURL = 'https://script.google.com/macros/s/AKfycbyvNS_87zqRGqlwDi0nu14XblFBSH1BH4y5BbP_pKkbZJOxbXXfc-kukcT_Z8Mj9Ngu/exec';
-    const mailchimpConfig = { apiKey: 'YOUR_API_KEY', serverPrefix: 'YOUR_SERVER_PREFIX', listId: 'YOUR_LIST_ID' };
+    const mailchimpConfig = { apiKey: '52a4887211a02a289eb15b327553ccaa-us11', serverPrefix: 'us11', listId: '4a3e4d2c58' };
 
     // --- DOM Referanser (før initialisering som kan trenge data) ---
     const advisorContainer = document.getElementById('bike-advisor-container');
