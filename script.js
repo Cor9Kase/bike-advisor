@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
-    const contactEvoSection = document.getElementById('contact-evo-section'); // Behold hvis du har dette elementet
+    const contactEvoSection = document.getElementById('contact-evo-section');
 
     // Modal DOM Referanser
     const newsletterPopupModal = document.getElementById('newsletter-popup-modal');
@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalNewsletterMessage = document.getElementById('modal-newsletter-message');
     const modalNewsletterFormWrapper = document.getElementById('modal-newsletter-form-wrapper');
     const modalNewsletterThankyouWrapper = document.getElementById('modal-newsletter-thankyou-wrapper');
+    const openNewsletterPopupBtn = document.getElementById('open-newsletter-popup-btn'); // Knapp for å åpne modalen manuelt
 
     // --- Steps Definisjon ---
     const steps = [
@@ -186,19 +187,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if(modalNewsletterMessage) modalNewsletterMessage.textContent = '';
                 const submitBtn = modalNewsletterForm ? modalNewsletterForm.querySelector('button[type="submit"]') : null;
                 if(submitBtn) submitBtn.disabled = false;
+
+                // Sørg for at skjemadelen er synlig og takkemelding skjult når modalen åpnes på nytt
+                modalNewsletterFormWrapper.classList.remove('hidden');
+                modalNewsletterThankyouWrapper.classList.add('hidden');
+                modalNewsletterThankyouWrapper.innerHTML = '';
             }
             newsletterPopupModal.classList.remove('hidden');
-            // newsletterModalShownThisSession = true; // Kommenter ut for å teste popup hver gang
+            newsletterModalShownThisSession = true;
         }
     }
 
     function closeNewsletterModal() {
         if (newsletterPopupModal) {
             newsletterPopupModal.classList.add('hidden');
+            // Alltid tilbakestill til skjemavisning når modalen lukkes, for neste gang den evt. åpnes
             if (modalNewsletterFormWrapper && modalNewsletterThankyouWrapper) {
-                modalNewsletterFormWrapper.classList.remove('hidden'); // Vis skjema igjen
-                modalNewsletterThankyouWrapper.classList.add('hidden'); // Skjul takkemelding
-                modalNewsletterThankyouWrapper.innerHTML = ''; // Tøm takkemelding innhold
+                modalNewsletterFormWrapper.classList.remove('hidden');
+                modalNewsletterThankyouWrapper.classList.add('hidden');
+                modalNewsletterThankyouWrapper.innerHTML = ''; // Tøm takkemelding
+                 if(modalNewsletterMessage) modalNewsletterMessage.textContent = ''; // Tøm også feilmeldinger
             }
         }
     }
@@ -209,7 +217,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (showRecommendationsView) {
             if (questionsSection) questionsSection.classList.add('hidden');
             if (recommendationsSection) recommendationsSection.classList.remove('hidden');
-            // Ikke lenger vis/skjul on-page newsletter section her
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
         } else {
             if (BikeCatalog.evoOriginal && BikeCatalog.evoOriginal.length > 0) {
@@ -264,7 +271,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
 
             if (recommendations.length > 0 && !newsletterModalShownThisSession) {
-                setTimeout(openNewsletterModal, 5000); // Vis modal etter 5 sekunder
+                // Endre 7000 til ønsket antall millisekunder (f.eks. 10000 for 10 sekunder)
+                setTimeout(openNewsletterModal, 7000); 
             }
         }, 300);
     }
@@ -303,9 +311,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             currentStep = lastVisibleStepIndex + 1;
             trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
             updateView();
-             // Sørg for at modalen ikke vises igjen umiddelbart hvis man går tilbake fra resultater
-            newsletterModalShownThisSession = true; // Kan justeres hvis ønskelig
-            if (newsletterPopupModal) newsletterPopupModal.classList.add('hidden'); // Skjul modalen
+            newsletterModalShownThisSession = true; 
+            if (newsletterPopupModal) newsletterPopupModal.classList.add('hidden');
         } else if (currentStep > 1) {
             const fromStepVisible = calculateCurrentVisibleStep();
             currentStep--;
@@ -329,7 +336,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
         closeNewsletterModal();
-        newsletterModalShownThisSession = false; // Nullstill for modal
+        newsletterModalShownThisSession = false;
 
         totalSteps = calculateTotalVisibleSteps();
         updateView();
@@ -339,7 +346,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function trackAdvisorEvent(eventName, eventParameters) {
         console.log(`TRACKING EVENT: ${eventName}`, eventParameters || {});
     }
-    document.body.addEventListener('click', function(event) { /* ... (din eksisterende sporingslogikk) ... */ });
+    document.body.addEventListener('click', function(event) { /* ... (din sporingslogikk) ... */ });
 
     // --- Nyhetsbrev innsending med FormData (mode: 'no-cors') ---
     async function sendNewsletterDataWithFormData(navn, email, recommendedBikes = []) {
@@ -395,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 if (modalNewsletterMessage) modalNewsletterMessage.textContent = "";
                 trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, source: 'popup_modal' });
-                // setTimeout(closeNewsletterModal, 5000); // Lukk modalen automatisk etter 5 sekunder
+                // setTimeout(closeNewsletterModal, 7000); // Lukk modalen automatisk etter 7 sekunder
             } catch (err) {
                 console.error("Innsending av nyhetsbrev fra modal feilet:", err);
                 if (modalNewsletterMessage) {
@@ -409,10 +416,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Event listeners for modal
     if (closeNewsletterModalBtn) closeNewsletterModalBtn.addEventListener('click', closeNewsletterModal);
     if (newsletterPopupModal) {
         newsletterPopupModal.addEventListener('click', function(event) {
             if (event.target === newsletterPopupModal) closeNewsletterModal();
+        });
+    }
+    // Event listener for den nye knappen som åpner newsletter modal
+    if (openNewsletterPopupBtn) {
+        openNewsletterPopupBtn.addEventListener('click', () => {
+            newsletterModalShownThisSession = false; // Overstyr for å tillate manuell åpning
+            openNewsletterModal();
         });
     }
 
@@ -421,7 +436,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const catalogLoaded = await fetchBikeCatalog();
         totalSteps = calculateTotalVisibleSteps();
 
-        const backButton = document.getElementById('back-button');
+        const backButton = document.getElementById('back-button'); // Re-declare for local scope if not already global for this function
         const resetButtonStep = document.getElementById('reset-button-step');
         const resetButtonFinal = document.getElementById('reset-button-final');
         const currentYearSpan = document.getElementById('current-year');
