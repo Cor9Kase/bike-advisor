@@ -396,11 +396,18 @@ body {
     margin-bottom: 0; /* Fjern unødvendig marg */
 }
 
-.modal-submit-btn { /* Bruker .button .button-primary fra før, men kan overstyre her */
-    width: 100%; /* Full bredde for innsendingsknappen */
-    padding: 11px 20px !important; /* Override .button hvis nødvendig */
+.modal-submit-btn {
+    /* Fjern eller kommenter ut width: 100%; */
+    /* width: 100%; */ 
+    width: auto; /* La knappen tilpasse seg innholdet */
+    min-width: 200px; /* Sett en fornuftig minimumsbredde */
+    max-width: 300px; /* Sett en eventuell maksbredde */
+    padding: 11px 25px !important; /* Juster padding etter ønske */
     font-size: 1.05em !important;
-    margin-top: 5px; /* Litt luft over knappen */
+    margin-top: 15px; /* Øk gjerne margin-top for mer luft */
+    margin-left: auto;  /* For sentrering */
+    margin-right: auto; /* For sentrering */
+    display: block; /* Nødvendig for at margin auto skal fungere på bredde auto */
 }
 
 .modal-message { /* For feilmeldinger i modalen */
