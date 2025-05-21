@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let showRecommendationsView = false;
     let relaxedSearchPerformed = false;
     let totalSteps;
+    let newsletterModalShownThisSession = false;
 
     // --- DOM Referanser ---
     const initialLoader = document.getElementById('initial-loader');
@@ -32,15 +33,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
-    const contactEvoSection = document.getElementById('contact-evo-section');
-    const newsletterSection = document.getElementById('newsletter-section');
-    const newsletterForm = document.getElementById('newsletter-form');
-    const newsletterNameInput = document.getElementById('newsletter-name');
-    const newsletterEmailInput = document.getElementById('newsletter-email');
-    const newsletterConsentCheckbox = document.getElementById('newsletter-consent');
-    const newsletterMessage = document.getElementById('newsletter-message');
-    const newsletterFormWrapper = document.getElementById('newsletter-form-wrapper');
-    const newsletterThankyouWrapper = document.getElementById('newsletter-thankyou-wrapper');
+    const contactEvoSection = document.getElementById('contact-evo-section'); // Behold hvis du har dette elementet
+
+    // Modal DOM Referanser
+    const newsletterPopupModal = document.getElementById('newsletter-popup-modal');
+    const closeNewsletterModalBtn = document.getElementById('close-newsletter-modal');
+    const modalNewsletterForm = document.getElementById('modal-newsletter-form');
+    const modalNewsletterNameInput = document.getElementById('modal-newsletter-name');
+    const modalNewsletterEmailInput = document.getElementById('modal-newsletter-email');
+    const modalNewsletterConsentCheckbox = document.getElementById('modal-newsletter-consent');
+    const modalNewsletterMessage = document.getElementById('modal-newsletter-message');
+    const modalNewsletterFormWrapper = document.getElementById('modal-newsletter-form-wrapper');
+    const modalNewsletterThankyouWrapper = document.getElementById('modal-newsletter-thankyou-wrapper');
 
     // --- Steps Definisjon ---
     const steps = [
@@ -172,15 +176,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // --- Modal Funksjoner ---
+    function openNewsletterModal() {
+        if (newsletterPopupModal && !newsletterModalShownThisSession) {
+            if (modalNewsletterFormWrapper && modalNewsletterThankyouWrapper && modalNewsletterThankyouWrapper.classList.contains('hidden')) {
+                if(modalNewsletterNameInput) modalNewsletterNameInput.value = '';
+                if(modalNewsletterEmailInput) modalNewsletterEmailInput.value = '';
+                if(modalNewsletterConsentCheckbox) modalNewsletterConsentCheckbox.checked = false;
+                if(modalNewsletterMessage) modalNewsletterMessage.textContent = '';
+                const submitBtn = modalNewsletterForm ? modalNewsletterForm.querySelector('button[type="submit"]') : null;
+                if(submitBtn) submitBtn.disabled = false;
+            }
+            newsletterPopupModal.classList.remove('hidden');
+            // newsletterModalShownThisSession = true; // Kommenter ut for å teste popup hver gang
+        }
+    }
+
+    function closeNewsletterModal() {
+        if (newsletterPopupModal) {
+            newsletterPopupModal.classList.add('hidden');
+            if (modalNewsletterFormWrapper && modalNewsletterThankyouWrapper) {
+                modalNewsletterFormWrapper.classList.remove('hidden'); // Vis skjema igjen
+                modalNewsletterThankyouWrapper.classList.add('hidden'); // Skjul takkemelding
+                modalNewsletterThankyouWrapper.innerHTML = ''; // Tøm takkemelding innhold
+            }
+        }
+    }
+
     // --- Oppdater Visning ---
     function updateView() {
         totalSteps = calculateTotalVisibleSteps();
         if (showRecommendationsView) {
             if (questionsSection) questionsSection.classList.add('hidden');
             if (recommendationsSection) recommendationsSection.classList.remove('hidden');
-            if (newsletterSection) {
-                recommendations.length > 0 ? newsletterSection.classList.remove('hidden') : newsletterSection.classList.add('hidden');
-            }
+            // Ikke lenger vis/skjul on-page newsletter section her
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
         } else {
             if (BikeCatalog.evoOriginal && BikeCatalog.evoOriginal.length > 0) {
@@ -189,7 +218,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             if (recommendationsSection) recommendationsSection.classList.add('hidden');
             if (contactEvoSection) contactEvoSection.classList.add('hidden');
-            if (newsletterSection) newsletterSection.classList.add('hidden');
             if (loadingIndicator) loadingIndicator.classList.add('hidden');
             if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
             renderSentence(sentenceBuilder);
@@ -200,14 +228,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateProgress();
     }
 
-    // --- Generer Anbefalinger ---
+    // --- Generer Anbefalinger (Oppdatert til å potensielt trigge modal) ---
     function generateAndShowRecommendations() {
         relaxedSearchPerformed = false;
         showRecommendationsView = true;
         if (questionsSection) questionsSection.classList.add('hidden');
         if (recommendationsSection) { recommendationsSection.classList.remove('hidden'); recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
-        if (newsletterSection) newsletterSection.classList.add('hidden');
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
         if (loadingIndicator) loadingIndicator.classList.remove('hidden');
         renderSentence(summarySentenceFinal);
@@ -235,7 +262,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderRecommendations();
             if (recommendationsOutput) recommendationsOutput.classList.remove('hidden');
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
-            if (newsletterSection) { recommendations.length > 0 ? newsletterSection.classList.remove('hidden') : newsletterSection.classList.add('hidden'); }
+
+            if (recommendations.length > 0 && !newsletterModalShownThisSession) {
+                setTimeout(openNewsletterModal, 5000); // Vis modal etter 5 sekunder
+            }
         }, 300);
     }
 
@@ -273,6 +303,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             currentStep = lastVisibleStepIndex + 1;
             trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
             updateView();
+             // Sørg for at modalen ikke vises igjen umiddelbart hvis man går tilbake fra resultater
+            newsletterModalShownThisSession = true; // Kan justeres hvis ønskelig
+            if (newsletterPopupModal) newsletterPopupModal.classList.add('hidden'); // Skjul modalen
         } else if (currentStep > 1) {
             const fromStepVisible = calculateCurrentVisibleStep();
             currentStep--;
@@ -295,20 +328,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         relaxedSearchPerformed = false;
 
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
-        if (newsletterSection) newsletterSection.classList.add('hidden');
-
-        if (newsletterFormWrapper) newsletterFormWrapper.classList.remove('hidden');
-        if (newsletterThankyouWrapper) {
-            newsletterThankyouWrapper.classList.add('hidden');
-            newsletterThankyouWrapper.innerHTML = '';
-        }
-        if (newsletterMessage) newsletterMessage.textContent = '';
-        if (newsletterNameInput) newsletterNameInput.value = '';
-        if (newsletterEmailInput) newsletterEmailInput.value = '';
-        if (newsletterConsentCheckbox) newsletterConsentCheckbox.checked = false;
-        
-        const submitButton = newsletterForm ? newsletterForm.querySelector('button[type="submit"]') : null;
-        if (submitButton) submitButton.disabled = false;
+        closeNewsletterModal();
+        newsletterModalShownThisSession = false; // Nullstill for modal
 
         totalSteps = calculateTotalVisibleSteps();
         updateView();
@@ -318,13 +339,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function trackAdvisorEvent(eventName, eventParameters) {
         console.log(`TRACKING EVENT: ${eventName}`, eventParameters || {});
     }
-    document.body.addEventListener('click', function(event) {
-        const target = event.target.closest('[data-track-event], [id^="track-"]');
-        if (!target) return;
-        const eventName = target.dataset.trackEvent;
-        if (eventName) { /* ... (din sporingslogikk) ... */ }
-        else if (target.id.startsWith('track-')) { /* ... (din sporingslogikk) ... */ }
-    });
+    document.body.addEventListener('click', function(event) { /* ... (din eksisterende sporingslogikk) ... */ });
 
     // --- Nyhetsbrev innsending med FormData (mode: 'no-cors') ---
     async function sendNewsletterDataWithFormData(navn, email, recommendedBikes = []) {
@@ -332,57 +347,43 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error("GAS_WEB_APP_URL er ikke korrekt satt for nyhetsbrev.");
             throw new Error("Konfigurasjonsfeil for innsending (GAS URL mangler).");
         }
-
-        const tags = Array.isArray(recommendedBikes) ?
-            recommendedBikes.map(b => b.name || b.id || 'UkjentSykkel').filter(Boolean) : [];
-
+        const tags = Array.isArray(recommendedBikes) ? recommendedBikes.map(b => b.name || b.id || 'UkjentSykkel').filter(Boolean) : [];
         const formData = new FormData();
         formData.append('navn', navn);
         formData.append('email_address', email);
         formData.append('tags', tags.join(','));
-
         try {
-            await fetch(GAS_WEB_APP_URL, {
-                method: "POST",
-                mode: 'no-cors', // ENDRET TIL 'no-cors'
-                body: formData
-            });
-            
+            await fetch(GAS_WEB_APP_URL, { method: "POST", mode: 'no-cors', body: formData });
             console.log("Nyhetsbrevdata sendt (mode: 'no-cors'). Antar suksess på backend.");
             return { success: true, message: "Forespørsel sendt." };
-
         } catch (error) {
             console.error('Feil under sending av fetch-forespørsel (mode: no-cors):', error);
             throw new Error("Kunne ikke sende forespørsel. Sjekk nettverkstilkoblingen din.");
         }
     }
 
-    if (newsletterForm) {
-        newsletterForm.addEventListener("submit", async (e) => {
+    if (modalNewsletterForm) {
+        modalNewsletterForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            if (!newsletterNameInput || !newsletterEmailInput || !newsletterConsentCheckbox || !newsletterMessage || !newsletterFormWrapper || !newsletterThankyouWrapper) {
-                console.error("Ett eller flere nyhetsbrev-DOM-elementer mangler.");
-                return;
+            if (!modalNewsletterNameInput || !modalNewsletterEmailInput || !modalNewsletterConsentCheckbox || !modalNewsletterMessage || !modalNewsletterFormWrapper || !modalNewsletterThankyouWrapper) {
+                console.error("Ett eller flere modal-nyhetsbrev-DOM-elementer mangler."); return;
             }
+            const navn = modalNewsletterNameInput.value.trim();
+            const email = modalNewsletterEmailInput.value.trim();
+            if (!navn) { modalNewsletterMessage.textContent = "Vennligst skriv inn navnet ditt."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
+            if (!modalNewsletterConsentCheckbox.checked) { modalNewsletterMessage.textContent = "Du må godta vilkårene for å motta e-post."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { modalNewsletterMessage.textContent = "Vennligst skriv inn en gyldig e-postadresse."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
 
-            const navn = newsletterNameInput.value.trim();
-            const email = newsletterEmailInput.value.trim();
-
-            if (!navn) { newsletterMessage.textContent = "Vennligst skriv inn navnet ditt."; newsletterMessage.style.color = "#b71c1c"; return; }
-            if (!newsletterConsentCheckbox.checked) { newsletterMessage.textContent = "Du må godta vilkårene for å motta e-post."; newsletterMessage.style.color = "#b71c1c"; return; }
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { newsletterMessage.textContent = "Vennligst skriv inn en gyldig e-postadresse."; newsletterMessage.style.color = "#b71c1c"; return; }
-
-            newsletterMessage.textContent = "Sender...";
-            newsletterMessage.style.color = "#495057";
-            const submitButton = newsletterForm.querySelector('button[type="submit"]');
+            modalNewsletterMessage.textContent = "Sender...";
+            modalNewsletterMessage.style.color = "#495057";
+            const submitButton = modalNewsletterForm.querySelector('button[type="submit"]');
             if (submitButton) submitButton.disabled = true;
 
             try {
                 await sendNewsletterDataWithFormData(navn, email, recommendations);
-
-                if (newsletterFormWrapper) newsletterFormWrapper.classList.add('hidden');
-                if (newsletterThankyouWrapper) {
-                    newsletterThankyouWrapper.innerHTML = `
+                if (modalNewsletterFormWrapper) modalNewsletterFormWrapper.classList.add('hidden');
+                if (modalNewsletterThankyouWrapper) {
+                    modalNewsletterThankyouWrapper.innerHTML = `
                         <h2>Takk, ${navn}!</h2>
                         <p>Du får straks anbefalingene dine tilsendt på e-post til ${email}.</p>
                         <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:48px; height:48px; color: #198754; margin-top: 15px; margin-bottom: 10px;">
@@ -390,21 +391,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </svg>
                         <p style="font-size: 0.9em; color: #6c757d;">Sjekk også søppelpostmappen din.</p>
                     `;
-                    newsletterThankyouWrapper.classList.remove('hidden');
+                    modalNewsletterThankyouWrapper.classList.remove('hidden');
                 }
-                if (newsletterMessage) newsletterMessage.textContent = ""; 
-
-                trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, bike_recommendations: recommendations.map(b => b.name) });
+                if (modalNewsletterMessage) modalNewsletterMessage.textContent = "";
+                trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, source: 'popup_modal' });
+                // setTimeout(closeNewsletterModal, 5000); // Lukk modalen automatisk etter 5 sekunder
             } catch (err) {
-                console.error("Innsending av nyhetsbrev feilet:", err); // Mer generisk feilmelding her
-                if (newsletterMessage) {
-                    newsletterMessage.textContent = err.message || "Noe gikk galt. Kunne ikke sende forespørselen. Prøv igjen.";
-                    newsletterMessage.style.color = "#b71c1c";
+                console.error("Innsending av nyhetsbrev fra modal feilet:", err);
+                if (modalNewsletterMessage) {
+                    modalNewsletterMessage.textContent = err.message || "Noe gikk galt. Prøv igjen.";
+                    modalNewsletterMessage.style.color = "#b71c1c";
                 }
-                trackAdvisorEvent('newsletter_signup_failed', { navn: navn, email: email, error: err.message || String(err) });
+                trackAdvisorEvent('newsletter_signup_failed', { navn: navn, email: email, source: 'popup_modal', error: err.message || String(err) });
             } finally {
                 if (submitButton) submitButton.disabled = false;
             }
+        });
+    }
+
+    if (closeNewsletterModalBtn) closeNewsletterModalBtn.addEventListener('click', closeNewsletterModal);
+    if (newsletterPopupModal) {
+        newsletterPopupModal.addEventListener('click', function(event) {
+            if (event.target === newsletterPopupModal) closeNewsletterModal();
         });
     }
 
@@ -412,6 +420,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function initializeAdvisor() {
         const catalogLoaded = await fetchBikeCatalog();
         totalSteps = calculateTotalVisibleSteps();
+
+        const backButton = document.getElementById('back-button');
+        const resetButtonStep = document.getElementById('reset-button-step');
+        const resetButtonFinal = document.getElementById('reset-button-final');
+        const currentYearSpan = document.getElementById('current-year');
 
         if (backButton) backButton.addEventListener('click', handleBack);
         if (resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
