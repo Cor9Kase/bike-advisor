@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- Konstanter ---
     // VIKTIG: Erstatt med din faktiske, publiserte Google Apps Script Web App URL
     // Denne URL-en MÅ stemme med den du får etter å ha deployert code.gs på nytt.
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzi-fvsQsScGLQpyrr4AOc6jJkocf4hPqgw5-dex4sknHsNP6NTYTxDhdbvpcv8dy_v/exec'; // ERSTATT DENNE HVIS DU HAR EN NYERE URL
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzRMRpnC-FMPpyRc5C5RDcBjKfaHLUeOLFQSR2zeUmfQVTV9VN27HheRqcZvNHhkgPl/exec'; // ERSTATT DENNE HVIS DU HAR EN NYERE URL
 
     // --- State Variabler ---
     let BikeCatalog = { evoOriginal: [] };
