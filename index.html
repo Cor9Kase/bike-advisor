@@ -5,21 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evo Elsykkel Rådgiver</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Legg til sporingsskript her (f.eks. Meta Pixel, GA4, GTM) -->
-    <!-- Eksempel GTM:
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','DIN_GTM_ID');</script>
-    -->
-</head>
+    </head>
 <body>
-    <!-- Eksempel GTM (noscript):
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=DIN_GTM_ID"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    -->
-
     <div id="bike-advisor-container">
 
         <header class="advisor-header">
@@ -29,42 +16,29 @@
 
         <div id="advisor-content">
 
-            <!-- START: Initial Bike Loader (med PNG) -->
-            <div id="initial-loader" class="hidden"> <!-- Skjult som standard, vises av JS -->
-                <!-- Bilde-element for sykkelen -->
-                <img src="https://evoelsykler.no/wp-content/uploads/2025/05/free-bicycle-icon-1054-thumb.png"
+            <div id="initial-loader" class="hidden"> <img src="https://evoelsykler.no/wp-content/uploads/2025/05/free-bicycle-icon-1054-thumb.png"
                      alt="Laster..."
-                     class="bike-loader-png">
-                <!-- Tekst (med en ID for å kunne endre den ved feil) -->
+                     class="bike-loader-png"
+                     onerror="this.style.display='none'; document.getElementById('bike-loading-text-element').textContent='Kunne ikke laste bilde.';">
                 <p id="bike-loading-text-element" class="bike-loading-text">Laster sykkeldata, vennligst vent...</p>
             </div>
-            <!-- SLUTT: Initial Bike Loader -->
-
-            <!-- Seksjon for anbefalinger (vises til slutt) -->
             <div id="recommendations-section" class="hidden">
                 <div id="summary-sentence-final" class="summary-box">
-                    <!-- Den ferdige setningen vises her -->
-                </div>
+                    </div>
 
-                <!-- Lasteindikator FOR ANBEFALINGER (den gamle spinneren) -->
                 <div id="loading-indicator" class="loading-container hidden">
                     <div class="spinner"></div>
                     <p class="loading-text">Konfigurerer dine anbefalinger...</p>
                 </div>
 
-                <!-- Selve anbefalingene - Header MED knapp -->
                 <div class="recommendations-header">
                      <h2 class="recommendations-title">Din anbefaling</h2>
                      <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
                 </div>
 
-                <!-- Anbefalings-Grid -->
                 <div id="recommendations-output" class="recommendations-grid hidden">
-                    <!-- Anbefalte sykler lastes inn her -->
-                    <!-- Meldinger om "ingen resultater" vil også vises her (med sporings-ID-er lagt til via JS) -->
-                </div>
+                    </div>
 
-                <!-- START: Ny Kontakt Oss Seksjon (Vises kun hvis det er anbefalinger) -->
                 <div id="contact-evo-section" class="contact-prompt-box hidden">
                     <h2>Har du spørsmål eller ønsker å bestille?</h2>
                     <p>Våre eksperter står klare til å hjelpe deg med å finne den perfekte elsykkelen, svare på spørsmål om modellene, eller veilede deg gjennom kjøpsprosessen.</p>
@@ -82,35 +56,34 @@
                         </a>
                     </div>
                 </div>
-                <!-- SLUTT: Ny Kontakt Oss Seksjon -->
-
-                <!-- START: Mailchimp Signup Section -->
                 <div id="newsletter-section" class="contact-prompt-box hidden">
-                    <h2>Få sykkelforslaget tilsendt</h2>
+                    <h2>Få sykkelforslaget tilsendt på e-post</h2>
                     <form id="newsletter-form" class="newsletter-form">
                         <label for="newsletter-email" class="visually-hidden">E-postadresse</label>
-                        <input type="email" id="newsletter-email" required placeholder="Din e-postadresse">
+                        <input type="email" id="newsletter-email" name="email" required placeholder="Din e-postadresse">
+                        
+                        <div class="consent-checkbox-container">
+                            <input type="checkbox" id="newsletter-consent" name="consent" required>
+                            <label for="newsletter-consent" class="consent-label">
+                                Ja, jeg ønsker å motta sykkelforslaget på e-post og godtar at Evo Elsykler lagrer min e-postadresse for dette formålet. Jeg kan når som helst melde meg av.
+                            </label>
+                        </div>
+                        
                         <button type="submit" class="button button-primary">Send meg sykkelforslaget</button>
                     </form>
                     <p id="newsletter-message" class="newsletter-message"></p>
                 </div>
-                <!-- SLUTT: Mailchimp Signup Section -->
-
                 <div class="recommendations-actions">
-                </div>
+                    </div>
             </div>
 
-            <!-- Seksjon for spørsmål (vises etter lasting) -->
-            <div id="questions-section" class="hidden"> <!-- Skjult som standard, vises av JS etter lasting -->
-                <div id="sentence-builder" class="summary-box">
-                    <!-- Setningen bygges opp her -->
-                </div>
+            <div id="questions-section" class="hidden"> <div id="sentence-builder" class="summary-box">
+                    </div>
 
                 <div id="options-area" class="options-container">
                     <h2 id="step-title">Laster inn...</h2>
                     <div id="step-options">
-                        <!-- Alternativknapper lastes inn her -->
-                    </div>
+                        </div>
                      <div id="step-progress" class="progress-indicator">
                         <div class="progress-bar-outer">
                            <div id="progress-bar" class="progress-bar-inner"></div>
@@ -150,7 +123,6 @@
 
     </div>
 
-    <!-- Viktig: script.js lastes helt til slutt -->
     <script src="script.js"></script>
 </body>
 </html>
