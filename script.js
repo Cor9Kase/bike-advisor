@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     };
     // VIKTIG: Erstatt med din faktiske Google Apps Script Web App URL
     const bikeCatalogURL = 'https://script.google.com/macros/s/AKfycbyvNS_87zqRGqlwDi0nu14XblFBSH1BH4y5BbP_pKkbZJOxbXXfc-kukcT_Z8Mj9Ngu/exec';
+    const mailchimpConfig = { apiKey: 'YOUR_API_KEY', serverPrefix: 'YOUR_SERVER_PREFIX', listId: 'YOUR_LIST_ID' };
 
     // --- DOM Referanser (før initialisering som kan trenge data) ---
     const advisorContainer = document.getElementById('bike-advisor-container');
@@ -28,6 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator'); // Spinner for anbefalinger
     const contactEvoSection = document.getElementById('contact-evo-section');
+    const newsletterSection = document.getElementById('newsletter-section');
+    const newsletterForm = document.getElementById('newsletter-form');
+    const newsletterEmailInput = document.getElementById('newsletter-email');
+    const newsletterMessage = document.getElementById('newsletter-message');
 
 
     // Funksjon for å hente sykkeldata
@@ -162,6 +167,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
              if (contactEvoSection) {
                  if (recommendations.length > 0) { contactEvoSection.classList.remove('hidden'); }
                  else { contactEvoSection.classList.add('hidden'); }
+             if (newsletterSection) newsletterSection.classList.add('hidden');
+                if (newsletterSection) { if (recommendations.length > 0) { newsletterSection.classList.remove('hidden'); } else { newsletterSection.classList.add('hidden'); } }
              }
          } else {
              console.log("updateView: Showing questions section.");
@@ -176,6 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
 
              if(recommendationsSection) recommendationsSection.classList.add('hidden');
              if (contactEvoSection) contactEvoSection.classList.add('hidden');
+             if (newsletterSection) newsletterSection.classList.add('hidden');
              if(loadingIndicator) loadingIndicator.classList.add('hidden');
              if(recommendationsOutput) recommendationsOutput.classList.add('hidden');
 
@@ -196,6 +204,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
      function generateAndShowRecommendations() { /* ... (uendret) ... */ }
     // (Innholdet er uendret fra forrige versjon)
     function generateAndShowRecommendations() { relaxedSearchPerformed = false; showRecommendationsView = true; if(questionsSection) questionsSection.classList.add('hidden'); if(recommendationsSection) { recommendationsSection.classList.remove('hidden'); recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); } if(recommendationsOutput) recommendationsOutput.classList.add('hidden'); if (contactEvoSection) contactEvoSection.classList.add('hidden'); if(loadingIndicator) loadingIndicator.classList.remove('hidden'); renderSentence(summarySentenceFinal); setTimeout(() => { const filterBikes = (relaxFrameType = false, relaxDistance = false, purposeOnly = false) => { let bikesToFilter = [...BikeCatalog.evoOriginal]; if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); } else if (purposeOnly && selections.purpose) { return bikesToFilter.filter(bike => bike.purpose && bike.purpose.includes(selections.purpose)); } else if (purposeOnly && !selections.purpose) { return bikesToFilter; } if (!purposeOnly) { if (selections.distance && !relaxDistance) { let min = 0; if (selections.distance === 'medium') min = 20; else if (selections.distance === 'lang') min = 50; bikesToFilter = bikesToFilter.filter(bike => bike.distance_km && bike.distance_km[1] >= min); } if (selections.cargo) { let cap = []; if (selections.cargo === 'små') cap = ['small', 'medium', 'large', 'massive']; else if (selections.cargo === 'store') cap = ['medium', 'large', 'massive']; else if (selections.cargo === 'massiv') cap = ['large', 'massive']; bikesToFilter = bikesToFilter.filter(bike => bike.cargo_capacity && cap.includes(bike.cargo_capacity)); } if (selections.frameType && !relaxFrameType) { let frames = []; if (selections.frameType === 'dypGjennomgang') frames = ['low-step', 'cargo', 'cargo-longtail']; else if (selections.frameType === 'lavtTopprør') frames = ['mid-step']; else if (selections.frameType === 'høytTopprør') frames = ['high-step']; bikesToFilter = bikesToFilter.filter(bike => bike.frame_types && bike.frame_types.some(type => frames.includes(type))); } const cargoLocStep = steps.find(s => s.id === 'cargoLocation'); const cargoLocAsked = !cargoLocStep || !cargoLocStep.condition || cargoLocStep.condition(); if (cargoLocAsked && selections.purpose === 'transport' && selections.cargoLocation) { const loc = selections.cargoLocation === 'frontlaster' ? 'front' : 'rear'; bikesToFilter = bikesToFilter.filter(bike => bike.cargo_location === loc); } } return bikesToFilter; }; let potentialMatches = filterBikes(); if (potentialMatches.length === 0) { potentialMatches = filterBikes(true); relaxedSearchPerformed = true; } if (potentialMatches.length === 0 && selections.purpose) { potentialMatches = filterBikes(false, false, true); relaxedSearchPerformed = true; } potentialMatches.sort((a, b) => { const inferChildNeed = selections.purpose === 'transport' || selections.purpose === 'family' || selections.cargo === 'massiv' || selections.cargo === 'store'; const meetsChildReq = (bike, inferNeed) => { if (!inferNeed) return true; return bike.maxChildren !== null && bike.maxChildren > 0; }; const a_meets_child = meetsChildReq(a, inferChildNeed); const b_meets_child = meetsChildReq(b, inferChildNeed); if (a_meets_child !== b_meets_child) { return a_meets_child ? -1 : 1; } const a_children = a.maxChildren ?? -1; const b_children = b.maxChildren ?? -1; if (a_children !== b_children && inferChildNeed) { return b_children - a_children; } if (selections.cargo === 'massiv' || selections.cargo === 'store') { const order = { 'small': 1, 'medium': 2, 'large': 3, 'massive': 4 }; const capA = order[a.cargo_capacity] || 0; const capB = order[b.cargo_capacity] || 0; if (capA !== capB) { return capB - capA; } } return 0; }); recommendations = potentialMatches.slice(0, 3); console.log("Endelige anbefalinger:", recommendations.map(b => `${b.name} (Relaxed: ${relaxedSearchPerformed})`)); if(loadingIndicator) loadingIndicator.classList.add('hidden'); renderRecommendations(); if(recommendationsOutput) recommendationsOutput.classList.remove('hidden'); if (contactEvoSection) { if (recommendations.length > 0) { contactEvoSection.classList.remove('hidden'); } else { contactEvoSection.classList.add('hidden'); } } }, 300); }
+             if (newsletterSection) newsletterSection.classList.add('hidden');
+                if (newsletterSection) { if (recommendations.length > 0) { newsletterSection.classList.remove('hidden'); } else { newsletterSection.classList.add('hidden'); } }
 
 
     // --- Event Handlers ---
@@ -204,6 +214,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     function resetAdvisor() { /* ... */ }
     // (Innholdet i event handlers er uendret)
     function handleOptionSelect(stepId, value) { selections[stepId] = value; trackAdvisorEvent('option_selected', { step_id: stepId, selected_value: value, step_number: calculateCurrentVisibleStep() }); if (stepId === 'purpose' && value !== 'transport') { selections.cargoLocation = null; } currentStep++; let next = steps[currentStep - 1]; while(next && next.condition && !next.condition()) { if (selections[next.id] !== undefined) selections[next.id] = null; currentStep++; next = steps[currentStep - 1]; } totalSteps = calculateTotalVisibleSteps(); if (currentStep > steps.length) { trackAdvisorEvent('quiz_completed', selections); generateAndShowRecommendations(); } else { updateView(); } } function handleBack() { if (showRecommendationsView) { showRecommendationsView = false; let lastVisIdx = -1; for (let i = 0; i < steps.length; i++) { const s = steps[i]; if (!s.condition || s.condition()) { lastVisIdx = i; } } currentStep = lastVisIdx + 1; trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep }); updateView(); } else if (currentStep > 1) { const fromStep = calculateCurrentVisibleStep(); currentStep--; let prev = steps[currentStep - 1]; while (currentStep > 1 && prev && prev.condition && !prev.condition()) { currentStep--; prev = steps[currentStep -1]; } trackAdvisorEvent('navigation_back', { from_step_visible: fromStep, to_step_visible: calculateCurrentVisibleStep() }); updateView(); } } function resetAdvisor() { trackAdvisorEvent('advisor_reset', { from_step: showRecommendationsView ? 'results' : calculateCurrentVisibleStep() }); currentStep = 1; selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null }; recommendations = []; showRecommendationsView = false; totalSteps = calculateTotalVisibleSteps(); if (contactEvoSection) contactEvoSection.classList.add('hidden'); updateView(); }
+             if (newsletterSection) newsletterSection.classList.add('hidden');
 
 
     // --- START: Sporingsfunksjonalitet ---
@@ -250,6 +261,44 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             // Feilmelding er allerede vist av fetchBikeCatalog
         }
         console.log("Initialization finished."); // NY LOGG
+    if (newsletterForm) {
+        newsletterForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = newsletterEmailInput.value.trim();
+            if (!email) return;
+            newsletterMessage.textContent = "Sender...";
+            try {
+                await subscribeToMailchimp(email, recommendations);
+                newsletterMessage.textContent = "Takk for påmeldingen!";
+                newsletterEmailInput.value = "";
+            } catch (err) {
+                console.error("Mailchimp subscribe failed:", err);
+                newsletterMessage.textContent = "Kunne ikke registrere e-posten.";
+            }
+        });
+    }
+
+    async function subscribeToMailchimp(email, recommendedBikes = []) {
+        const url = `https://${mailchimpConfig.serverPrefix}.api.mailchimp.com/3.0/lists/${mailchimpConfig.listId}/members`;
+        const tags = Array.isArray(recommendedBikes)
+            ? recommendedBikes.map(b => b.name || b.model || b.title || b.bikeName).filter(Boolean)
+            : [];
+        const bodyData = { email_address: email, status: "subscribed" };
+        if (tags.length) bodyData.tags = tags;
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `apikey ${mailchimpConfig.apiKey}`
+            },
+            body: JSON.stringify(bodyData)
+        });
+        if (!response.ok) {
+            throw new Error(response.status);
+        }
+        return await response.json();
+    }
+
     }
 
     // Kall initialiseringsfunksjonen
