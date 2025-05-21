@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             if (!email) return;
             newsletterMessage.textContent = "Sender...";
             try {
-                await subscribeToMailchimp(email);
+                await subscribeToMailchimp(email, recommendations);
                 newsletterMessage.textContent = "Takk for påmeldingen!";
                 newsletterEmailInput.value = "";
             } catch (err) {
@@ -278,7 +278,10 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
         });
     }
 
-    async function subscribeToMailchimp(email) {
+    async function subscribeToMailchimp(email, recommendedBikes = []) {
+        const tags = Array.isArray(recommendedBikes) ? recommendedBikes.map(b => b.name || b.model || b.title || b.bikeName).filter(Boolean) : [];
+        const bodyData = { email_address: email, status: "subscribed" };
+        if (tags.length) bodyData.tags = tags;
         const url = `https://${mailchimpConfig.serverPrefix}.api.mailchimp.com/3.0/lists/${mailchimpConfig.listId}/members`;
         const response = await fetch(url, {
             method: "POST",
@@ -286,7 +289,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
                 "Content-Type": "application/json",
                 "Authorization": `apikey ${mailchimpConfig.apiKey}`
             },
-            body: JSON.stringify({ email_address: email, status: "subscribed" })
+            body: JSON.stringify(bodyData)
         });
         if (!response.ok) {
             throw new Error(response.status);
