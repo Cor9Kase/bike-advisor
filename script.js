@@ -32,13 +32,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
-    const contactEvoSection = document.getElementById('contact-evo-section'); // Sørg for at dette elementet finnes hvis brukt
+    const contactEvoSection = document.getElementById('contact-evo-section');
     const newsletterSection = document.getElementById('newsletter-section');
     const newsletterForm = document.getElementById('newsletter-form');
     const newsletterNameInput = document.getElementById('newsletter-name');
     const newsletterEmailInput = document.getElementById('newsletter-email');
     const newsletterConsentCheckbox = document.getElementById('newsletter-consent');
     const newsletterMessage = document.getElementById('newsletter-message');
+    const newsletterFormWrapper = document.getElementById('newsletter-form-wrapper');
+    const newsletterThankyouWrapper = document.getElementById('newsletter-thankyou-wrapper');
 
     // --- Steps Definisjon ---
     const steps = [
@@ -58,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Hent Sykkeldata ---
     async function fetchBikeCatalog() {
-        if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes('DIN_PUBLISERTE') || GAS_WEB_APP_URL.length < 60) { // Enkel sjekk
+        if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL === 'YOUR_PUBLISHED_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE' || GAS_WEB_APP_URL.length < 60) {
             console.error("GAS_WEB_APP_URL er ikke korrekt satt. Kan ikke hente sykkeldata.");
             if (initialLoaderText) initialLoaderText.textContent = 'Konfigurasjonsfeil. Kan ikke laste sykkeldata.';
             if (initialLoader && bikeImageElement) bikeImageElement.style.display = 'none';
@@ -67,18 +69,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             return false;
         }
         if (initialLoader) initialLoader.classList.remove('hidden');
-        if (questionsSection) questionsSection.classList.add('hidden'); // Skjul mens lasting pågår
+        if (questionsSection) questionsSection.classList.add('hidden');
         try {
             const response = await fetch(GAS_WEB_APP_URL, { method: 'GET', mode: 'cors' });
             if (!response.ok) {
-                let errorDetails = `HTTP error! status: ${response.status}`;
-                try { const errorText = await response.text(); errorDetails += `, ${errorText}`; } catch (e) { /* Ignorer feil ved lesing av tekst */ }
+                let errorDetails = `HTTP error! status: ${response.status} ${response.statusText}`;
+                try { const errorText = await response.text(); errorDetails += `, ${errorText}`; } catch (e) { /* Ignorer */ }
                 throw new Error(errorDetails);
             }
             const data = await response.json();
             if (data.error) {
                 console.error("Feil returnert fra Google Apps Script (doGet):", data);
-                throw new Error(`Feil fra Google Apps Script (doGet): ${data.message}`);
+                throw new Error(`Feil fra Google Apps Script (doGet): ${data.message || 'Ukjent feil fra server.'}`);
             }
             BikeCatalog.evoOriginal = data;
             console.log("Sykkelkatalog lastet:", BikeCatalog.evoOriginal.length, "sykler funnet.");
@@ -93,15 +95,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         } finally {
             if (BikeCatalog.evoOriginal.length > 0) {
                 if (initialLoader) initialLoader.classList.add('hidden');
-                if (questionsSection) questionsSection.classList.remove('hidden'); // Vis spørsmål etter vellykket lasting
-            } else if (initialLoader && !initialLoaderText.textContent.includes('Konfigurasjonsfeil')) {
-                 // Hvis katalogen er tom, men ingen konfigfeil, vis melding om tom katalog
+            } else if (initialLoader && !initialLoaderText.textContent.includes('Konfigurasjonsfeil') && !initialLoaderText.textContent.includes('Kunne ikke laste')) {
                  if(initialLoaderText) initialLoaderText.textContent = 'Sykkelkatalogen er tom for øyeblikket.';
                  if (initialLoader && bikeImageElement) bikeImageElement.style.display = 'none';
-                 if (initialLoader) initialLoader.classList.remove('hidden'); // Sørg for at loader er synlig
+                 if (initialLoader) initialLoader.classList.remove('hidden');
                  if (questionsSection) questionsSection.classList.add('hidden');
             }
-            // Ikke skjul loader hvis det var en konfigfeil eller annen feil som allerede har satt melding
         }
     }
 
@@ -173,24 +172,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-
     // --- Oppdater Visning ---
     function updateView() {
         totalSteps = calculateTotalVisibleSteps();
         if (showRecommendationsView) {
             if (questionsSection) questionsSection.classList.add('hidden');
             if (recommendationsSection) recommendationsSection.classList.remove('hidden');
+            if (newsletterSection) {
+                recommendations.length > 0 ? newsletterSection.classList.remove('hidden') : newsletterSection.classList.add('hidden');
+            }
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
-            if (newsletterSection) { recommendations.length > 0 ? newsletterSection.classList.remove('hidden') : newsletterSection.classList.add('hidden'); }
         } else {
             if (BikeCatalog.evoOriginal && BikeCatalog.evoOriginal.length > 0) {
                 if (questionsSection) questionsSection.classList.remove('hidden');
-            } else {
-                if (initialLoader && !initialLoader.classList.contains('hidden')) {
-                     if (questionsSection) questionsSection.classList.add('hidden');
-                } else if (BikeCatalog.evoOriginal.length === 0 && initialLoader && initialLoader.classList.contains('hidden')) {
-                    if (questionsSection) questionsSection.classList.add('hidden');
-                }
+                if (initialLoader) initialLoader.classList.add('hidden');
             }
             if (recommendationsSection) recommendationsSection.classList.add('hidden');
             if (contactEvoSection) contactEvoSection.classList.add('hidden');
@@ -212,8 +207,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (questionsSection) questionsSection.classList.add('hidden');
         if (recommendationsSection) { recommendationsSection.classList.remove('hidden'); recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
-        if (contactEvoSection) contactEvoSection.classList.add('hidden');
+        // Skjul nyhetsbrev inntil anbefalinger er klare
         if (newsletterSection) newsletterSection.classList.add('hidden');
+        if (contactEvoSection) contactEvoSection.classList.add('hidden');
         if (loadingIndicator) loadingIndicator.classList.remove('hidden');
         renderSentence(summarySentenceFinal);
 
@@ -252,11 +248,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentStep++;
         let nextStepDef = steps[currentStep - 1];
         while(nextStepDef && nextStepDef.condition && !nextStepDef.condition()) {
-            if (selections[nextStepDef.id] !== undefined) selections[nextStepDef.id] = null; // Nullstill skjulte valg
+            if (selections[nextStepDef.id] !== undefined) selections[nextStepDef.id] = null;
             currentStep++;
             nextStepDef = steps[currentStep - 1];
         }
-        totalSteps = calculateTotalVisibleSteps(); // Oppdater totalSteps etter kondisjonell logikk
+        totalSteps = calculateTotalVisibleSteps();
         if (currentStep > steps.length) {
             trackAdvisorEvent('quiz_completed', selections);
             generateAndShowRecommendations();
@@ -275,14 +271,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     lastVisibleStepIndex = i;
                 }
             }
-            currentStep = lastVisibleStepIndex + 1; // Gå til siste synlige trinn
+            currentStep = lastVisibleStepIndex + 1;
             trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
             updateView();
         } else if (currentStep > 1) {
             const fromStepVisible = calculateCurrentVisibleStep();
             currentStep--;
             let prevStepDef = steps[currentStep - 1];
-            // Hopp over skjulte trinn bakover
             while (currentStep > 1 && prevStepDef && prevStepDef.condition && !prevStepDef.condition()) {
                 currentStep--;
                 prevStepDef = steps[currentStep -1];
@@ -299,34 +294,61 @@ document.addEventListener('DOMContentLoaded', async () => {
         recommendations = [];
         showRecommendationsView = false;
         relaxedSearchPerformed = false;
+
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
         if (newsletterSection) newsletterSection.classList.add('hidden');
+
+        if (newsletterFormWrapper) newsletterFormWrapper.classList.remove('hidden');
+        if (newsletterThankyouWrapper) {
+            newsletterThankyouWrapper.classList.add('hidden');
+            newsletterThankyouWrapper.innerHTML = '';
+        }
         if (newsletterMessage) newsletterMessage.textContent = '';
         if (newsletterNameInput) newsletterNameInput.value = '';
         if (newsletterEmailInput) newsletterEmailInput.value = '';
         if (newsletterConsentCheckbox) newsletterConsentCheckbox.checked = false;
-        totalSteps = calculateTotalVisibleSteps(); // Kalkuler på nytt
+        
+        const submitButton = newsletterForm ? newsletterForm.querySelector('button[type="submit"]') : null;
+        if (submitButton) submitButton.disabled = false;
+
+        totalSteps = calculateTotalVisibleSteps();
         updateView();
     }
 
-    // --- Sporingsfunksjon (forenklet) ---
+    // --- Sporingsfunksjon ---
     function trackAdvisorEvent(eventName, eventParameters) {
         console.log(`TRACKING EVENT: ${eventName}`, eventParameters || {});
-        // Implementer GTM e.l. her om nødvendig
+        // Eksempel: if (typeof gtag === 'function') { gtag('event', eventName, eventParameters); }
     }
     document.body.addEventListener('click', function(event) {
-        const target = event.target;
-        let tracked = false;
-        const detailsLink = target.closest('[data-track-event^="view_bike_details"]');
-        if (detailsLink) { /* ... (sporingslogikk for produktdetaljer) ... */ tracked = true; }
-        const trackableStaticElement = target.closest('[id^="track-"]');
-        if (trackableStaticElement && !tracked) { /* ... (sporingslogikk for statiske elementer) ... */ }
-    });
+        const target = event.target.closest('[data-track-event], [id^="track-"]');
+        if (!target) return;
 
+        const eventName = target.dataset.trackEvent;
+        if (eventName) {
+            let params = {
+                current_selections: { ...selections },
+                clicked_element_id: target.id || 'N/A'
+            };
+            if (eventName === 'view_bike_details') {
+                params.bike_id = target.dataset.bikeId;
+                params.bike_name = target.dataset.bikeName;
+                params.clicked_element_type = target.tagName.toLowerCase();
+            }
+            trackAdvisorEvent(eventName, params);
+        } else if (target.id.startsWith('track-')) {
+            let staticEventName = 'static_element_click';
+            let staticParams = { element_id: target.id, url: target.href || 'N/A' };
+            // Spesifiser eventnavn basert på ID hvis ønskelig
+            if (target.id.includes('contact')) staticEventName = 'contact_interaction';
+            if (target.id.includes('call')) staticEventName = 'call_interaction';
+            trackAdvisorEvent(staticEventName, staticParams);
+        }
+    });
 
     // --- Nyhetsbrev innsending med FormData ---
     async function sendNewsletterDataWithFormData(navn, email, recommendedBikes = []) {
-        if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes('DIN_PUBLISERTE') || GAS_WEB_APP_URL.length < 60) {
+        if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL === 'YOUR_PUBLISHED_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE' || GAS_WEB_APP_URL.length < 60) {
             console.error("GAS_WEB_APP_URL er ikke korrekt satt for nyhetsbrev.");
             throw new Error("Konfigurasjonsfeil for innsending (GAS URL mangler).");
         }
@@ -337,19 +359,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const formData = new FormData();
         formData.append('navn', navn);
         formData.append('email_address', email);
-        formData.append('tags', tags.join(',')); // Send tags som en kommaseparert streng
-        // Du kan legge til en 'action' her hvis doPost i Apps Script skal håndtere flere typer POST-requests
-        // formData.append('action', 'newsletterSignup');
+        formData.append('tags', tags.join(','));
 
         try {
             const response = await fetch(GAS_WEB_APP_URL, {
                 method: "POST",
-                mode: 'cors', // Viktig for å kunne lese responsen med doOptions på plass
-                // IKKE sett Content-Type manuelt når du bruker FormData, nettleseren gjør det.
+                mode: 'cors',
                 body: formData
             });
 
-            const result = await response.json(); // Prøv alltid å parse JSON hvis mode:'cors'
+            const result = await response.json();
 
             if (!response.ok || !result.success) {
                 console.error("Feil fra Apps Script (FormData):", result.message || `HTTP-feil: ${response.status}`);
@@ -370,44 +389,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (newsletterForm) {
         newsletterForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            if (!newsletterNameInput || !newsletterEmailInput || !newsletterConsentCheckbox || !newsletterMessage) {
-                console.error("Ett eller flere nyhetsbrevskjemaelementer mangler.");
+            if (!newsletterNameInput || !newsletterEmailInput || !newsletterConsentCheckbox || !newsletterMessage || !newsletterFormWrapper || !newsletterThankyouWrapper) {
+                console.error("Ett eller flere nyhetsbrev-DOM-elementer mangler.");
                 return;
             }
 
             const navn = newsletterNameInput.value.trim();
             const email = newsletterEmailInput.value.trim();
 
-            if (!navn) {
-                newsletterMessage.textContent = "Vennligst skriv inn navnet ditt.";
-                newsletterMessage.style.color = "#b71c1c"; return;
-            }
-            if (!newsletterConsentCheckbox.checked) {
-                newsletterMessage.textContent = "Du må godta vilkårene for å motta e-post.";
-                newsletterMessage.style.color = "#b71c1c"; return;
-            }
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                newsletterMessage.textContent = "Vennligst skriv inn en gyldig e-postadresse.";
-                newsletterMessage.style.color = "#b71c1c"; return;
-            }
+            if (!navn) { newsletterMessage.textContent = "Vennligst skriv inn navnet ditt."; newsletterMessage.style.color = "#b71c1c"; return; }
+            if (!newsletterConsentCheckbox.checked) { newsletterMessage.textContent = "Du må godta vilkårene for å motta e-post."; newsletterMessage.style.color = "#b71c1c"; return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { newsletterMessage.textContent = "Vennligst skriv inn en gyldig e-postadresse."; newsletterMessage.style.color = "#b71c1c"; return; }
 
             newsletterMessage.textContent = "Sender...";
-            newsletterMessage.style.color = "#495057"; // Standard tekstfarge
+            newsletterMessage.style.color = "#495057";
             const submitButton = newsletterForm.querySelector('button[type="submit"]');
             if (submitButton) submitButton.disabled = true;
 
             try {
                 await sendNewsletterDataWithFormData(navn, email, recommendations);
-                newsletterMessage.textContent = "Takk! Sykkelforslaget er på vei til din e-post.";
-                newsletterMessage.style.color = "#198754"; // Grønn for suksess
-                newsletterNameInput.value = "";
-                newsletterEmailInput.value = "";
-                newsletterConsentCheckbox.checked = false;
+
+                if (newsletterFormWrapper) newsletterFormWrapper.classList.add('hidden');
+                if (newsletterThankyouWrapper) {
+                    newsletterThankyouWrapper.innerHTML = `
+                        <h2>Takk, ${navn}!</h2>
+                        <p>Du får straks anbefalingene dine tilsendt på e-post til ${email}.</p>
+                        <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:48px; height:48px; color: #198754; margin-top: 15px;">
+                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.06-1.06l-3.72 3.72-1.72-1.72a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l4.25-4.25Z" clip-rule="evenodd" />
+                        </svg>
+                        <p style="font-size: 0.9em; margin-top: 10px;">Sjekk også søppelpostmappen hvis du ikke ser e-posten innen noen minutter.</p>
+                    `;
+                    newsletterThankyouWrapper.classList.remove('hidden');
+                }
+                if (newsletterMessage) newsletterMessage.textContent = "";
+
                 trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, bike_recommendations: recommendations.map(b => b.name) });
             } catch (err) {
                 console.error("Innsending av nyhetsbrev feilet (FormData):", err);
-                newsletterMessage.textContent = err.message || "Noe gikk galt. Kunne ikke registrere e-posten. Prøv igjen.";
-                newsletterMessage.style.color = "#b71c1c"; // Rød for feil
+                if (newsletterMessage) {
+                    newsletterMessage.textContent = err.message || "Noe gikk galt. Kunne ikke registrere e-posten. Prøv igjen.";
+                    newsletterMessage.style.color = "#b71c1c";
+                }
                 trackAdvisorEvent('newsletter_signup_failed', { navn: navn, email: email, error: err.message || String(err) });
             } finally {
                 if (submitButton) submitButton.disabled = false;
@@ -417,22 +439,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Initialisering ---
     async function initializeAdvisor() {
-        const catalogLoaded = await fetchBikeCatalog(); // Vent til katalogen er lastet
-        
-        // Oppdater UI uansett om katalog lastet OK eller ikke, for å vise feilmld. etc.
-        // Initial visning og progresjon settes her
-        totalSteps = calculateTotalVisibleSteps(); // Kalkuler totalSteps etter catalogLoaded
+        const catalogLoaded = await fetchBikeCatalog();
+        totalSteps = calculateTotalVisibleSteps();
 
         if (backButton) backButton.addEventListener('click', handleBack);
         if (resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
         if (resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor);
         if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
-        
+
         if (catalogLoaded && BikeCatalog.evoOriginal.length > 0) {
             trackAdvisorEvent('advisor_ui_ready');
         }
-        // updateView vil håndtere synlighet av initialLoader vs questionsSection
-        updateView(); // Kall updateView for å rendre initielt view
+        updateView();
     }
 
     initializeAdvisor();
