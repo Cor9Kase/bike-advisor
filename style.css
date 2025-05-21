@@ -504,14 +504,15 @@ body {
 @media (min-width: 768px) {
     .recommendations-grid { grid-template-columns: 1fr 1fr; }
     .recommendations-grid .no-results.contact-prompt-box { grid-column: 1 / -1; }
+    /* Første kort tar alltid hele bredden */
+    .recommendations-grid .recommendation-card:first-child {
+        grid-column: 1 / -1;
+    }
+    /* Hvis det bare finnes ett kort, sentrer det */
     .recommendations-grid .recommendation-card:first-child:nth-last-child(1) {
-        grid-column: 1 / -1; max-width: 60%; margin-left: auto; margin-right: auto;
+        grid-column: 1 / -1;
+        max-width: 60%;
+        margin-left: auto;
+        margin-right: auto;
     }
-    .recommendations-grid .recommendation-card:nth-child(odd):nth-last-child(1):not(:first-child) {
-        grid-column: 1 / -1; max-width: 60%; margin-left: auto; margin-right: auto;
-    }
-}
-
-@media (min-width: 900px) {
-    .recommendations-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
