@@ -15,26 +15,80 @@
         </header>
 
         <div id="advisor-content">
+
+            <div id="initial-loader" class="hidden">
+                <img src="https://evoelsykler.no/wp-content/uploads/2025/05/free-bicycle-icon-1054-thumb.png"
+                     alt="Laster..."
+                     class="bike-loader-png"
+                     onerror="this.style.display='none'; document.getElementById('bike-loading-text-element').textContent='Kunne ikke laste bilde.';">
+                <p id="bike-loading-text-element" class="bike-loading-text">Laster sykkeldata, vennligst vent...</p>
+            </div>
+
             <div id="recommendations-section" class="hidden">
-                <div id="summary-sentence-final" class="summary-box"></div>
+                <div id="summary-sentence-final" class="summary-box">
+                    </div>
+
                 <div id="loading-indicator" class="loading-container hidden">
                     <div class="spinner"></div>
                     <p class="loading-text">Konfigurerer dine anbefalinger...</p>
                 </div>
+
                 <div class="recommendations-header">
                      <h2 class="recommendations-title">Din anbefaling</h2>
                      <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
                 </div>
-                <div id="recommendations-output" class="recommendations-grid hidden"></div>
-                <div class="recommendations-actions"></div>
+
+                <div id="recommendations-output" class="recommendations-grid hidden">
+                    </div>
+
+                <div class="recommendations-actions">
+                    </div>
             </div>
 
             <div id="questions-section" class="hidden">
+                <div id="sentence-builder" class="summary-box">
+                    </div>
+
+                <div id="options-area" class="options-container">
+                    <h2 id="step-title">Laster inn...</h2>
+                    <div id="step-options">
+                        </div>
+                     <div id="step-progress" class="progress-indicator">
+                        <div class="progress-bar-outer">
+                           <div id="progress-bar" class="progress-bar-inner"></div>
+                        </div>
+                        <span id="progress-text" class="progress-label">Trinn 1/X</span>
+                    </div>
                 </div>
+
+                <div class="navigation-buttons">
+                    <button id="back-button" class="button button-secondary hidden">
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                         </svg>
+                        Tilbake
+                    </button>
+                    <button id="reset-button-step" class="button button-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Start på nytt
+                    </button>
+                </div>
+            </div>
+
         </div>
 
         <footer class="advisor-footer">
-            </footer>
+             <p>© <span id="current-year"></span> Evo Elsykler
+                <span class="footer-separator">|</span>
+                <a href="mailto:POST@EVOELSYKLER.NO"
+                   target="_blank"
+                   id="track-footer-contact-email-link">Kontakt oss</a>
+                <span class="footer-separator">|</span> Tlf:
+                <a href="tel:+4723905555" id="track-footer-call-link">23 90 55 55</a>
+             </p>
+        </footer>
 
     </div>
 
