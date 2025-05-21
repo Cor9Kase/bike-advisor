@@ -457,6 +457,7 @@ body {
     #bike-advisor-container { margin: 10px; padding: 10px; }
     .advisor-header h1 { font-size: 1.8em; }
     .summary-box { font-size: 1em; padding: 15px; }
+    #sentence-builder { display: none; }
     #step-title { font-size: 1.4em; }
     .option-button { min-width: 100%; }
     .navigation-buttons { flex-direction: column-reverse; gap: 10px; }
