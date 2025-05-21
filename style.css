@@ -500,9 +500,6 @@ body {
     #step-title { font-size: 1.2em; }
 }
 
-@media (min-width: 601px) {
-    .card-toggle { display: none; }
-}
 
 /* Grid justering for større skjermer */
 @media (min-width: 768px) {
