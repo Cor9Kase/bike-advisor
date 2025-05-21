@@ -504,14 +504,16 @@ body {
 @media (min-width: 768px) {
     .recommendations-grid { grid-template-columns: 1fr 1fr; }
     .recommendations-grid .no-results.contact-prompt-box { grid-column: 1 / -1; }
-    .recommendations-grid .recommendation-card:first-child:nth-last-child(1) {
-        grid-column: 1 / -1; max-width: 60%; margin-left: auto; margin-right: auto;
+    /* Alltid full bredde på første kort for desktop-visning */
+    .recommendations-grid .recommendation-card:first-child {
+        grid-column: 1 / -1;
     }
+    /* Dersom kun ett kort eller et oddetall gjenstår, gi full bredde og sentrer */
+    .recommendations-grid .recommendation-card:first-child:nth-last-child(1),
     .recommendations-grid .recommendation-card:nth-child(odd):nth-last-child(1):not(:first-child) {
-        grid-column: 1 / -1; max-width: 60%; margin-left: auto; margin-right: auto;
+        grid-column: 1 / -1;
+        max-width: 60%;
+        margin-left: auto;
+        margin-right: auto;
     }
-}
-
-@media (min-width: 900px) {
-    .recommendations-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
