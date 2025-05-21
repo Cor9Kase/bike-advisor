@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Konstanter ---
     // VIKTIG: Erstatt med din faktiske, publiserte Google Apps Script Web App URL
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxzpkLDGHVVEqVT5MM1ka92jx6N5PyKNxexEDTsw16S72LEboYaWYIbBSmfthLovgU1/exec';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyM4cnhgEknzN7M5_Lky5iT1gsbwbtrn_rwTpxBQr_MdWLNODiWJeb1XDaSQF07WCs/exec';
 
     // --- State Variabler ---
     let BikeCatalog = {
@@ -70,14 +70,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (initialLoader) initialLoader.classList.remove('hidden');
         if (questionsSection) questionsSection.classList.add('hidden');
         try {
-            const response = await fetch(GAS_WEB_APP_URL); // Kaller doGet på Apps Script
+            // Kaller doGet på Apps Script
+            const response = await fetch(GAS_WEB_APP_URL, { method: 'GET', mode: 'cors' }); 
             if (!response.ok) {
-                const errorText = `HTTP error! status: ${response.status}, ${await response.text()}`;
-                throw new Error(errorText);
+                // Prøv å få mer detaljert feilmelding hvis mulig
+                let errorDetails = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorText = await response.text();
+                    errorDetails += `, ${errorText}`;
+                } catch (e) { /* Ignorer hvis tekst ikke kan hentes */ }
+                throw new Error(errorDetails);
             }
             const data = await response.json();
             if (data.error) { // Håndterer feil returnert fra Google Apps Script (doGet)
-                throw new Error(`Feil fra Google Apps Script: ${data.message}`);
+                throw new Error(`Feil fra Google Apps Script (doGet): ${data.message}`);
             }
             BikeCatalog.evoOriginal = data; // Antar at data er et array med sykler
             console.log("Sykkelkatalog lastet fra Google Apps Script:", BikeCatalog.evoOriginal.length, "sykler funnet.");
@@ -140,7 +146,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (BikeCatalog.evoOriginal && BikeCatalog.evoOriginal.length > 0) {
                 if (questionsSection) questionsSection.classList.remove('hidden');
             } else {
-                if (questionsSection) questionsSection.classList.add('hidden');
+                // Ikke skjul questionsSection hvis katalogen ennå ikke er lastet (eller feilet)
+                // initialLoader vil vise status i så fall.
+                if (initialLoader && !initialLoader.classList.contains('hidden')) {
+                     if (questionsSection) questionsSection.classList.add('hidden');
+                } else if (BikeCatalog.evoOriginal.length === 0 && initialLoader && initialLoader.classList.contains('hidden')) {
+                    // Dette betyr at lasting er ferdig, men katalogen var tom.
+                    if (questionsSection) questionsSection.classList.add('hidden');
+                }
             }
             if (recommendationsSection) recommendationsSection.classList.add('hidden');
             if (contactEvoSection) contactEvoSection.classList.add('hidden');
@@ -167,7 +180,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (loadingIndicator) loadingIndicator.classList.remove('hidden');
         renderSentence(summarySentenceFinal);
 
-        setTimeout(() => { // Simulerer litt lastetid
+        setTimeout(() => { 
             const filterBikes = (relaxFrameType = false, relaxDistance = false, purposeOnly = false) => {
                 let bikesToFilter = [...BikeCatalog.evoOriginal];
                 if (selections.purpose && !purposeOnly) { bikesToFilter = bikesToFilter.filter(bike => bike.purpose && Array.isArray(bike.purpose) && bike.purpose.includes(selections.purpose)); }
@@ -221,14 +234,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch(GAS_WEB_APP_URL, {
                 method: "POST",
-                mode: 'cors', // Nødvendig for cross-origin kall til Apps Script
+                mode: 'cors', 
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(bodyData) // Sendes som POST body
+                body: JSON.stringify(bodyData) 
             });
 
-            const result = await response.json(); // Forventer JSON-svar fra Apps Script
+            const result = await response.json(); 
 
             if (!response.ok || !result.success) {
                 console.error("Feil fra Apps Script/Mailchimp:", result.message || `HTTP-feil: ${response.status}`);
@@ -238,7 +251,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return result;
         } catch (error) {
             console.error('Feil under kall til Apps Script for Mailchimp-påmelding:', error);
-            throw error; // Kast feilen videre
+            throw error; 
         }
     }
 
@@ -253,7 +266,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             newsletterMessage.textContent = "Sender...";
             newsletterMessage.style.color = "#495057";
             try {
-                await subscribeToMailchimpViaGAS(email, recommendations); // Kall den nye funksjonen
+                await subscribeToMailchimpViaGAS(email, recommendations); 
                 newsletterMessage.textContent = "Takk! Sykkelforslaget er på vei til din e-post.";
                 newsletterMessage.style.color = "#198754";
                 newsletterEmailInput.value = "";
@@ -283,10 +296,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (initialLoaderText) initialLoaderText.textContent = 'Sykkelkatalogen er tom for øyeblikket. Prøv igjen senere.';
             if (initialLoader && bikeImageElement) bikeImageElement.style.display = 'none';
             if (initialLoader) initialLoader.classList.remove('hidden');
-            if (questionsSection) questionsSection.classList.add('hidden');
+            if (questionsSection) questionsSection.classList.add('hidden'); // Skjul spørsmål hvis katalog er tom
         } else {
             // Feilmelding håndteres allerede av fetchBikeCatalog
-            if (questionsSection) questionsSection.classList.add('hidden');
+            if (questionsSection) questionsSection.classList.add('hidden'); // Skjul spørsmål ved feil
         }
     }
 
