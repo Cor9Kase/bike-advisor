@@ -29,3 +29,18 @@ surrounding content is pushed down when the advisor changes height.
 The embedded `index.html` posts its height to the parent using
 `postMessage` whenever its content size changes. The script above resizes
 the iframe accordingly so the page layout adjusts automatically.
+
+## Locking the iframe when the modal opens
+
+When the newsletter modal opens, `index.html` now sends additional
+`postMessage` events so the embedding page can temporarily lock the
+iframe in place:
+
+```
+{ type: 'modalOpen' }  // sent when the modal is shown
+{ type: 'modalClose' } // sent when the modal is hidden
+```
+
+If your page listens for these messages you can switch the iframe to a
+fixed position while the modal is visible and restore the normal layout
+when it closes.
