@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Konstanter ---
     // VIKTIG: Erstatt med din faktiske, publiserte Google Apps Script Web App URL
-    const GAS_WEB_APP_URL = 'DIN_PUBLISERTE_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HER';
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyQa8tssmOk4oio_Q2uEamQdZXrs79OgYBkeC3B5Ah7m1JJD6J4HqSJ7GIAhFVVfIqR/exec';
 
     // --- State Variabler ---
     let BikeCatalog = {
