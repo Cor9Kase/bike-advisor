@@ -16,12 +16,14 @@
 
         <div id="advisor-content">
 
-            <div id="initial-loader" class="hidden"> <img src="https://evoelsykler.no/wp-content/uploads/2025/05/free-bicycle-icon-1054-thumb.png"
+            <div id="initial-loader" class="hidden">
+                <img src="https://evoelsykler.no/wp-content/uploads/2025/05/free-bicycle-icon-1054-thumb.png"
                      alt="Laster..."
                      class="bike-loader-png"
                      onerror="this.style.display='none'; document.getElementById('bike-loading-text-element').textContent='Kunne ikke laste bilde.';">
                 <p id="bike-loading-text-element" class="bike-loading-text">Laster sykkeldata, vennligst vent...</p>
             </div>
+
             <div id="recommendations-section" class="hidden">
                 <div id="summary-sentence-final" class="summary-box">
                     </div>
@@ -39,9 +41,30 @@
                 <div id="recommendations-output" class="recommendations-grid hidden">
                     </div>
 
+                <div id="contact-evo-section" class="contact-prompt-box hidden">
+                    <h2>Har du spørsmål eller ønsker å bestille?</h2>
+                    <p>Våre eksperter står klare til å hjelpe deg med å finne den perfekte elsykkelen, svare på spørsmål om modellene, eller veilede deg gjennom kjøpsprosessen.</p>
+                    <div class="contact-options">
+                        <a href="mailto:POST@EVOELSYKLER.NO"
+                           target="_blank"
+                           class="button button-primary"
+                           id="track-contact-email-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+                            Kontakt oss
+                        </a>
+                        <a href="tel:+4723905555" class="button button-secondary" id="track-call-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 6.75Z" /></svg>
+                            Ring oss: 23 90 55 55
+                        </a>
+                    </div>
+                </div>
+
                 <div id="newsletter-section" class="contact-prompt-box hidden">
                     <h2>Få sykkelforslaget tilsendt på e-post</h2>
                     <form id="newsletter-form" class="newsletter-form">
+                        <label for="newsletter-name" class="visually-hidden">Navn</label>
+                        <input type="text" id="newsletter-name" name="name" required placeholder="Ditt navn">
+
                         <label for="newsletter-email" class="visually-hidden">E-postadresse</label>
                         <input type="email" id="newsletter-email" name="email" required placeholder="Din e-postadresse">
                         
@@ -57,10 +80,11 @@
                     <p id="newsletter-message" class="newsletter-message"></p>
                 </div>
                 <div class="recommendations-actions">
-                    </div>
+                </div>
             </div>
 
-            <div id="questions-section" class="hidden"> <div id="sentence-builder" class="summary-box">
+            <div id="questions-section" class="hidden">
+                <div id="sentence-builder" class="summary-box">
                     </div>
 
                 <div id="options-area" class="options-container">
@@ -105,7 +129,6 @@
         </footer>
 
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
