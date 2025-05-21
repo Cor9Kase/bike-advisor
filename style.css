@@ -233,8 +233,25 @@ body {
 .recommendation-image { max-width: 100%; height: auto; max-height: 200px; /* Begrens bildehøyde */ object-fit: contain; display: block; }
 .recommendation-image-container a { display: block; line-height: 0; text-decoration: none; color: inherit; }
 .recommendation-image-container a:hover { opacity: 0.9; transition: opacity 0.2s ease-in-out; }
-.card-toggle { display: none; width: 100%; padding: 10px 15px; background-color: #f8f9fa; border: none; border-top: 1px solid #e0e0e0; cursor: pointer; font-size: 1em; text-align: left; }
-.card-toggle:focus { outline: 2px solid #0d6efd; }
+.card-toggle {
+    display: none;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #0d6efd;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    border-top: 1px solid #0b5ed7;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+}
+.card-toggle:hover,
+.card-toggle:focus {
+    background-color: #0b5ed7;
+    outline: 2px solid #0d6efd;
+    color: #ffffff;
+}
 .recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; } /* Innhold i kortet */
 .recommendation-content h3 { font-size: 1.3em; font-weight: 600; margin-top: 0; margin-bottom: 10px; color: #343a40; }
 .child-capacity-info { font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
