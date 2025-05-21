@@ -9,6 +9,8 @@ body {
 
 #bike-advisor-container {
     max-width: 800px; /* Maksimal bredde på containeren */
+    width: 100%;
+    box-sizing: border-box;
     margin: 20px auto; /* Sentrer containeren med marg */
     padding: 15px;
     background-color: #ffffff; /* Hvit bakgrunn for innholdet */
@@ -26,7 +28,7 @@ body {
 }
 
 .advisor-header h1 {
-    font-size: 2.2em;
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: bold;
     color: #212529; /* Nesten svart tittel */
     margin-bottom: 5px;
@@ -149,7 +151,8 @@ body {
 /* Alternativ-område */
 .options-container { background-color: #ffffff; margin-bottom: 30px; }
 #step-title { /* Tittel for hvert trinn */
-    font-size: 1.6em; font-weight: 600; color: #343a40;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 600; color: #343a40;
     margin-bottom: 25px; text-align: left;
 }
 #step-options { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; } /* Container for valgknapper */
@@ -163,6 +166,7 @@ body {
     cursor: pointer; transition: all 0.2s ease-in-out; /* Myk overgang */
     text-align: left;
     flex-grow: 1; min-width: 180px; /* Fleksibel bredde */
+    min-height: 44px;
 }
 .option-button:hover { /* Hover-effekt */
     border-color: #0d6efd; color: #0d6efd; /* Blå kant og tekst */
@@ -218,6 +222,8 @@ body {
 .recommendation-image { max-width: 100%; height: auto; max-height: 200px; /* Begrens bildehøyde */ object-fit: contain; display: block; }
 .recommendation-image-container a { display: block; line-height: 0; text-decoration: none; color: inherit; }
 .recommendation-image-container a:hover { opacity: 0.9; transition: opacity 0.2s ease-in-out; }
+.card-toggle { display: none; width: 100%; padding: 10px 15px; background-color: #f8f9fa; border: none; border-top: 1px solid #e0e0e0; cursor: pointer; font-size: 1em; text-align: left; }
+.card-toggle:focus { outline: 2px solid #0d6efd; }
 .recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; } /* Innhold i kortet */
 .recommendation-content h3 { font-size: 1.3em; font-weight: 600; margin-top: 0; margin-bottom: 10px; color: #343a40; }
 .child-capacity-info { font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
@@ -453,9 +459,10 @@ body {
 /* Responsivitet */
 @media (max-width: 600px) {
     #bike-advisor-container { margin: 10px; padding: 10px; }
-    .advisor-header h1 { font-size: 1.8em; }
+    .advisor-header h1 { font-size: clamp(1.6rem, 5vw, 1.8rem); }
     .summary-box { font-size: 1em; padding: 15px; }
-    #step-title { font-size: 1.4em; }
+    #sentence-builder { display: none; }
+    #step-title { font-size: clamp(1.1rem, 4vw, 1.4rem); }
     .option-button { min-width: 100%; }
     .navigation-buttons { flex-direction: column-reverse; gap: 10px; }
     .recommendations-header { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -478,6 +485,23 @@ body {
     .modal-consent-label { font-size: 0.75em; }
     #modal-newsletter-thankyou-wrapper h2 { font-size: 1.4em; }
     #modal-newsletter-thankyou-wrapper p { font-size: 1em; }
+
+    .card-toggle { display: block; }
+    .recommendation-card .child-capacity-info,
+    .recommendation-card .description,
+    .recommendation-card .recommendation-features { display: none; }
+    .recommendation-card.expanded .child-capacity-info,
+    .recommendation-card.expanded .description,
+    .recommendation-card.expanded .recommendation-features { display: block; }
+}
+
+@media (max-width: 480px) {
+    .advisor-header h1 { font-size: 1.6em; }
+    #step-title { font-size: 1.2em; }
+}
+
+@media (min-width: 601px) {
+    .card-toggle { display: none; }
 }
 
 /* Grid justering for større skjermer */
@@ -490,4 +514,8 @@ body {
     .recommendations-grid .recommendation-card:nth-child(odd):nth-last-child(1):not(:first-child) {
         grid-column: 1 / -1; max-width: 60%; margin-left: auto; margin-right: auto;
     }
+}
+
+@media (min-width: 900px) {
+    .recommendations-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
