@@ -283,8 +283,8 @@ body {
     background-color: rgba(0, 0, 0, 0.65); /* Mørkere semi-transparent bakgrunn */
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Plasser modalen nederst */
-    padding-bottom: 20px;
+    align-items: center; /* Sentrer modalen vertikalt */
+    padding-bottom: 0;
     z-index: 1050; /* Sørg for at den er over annet innhold */
     opacity: 0;
     visibility: hidden;
