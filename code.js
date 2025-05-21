@@ -2,7 +2,7 @@
 // Gå til Extensions > Apps Script i ditt Google Sheet for å lime inn denne koden.
 
 // Global konstant for å enkelt endre arknavn om nødvendig
-const SHEET_ID = "1xQLtzq6gl32aIl1kUsGJQTj0bOwwrCMxTJN40MCBMe0"; // <--- Sjekk at denne stemmer!
+const SHEET_ID = ""; // <--- Sjekk at denne stemmer!
 const SHEET_NAME = 'sykler'; // << VIKTIG: ENDRE DETTE HVIS ARKET DITT HETER NOE ANNET
 
 function doGet(e) {
