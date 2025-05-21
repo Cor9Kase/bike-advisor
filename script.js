@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Konstanter ---
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzaG6_GQeWYBKJ4etlTH1UWavFSPcU95aUXTcL9hEXYksWah7FLNpLYOemloMLZ4xMt/exec'; // ERSTATT DENNE
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxzkrWrLRw7h_vumD8sIET74JZUJymIcx1G9O2h8Q36vLfsFuciRNtsB7kvTSfC-a0B/exec'; // ERSTATT DENNE
 
     // --- State Variabler ---
     let BikeCatalog = { evoOriginal: [] };
