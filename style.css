@@ -283,7 +283,8 @@ body {
     background-color: rgba(0, 0, 0, 0.65); /* Mørkere semi-transparent bakgrunn */
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end; /* Plasser modalen nederst */
+    padding-bottom: 20px;
     z-index: 1050; /* Sørg for at den er over annet innhold */
     opacity: 0;
     visibility: hidden;
@@ -304,7 +305,7 @@ body {
     width: 90%;
     max-width: 480px; /* Litt smalere modal for et renere utseende */
     position: relative;
-    transform: translateY(-20px) scale(0.95); /* Startposisjon for animasjon */
+    transform: translateY(20px) scale(0.95); /* Startposisjon for animasjon nederst */
     opacity: 0;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
