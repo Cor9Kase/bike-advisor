@@ -238,7 +238,6 @@ body {
 
 /* Kontakt Oss Seksjon & "Ingen Resultater" Melding */
 .contact-prompt-box { background-color: #f8f9fa; padding: 25px; border-radius: 8px; margin-top: 30px; margin-bottom: 30px; text-align: center; border: 1px solid #e0e0e0; }
-#contact-evo-section.contact-prompt-box h2 { font-size: 1.8em; color: #343a40; margin-bottom: 15px; }
 .recommendations-grid .no-results.contact-prompt-box h3 { font-size: 1.5em; color: #343a40; margin-top: 0; margin-bottom: 10px; }
 .contact-prompt-box h4 { font-size: 1.2em; color: #495057; margin-top: 20px; margin-bottom: 8px; }
 .contact-prompt-box p { font-size: 1.05em; color: #495057; line-height: 1.7; max-width: 650px; margin-left: auto; margin-right: auto; margin-bottom: 25px; }
@@ -246,8 +245,6 @@ body {
 .contact-prompt-box ul li { margin-bottom: 8px; margin-left: 20px; }
 .contact-prompt-box a:not(.button) { color: #0d6efd; text-decoration: underline; }
 .contact-prompt-box a:not(.button):hover { color: #0b5ed7; }
-.contact-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; } /* Knapper for kontakt */
-.contact-options .button { min-width: 200px; }
 #recommendations-output .no-results.contact-prompt-box { margin-top: 0; grid-column: 1 / -1; } /* "Ingen resultater" tar full bredde i grid */
 #recommendations-output .no-results.contact-prompt-box p,
 #recommendations-output .no-results.contact-prompt-box ul { max-width: 100%; text-align: left; }
@@ -332,10 +329,8 @@ body {
     .recommendations-title { font-size: 1.6em; }
     .recommendation-footer { flex-direction: column; align-items: flex-start; }
     .recommendation-buttons { width: 100%; justify-content: flex-start; }
-    #contact-evo-section.contact-prompt-box h2 { font-size: 1.5em; }
     #recommendations-output .no-results.contact-prompt-box h3 { font-size: 1.3em; }
     .contact-prompt-box p { font-size: 0.95em; }
-    .contact-options .button { width: 100%; min-width: unset; }
     #initial-loader { min-height: 160px; }
     .bike-loader-png { width: 50px; bottom: 45px; }
     .bike-loading-text { font-size: 1em; margin-top: 60px; }
