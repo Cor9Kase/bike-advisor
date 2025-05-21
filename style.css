@@ -504,6 +504,7 @@ body {
 @media (min-width: 768px) {
     .recommendations-grid { grid-template-columns: 1fr 1fr; }
     .recommendations-grid .no-results.contact-prompt-box { grid-column: 1 / -1; }
+  
     /* Første kort tar alltid hele bredden */
     .recommendations-grid .recommendation-card:first-child {
         grid-column: 1 / -1;
