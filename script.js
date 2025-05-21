@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
     // VIKTIG: Erstatt med din faktiske Google Apps Script Web App URL
     const bikeCatalogURL = 'https://script.google.com/macros/s/AKfycbyvNS_87zqRGqlwDi0nu14XblFBSH1BH4y5BbP_pKkbZJOxbXXfc-kukcT_Z8Mj9Ngu/exec';
     // ADVARSEL: API-nøkkelen bør ikke ligge åpent i klientsidekode i produksjon. Bruk en proxy-server.
-    const mailchimpConfig = { apiKey: 'DIN_MAILCHIMP_API_NØKKEL', serverPrefix: 'DIN_SERVER_PREFIX', listId: 'DIN_LISTE_ID' };
+    const mailchimpConfig = { apiKey: '52a4887211a02a289eb15b327553ccaa-us11', serverPrefix: 'us11', listId: '4a3e4d2c58' };
     // Eksempel på hvordan det kan se ut (IKKE BRUK DISSE VERDIENE):
     // const mailchimpConfig = { apiKey: '52a4887211a02a289eb15b327553ccaa-us11', serverPrefix: 'us11', listId: '4a3e4d2c58' };
 
