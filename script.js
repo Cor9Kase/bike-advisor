@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- Konstanter ---
     // VIKTIG: Erstatt med din faktiske, publiserte Google Apps Script Web App URL
     // Denne URL-en MÅ stemme med den du får etter å ha deployert code.gs på nytt.
-    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzUHiV12bu568vFodZd3oxS7eqM4DZhG75MHvjjVG7cmhPMlpeuSNwQFkMRYe3bjqnq/exec'; // ERSTATT DENNE HVIS DU HAR EN NY
+    const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxjvoBXCCZ3E6KuOkIoeONeMIBjexs4RxA8rlFJHuXoOIHtDBAOjLD01fF0_r9BSg0U/exec'; // ERSTATT DENNE HVIS DU HAR EN NYERE URL
 
     // --- State Variabler ---
     let BikeCatalog = { evoOriginal: [] };
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const progressText = document.getElementById('progress-text');
     const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
-    const contactEvoSection = document.getElementById('contact-evo-section'); // Antar at dette elementet finnes eller er planlagt
+    const contactEvoSection = document.getElementById('contact-evo-section');
     const newsletterSection = document.getElementById('newsletter-section');
     const newsletterForm = document.getElementById('newsletter-form');
     const newsletterNameInput = document.getElementById('newsletter-name');
@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         else if (target.id.startsWith('track-')) { /* ... (din sporingslogikk) ... */ }
     });
 
-    // --- Nyhetsbrev innsending med FormData (kun sjekker response.ok) ---
+    // --- Nyhetsbrev innsending med FormData (mode: 'no-cors') ---
     async function sendNewsletterDataWithFormData(navn, email, recommendedBikes = []) {
         if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL === 'YOUR_PUBLISHED_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE' || GAS_WEB_APP_URL.length < 60) {
             console.error("GAS_WEB_APP_URL er ikke korrekt satt for nyhetsbrev.");
@@ -342,22 +342,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         formData.append('tags', tags.join(','));
 
         try {
-            const response = await fetch(GAS_WEB_APP_URL, {
+            await fetch(GAS_WEB_APP_URL, {
                 method: "POST",
-                mode: 'cors',
+                mode: 'no-cors', // ENDRET TIL 'no-cors'
                 body: formData
             });
-
-            if (!response.ok) {
-                console.error("Feilrespons fra server (FormData):", response.status, response.statusText);
-                throw new Error(`Feil ved innsending til server: ${response.statusText || 'Status ' + response.status}`);
-            }
-            console.log("Nyhetsbrevdata antas sendt og mottatt OK av server (FormData).");
-            return { success: true, message: "Innsending antatt vellykket." };
+            
+            console.log("Nyhetsbrevdata sendt (mode: 'no-cors'). Antar suksess på backend.");
+            return { success: true, message: "Forespørsel sendt." };
 
         } catch (error) {
-            console.error('Nettverksfeil eller annen feil under kall til Apps Script (FormData):', error);
-            throw error;
+            console.error('Feil under sending av fetch-forespørsel (mode: no-cors):', error);
+            throw new Error("Kunne ikke sende forespørsel. Sjekk nettverkstilkoblingen din.");
         }
     }
 
@@ -396,13 +392,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     `;
                     newsletterThankyouWrapper.classList.remove('hidden');
                 }
-                if (newsletterMessage) newsletterMessage.textContent = ""; // Fjern "Sender..." meldingen
+                if (newsletterMessage) newsletterMessage.textContent = ""; 
 
                 trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, bike_recommendations: recommendations.map(b => b.name) });
             } catch (err) {
-                console.error("Innsending av nyhetsbrev feilet (FormData):", err);
+                console.error("Innsending av nyhetsbrev feilet:", err); // Mer generisk feilmelding her
                 if (newsletterMessage) {
-                    newsletterMessage.textContent = err.message || "Noe gikk galt. Kunne ikke registrere e-posten. Prøv igjen.";
+                    newsletterMessage.textContent = err.message || "Noe gikk galt. Kunne ikke sende forespørselen. Prøv igjen.";
                     newsletterMessage.style.color = "#b71c1c";
                 }
                 trackAdvisorEvent('newsletter_signup_failed', { navn: navn, email: email, error: err.message || String(err) });
