@@ -467,6 +467,7 @@ document.addEventListener('DOMContentLoaded', async () => { // Gjør om til asyn
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest", // Kreves av cors-anywhere
                 "Authorization": `apikey ${mailchimpConfig.apiKey}` // For direkte kall / cors-anywhere. Proxyen håndterer dette ellers.
             },
             body: JSON.stringify(bodyData)
