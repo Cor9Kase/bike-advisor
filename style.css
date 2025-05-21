@@ -14,7 +14,7 @@ body {
     background-color: #ffffff; /* Hvit bakgrunn for innholdet */
     border-radius: 12px; /* Avrundede hjørner */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Subtil skygge */
-    overflow: visible; /* Tillat elementer (som loader) å gå utenfor visuelt om nødvendig */
+    overflow: visible;
 }
 
 /* Header */
@@ -44,7 +44,7 @@ body {
 /* Innholdsområde */
 #advisor-content {
     padding: 10px 20px;
-    position: relative; /* For absolutt posisjonering av interne elementer om nødvendig */
+    position: relative;
 }
 
 /* Skjult klasse */
@@ -59,185 +59,191 @@ body {
   justify-content: center;
   align-items: center;
   padding: 40px 20px;
-  min-height: 180px; /* Minimumshøyde for lasteanimasjonen */
+  min-height: 180px;
   text-align: center;
   border: 1px solid #e9ecef;
   border-radius: 8px;
   background-color: #f8f9fa;
   margin-bottom: 30px;
-  overflow: hidden; /* Skjul sykkelen når den går utenfor denne boksen */
-  position: relative; /* For animasjonens posisjonering */
+  overflow: hidden;
+  position: relative;
 }
 .bike-loader-png {
-  width: 60px; /* Bredde på sykkelbildet */
+  width: 60px;
   height: auto;
   display: block;
   position: absolute;
-  bottom: 50px; /* Vertikal posisjon */
-  left: -80px; /* Startposisjon utenfor venstre kant */
-  transform-origin: 85% 95%; /* Rotasjonspunkt (ca. bakhjul) */
-  transform: rotate(-18deg); /* Statisk rotasjon for "wheelie"-effekt */
-  animation: rideLeftAcross 2.5s linear infinite; /* Animasjon */
+  bottom: 50px;
+  left: -80px;
+  transform-origin: 85% 95%;
+  transform: rotate(-18deg);
+  animation: rideLeftAcross 2.5s linear infinite;
 }
 .bike-loading-text {
   font-size: 1.1em;
   color: #495057;
   font-weight: 500;
-  margin-top: 70px; /* Plass under animasjonsområdet */
+  margin-top: 70px;
 }
-@keyframes rideLeftAcross { /* Animasjon for sykkelen */
-  0% { left: -80px; opacity: 0; } /* Start utenfor, usynlig */
-  10% { opacity: 1; } /* Fade inn */
-  90% { opacity: 1; } /* Begynn å fade ut */
-  100% { left: 100%; opacity: 0; } /* Slutt utenfor, usynlig */
+@keyframes rideLeftAcross {
+  0% { left: -80px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
 }
 
 /* Spinner-styling (for lasteindikator når anbefalinger genereres) */
 .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1); /* Lys grå sirkel */
+    border: 4px solid rgba(0, 0, 0, 0.1);
     width: 36px; height: 36px;
-    border-radius: 50%; /* Perfekt sirkel */
-    border-left-color: #343a40; /* Mørkere farge for animert del */
-    animation: spin 1s linear infinite; /* Rotasjonsanimasjon */
+    border-radius: 50%;
+    border-left-color: #343a40;
+    animation: spin 1s linear infinite;
 }
-@keyframes spin { /* Rotasjonsanimasjon for spinner */
+@keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-.loading-text { /* Tekst brukt med spinneren */
+.loading-text {
     font-size: 1.1em; color: #495057; font-weight: 500;
 }
-.loading-container { /* Container for anbefalings-spinner */
+.loading-container {
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     padding: 40px 20px; min-height: 200px; text-align: center;
     border: 1px solid #e9ecef; border-radius: 8px; background-color: #f8f9fa; margin-bottom: 30px;
 }
-.loading-container .spinner { margin-bottom: 15px; } /* Avstand mellom spinner og tekst */
+.loading-container .spinner { margin-bottom: 15px; }
 
 /* Feilmeldingsstyling */
 .error-message {
-    background-color: #fff3f3; /* Lys rød bakgrunn for feil */
-    color: #b71c1c; /* Mørk rød tekstfarge */
-    border: 1px solid #ef9a9a; /* Rød kantlinje */
+    background-color: #fff3f3;
+    color: #b71c1c;
+    border: 1px solid #ef9a9a;
     padding: 15px; border-radius: 8px; text-align: center; width: 100%;
 }
 .error-message small { display: block; margin-top: 8px; font-size: 0.9em; color: #c62828; }
 
 /* Setningsbygger / Oppsummering */
 .summary-box {
-    background-color: #e9ecef; /* Lys grå bakgrunn */
+    background-color: #e9ecef;
     color: #343a40;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 30px;
-    font-size: 1.2em; /* Større tekst for oppsummering */
+    font-size: 1.2em;
     line-height: 1.7;
 }
-.summary-box .placeholder, .summary-box .selected-value { /* Styling for valgte verdier og plassholdere */
+.summary-box .placeholder, .summary-box .selected-value {
     display: inline-block; padding: 3px 8px; border-radius: 5px;
     margin: 2px 6px; vertical-align: baseline;
 }
-.summary-box .placeholder { /* Plassholdertekst (f.eks. "bruksområde") */
+.summary-box .placeholder {
     background-color: rgba(255, 255, 255, 0.7); color: #6c757d;
     min-width: 100px; text-align: center; border: 1px dashed #ced4da;
 }
-.summary-box .selected-value { /* Valgt verdi */
-    font-weight: 600; border-bottom: 2px solid #0d6efd; /* Blå understrekning */
+.summary-box .selected-value {
+    font-weight: 600; border-bottom: 2px solid #0d6efd;
     padding-bottom: 1px; border-radius: 0; padding-left: 2px; padding-right: 2px;
 }
 
 /* Alternativ-område */
 .options-container { background-color: #ffffff; margin-bottom: 30px; }
-#step-title { /* Tittel for hvert trinn */
+#step-title {
     font-size: 1.6em; font-weight: 600; color: #343a40;
     margin-bottom: 25px; text-align: left;
 }
-#step-options { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; } /* Container for valgknapper */
+#step-options { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
 
 /* Knapper for alternativer */
 .option-button {
-    padding: 12px 20px; border: 2px solid #ced4da; /* Grå kantlinje */
+    padding: 12px 20px; border: 2px solid #ced4da;
     border-radius: 8px;
     background-color: #ffffff; color: #495057;
     font-size: 1em; font-weight: 500;
-    cursor: pointer; transition: all 0.2s ease-in-out; /* Myk overgang */
+    cursor: pointer; transition: all 0.2s ease-in-out;
     text-align: left;
-    flex-grow: 1; min-width: 180px; /* Fleksibel bredde */
+    flex-grow: 1; min-width: 180px;
 }
-.option-button:hover { /* Hover-effekt */
-    border-color: #0d6efd; color: #0d6efd; /* Blå kant og tekst */
+.option-button:hover {
+    border-color: #0d6efd; color: #0d6efd;
     box-shadow: 0 2px 5px rgba(13, 110, 253, 0.1);
 }
-.option-button.selected { /* Valgt knapp */
-    background-color: #0d6efd; color: white; border-color: #0d6efd; /* Blå bakgrunn, hvit tekst */
-    transform: scale(1.02); /* Lett forstørrelse */
+.option-button.selected {
+    background-color: #0d6efd; color: white; border-color: #0d6efd;
+    transform: scale(1.02);
     box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
 }
-.option-button .description { /* Beskrivelse under knappetekst */
+.option-button .description {
     font-size: 0.85em; color: #6c757d; margin-top: 5px; font-weight: 400;
 }
-.option-button.selected .description { color: rgba(255, 255, 255, 0.85); } /* Lysere beskrivelse på valgt knapp */
+.option-button.selected .description { color: rgba(255, 255, 255, 0.85); }
 
-/* Spesifikk styling for lastetype-knapper (med bilder) */
 .option-button.cargo-type { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 150px; }
 .option-button.cargo-type img { width: 60px; height: auto; margin-bottom: 10px; opacity: 0.7; transition: opacity 0.2s ease; }
-.option-button.cargo-type:hover img, .option-button.cargo-type.selected img { opacity: 1; } /* Full opasitet på bilde ved hover/valg */
+.option-button.cargo-type:hover img, .option-button.cargo-type.selected img { opacity: 1; }
 
 /* Fremdriftsindikator */
 .progress-indicator { display: flex; align-items: center; margin-top: 20px; }
 .progress-bar-outer { flex-grow: 1; height: 8px; background-color: #e9ecef; border-radius: 4px; overflow: hidden; margin-right: 10px; }
-.progress-bar-inner { /* Selve fremdriftslinjen */
-    height: 100%; width: 0%; background-color: #0d6efd; /* Blå farge */
-    border-radius: 4px; transition: width 0.4s ease-out; /* Myk animasjon av bredde */
+.progress-bar-inner {
+    height: 100%; width: 0%; background-color: #0d6efd;
+    border-radius: 4px; transition: width 0.4s ease-out;
 }
-.progress-label { font-size: 0.9em; color: #6c757d; white-space: nowrap; } /* Tekst (Trinn X/Y) */
+.progress-label { font-size: 0.9em; color: #6c757d; white-space: nowrap; }
 
 /* Navigasjonsknapper (Tilbake/Reset) */
 .navigation-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e9ecef; }
 
 /* Generell knappestyling */
 .button { padding: 10px 20px; border: none; border-radius: 6px; font-size: 1em; font-weight: 500; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-.button .icon { width: 1.2em; height: 1.2em; } /* Ikonstørrelse i knapper */
+.button .icon { width: 1.2em; height: 1.2em; }
 
-/* KNAPPFARGER */
-.button-primary { background-color: #0d6efd; color: white; } /* Primærknapp (blå) */
+.button-primary { background-color: #0d6efd; color: white; }
 .button-primary:hover { background-color: #0b5ed7; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-.button-secondary { background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; } /* Sekundærknapp (lys grå) */
+.button-secondary { background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; }
 .button-secondary:hover { background-color: #e9ecef; border-color: #adb5bd; }
 
 /* Anbefalingsseksjon */
 .recommendations-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e9ecef; }
 .recommendations-title { font-size: 2em; font-weight: bold; color: #343a40; margin: 0; }
-.recommendations-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; } /* Grid for anbefalingskort */
+.recommendations-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; }
 
 /* Anbefalingskort Styling */
 .recommendation-card { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; background-color: #ffffff; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07); transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; position: relative; }
-.recommendation-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); } /* Hover-effekt på kort */
-.recommendation-badge { position: absolute; top: 0; right: 0; background-color: #0d6efd; color: white; padding: 5px 12px; border-bottom-left-radius: 8px; font-size: 0.8em; font-weight: bold; z-index: 1; } /* Badge (f.eks. "TOPPVALG") */
+.recommendation-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); }
+.recommendation-badge { position: absolute; top: 0; right: 0; background-color: #0d6efd; color: white; padding: 5px 12px; border-bottom-left-radius: 8px; font-size: 0.8em; font-weight: bold; z-index: 1; }
 .recommendation-image-container { background-color: #ffffff; padding: 10px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #e0e0e0; }
-.recommendation-image { max-width: 100%; height: auto; max-height: 200px; /* Begrens bildehøyde */ object-fit: contain; display: block; }
+.recommendation-image { max-width: 100%; height: auto; max-height: 200px; object-fit: contain; display: block; }
 .recommendation-image-container a { display: block; line-height: 0; text-decoration: none; color: inherit; }
 .recommendation-image-container a:hover { opacity: 0.9; transition: opacity 0.2s ease-in-out; }
-.recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; } /* Innhold i kortet */
+.recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
 .recommendation-content h3 { font-size: 1.3em; font-weight: 600; margin-top: 0; margin-bottom: 10px; color: #343a40; }
 .child-capacity-info { font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
 .child-capacity-info svg { width: 1.1em; height: 1.1em; flex-shrink: 0; color: #495057; }
 .recommendation-content .description { font-size: 0.95em; color: #6c757d; margin-bottom: 15px; flex-grow: 1; }
-.recommendation-features { margin-bottom: 20px; } /* Nøkkelegenskaper */
+.recommendation-features { margin-bottom: 20px; }
 .recommendation-features h4 { font-size: 1em; font-weight: 600; margin-bottom: 10px; color: #495057; display: flex; align-items: center; gap: 5px; }
-.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #198754; } /* Grønt ikon for egenskaper */
+.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #198754; }
 .recommendation-features ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #6c757d; }
 .recommendation-features li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; }
-.recommendation-features li::before { content: '✓'; color: #343a40; font-weight: bold; display: inline-block; line-height: 1.3; } /* Hake-ikon */
-.recommendation-footer { border-top: 1px solid #e9ecef; padding-top: 15px; margin-top: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; } /* Bunnseksjon av kortet */
+.recommendation-features li::before { content: '✓'; color: #343a40; font-weight: bold; display: inline-block; line-height: 1.3; }
+.recommendation-footer { border-top: 1px solid #e9ecef; padding-top: 15px; margin-top: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .recommendation-price .price-label { font-size: 0.85em; color: #6c757d; display: block; }
-.recommendation-price .price-value { font-size: 1.5em; font-weight: bold; color: #343a40; } /* Prisvisning */
+.recommendation-price .price-value { font-size: 1.5em; font-weight: bold; color: #343a40; }
 .recommendation-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 .recommendation-buttons .button { padding: 8px 12px; font-size: 0.9em; }
-.recommendations-actions { display: none; } /* Skjult som standard, kan brukes senere */
+.recommendations-actions { display: none; }
 
 /* Kontakt Oss Seksjon & "Ingen Resultater" Melding */
-.contact-prompt-box { background-color: #f8f9fa; padding: 25px; border-radius: 8px; margin-top: 30px; margin-bottom: 30px; text-align: center; border: 1px solid #e0e0e0; }
+.contact-prompt-box {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
 .recommendations-grid .no-results.contact-prompt-box h3 { font-size: 1.5em; color: #343a40; margin-top: 0; margin-bottom: 10px; }
 .contact-prompt-box h4 { font-size: 1.2em; color: #495057; margin-top: 20px; margin-bottom: 8px; }
 .contact-prompt-box p { font-size: 1.05em; color: #495057; line-height: 1.7; max-width: 650px; margin-left: auto; margin-right: auto; margin-bottom: 25px; }
@@ -245,7 +251,7 @@ body {
 .contact-prompt-box ul li { margin-bottom: 8px; margin-left: 20px; }
 .contact-prompt-box a:not(.button) { color: #0d6efd; text-decoration: underline; }
 .contact-prompt-box a:not(.button):hover { color: #0b5ed7; }
-#recommendations-output .no-results.contact-prompt-box { margin-top: 0; grid-column: 1 / -1; } /* "Ingen resultater" tar full bredde i grid */
+#recommendations-output .no-results.contact-prompt-box { margin-top: 0; grid-column: 1 / -1; }
 #recommendations-output .no-results.contact-prompt-box p,
 #recommendations-output .no-results.contact-prompt-box ul { max-width: 100%; text-align: left; }
 #recommendations-output .no-results.contact-prompt-box ul { display: block; }
@@ -256,75 +262,155 @@ body {
 .advisor-footer a { color: #0d6efd; text-decoration: none; }
 .advisor-footer a:hover { text-decoration: underline; }
 
-/* Newsletter (Mailchimp) Seksjon */
-#newsletter-section h2 { font-size: 1.6em; margin-bottom: 20px; }
-#newsletter-form { /* Skjema for nyhetsbrev */
-    display: flex;
-    flex-direction: column; /* Elementer under hverandre */
-    gap: 15px;
-    align-items: center; /* Sentrer elementene */
-    width: 100%;
-    max-width: 500px; /* Begrens bredde for bedre lesbarhet */
-    margin: 0 auto 15px auto; /* Sentrer skjemaet */
+
+/* --- NY STYLING FOR NYHETSBREV --- */
+#newsletter-section.contact-prompt-box {
+    border-top: 1px solid #e0e0e0;
+    margin-top: 40px;
+    padding: 30px; /* Litt mer padding for å se bedre ut som et "kort" */
 }
-#newsletter-section input[type="email"] { /* E-postfelt */
+
+/* Styling for overskriften inne i nyhetsbrev-skjema-wrapperen */
+#newsletter-form-wrapper h2 {
+    font-size: 1.6em; /* Større overskrift */
+    color: #343a40;
+    margin-bottom: 25px; /* Mer plass under overskriften */
+    text-align: center;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px; /* Litt mer mellomrom mellom elementene */
+    align-items: stretch; /* Strekk elementene for å fylle bredden */
+    width: 100%;
+    max-width: 480px; /* Begrens maks bredde for skjemaet */
+    margin: 0 auto 15px auto;
+}
+
+.newsletter-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 0.9em; /* Litt mindre label-tekst */
+    color: #495057;
+    text-align: left;
+}
+
+.newsletter-form input[type="text"],
+.newsletter-form input[type="email"] {
+    width: 100%;
     padding: 12px 15px;
-    font-size: 1em;
     border: 1px solid #ced4da;
     border-radius: 6px;
-    width: 100%;
-    box-sizing: border-box; /* Inkluder padding/border i totalbredde */
+    box-sizing: border-box;
+    font-size: 1em;
+    background-color: #fff; /* Sørg for hvit bakgrunn */
 }
-#newsletter-section input[type="email"]:focus { /* Fokus-effekt på e-postfelt */
+.newsletter-form input[type="text"]:focus,
+.newsletter-form input[type="email"]:focus {
     border-color: #0d6efd;
     box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
     outline: none;
 }
-/* Styling for samtykkeboks-container */
-.consent-checkbox-container {
+
+.newsletter-form .consent-checkbox-container {
     display: flex;
-    align-items: flex-start; /* Juster for flerslinjers tekst */
+    align-items: flex-start;
     gap: 10px;
-    width: 100%;
-    text-align: left;
-    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px; /* Mindre bunnmarg, knappen har sin egen */
 }
-#newsletter-consent { /* Selve avkrysningsboksen */
-    margin-top: 4px; /* Juster vertikalt med teksten */
-    flex-shrink: 0; /* Forhindre at boksen krymper */
-    width: 1.2em; height: 1.2em; /* Litt større boks */
+
+.newsletter-form #newsletter-consent {
+    margin-top: 4px;
+    flex-shrink: 0;
+    width: 1.2em; height: 1.2em;
     cursor: pointer;
 }
-.consent-label { /* Tekst ved siden av avkrysningsboksen */
-    font-size: 0.9em;
-    color: #495057;
-    line-height: 1.5;
+.newsletter-form .consent-label {
+    font-size: 0.85em; /* Mindre tekst for samtykke */
+    color: #555;
+    line-height: 1.45;
     cursor: pointer;
+    margin-bottom: 0; /* Fjern bunnmarg fra label inni her */
 }
-#newsletter-section button[type="submit"] { /* Send-knapp */
-    width: auto; /* Tilpass bredde til innhold */
-    padding: 12px 25px;
-    min-width: 220px;
+
+.newsletter-form button[type="submit"] {
+    width: 100%; /* Full bredde for knappen */
+    padding: 12px 20px;
+    font-size: 1.05em;
+    margin-top: 10px; /* Litt plass over knappen */
 }
-#newsletter-message { /* Melding (suksess/feil) */
+
+#newsletter-message { /* For valideringsfeil / tidligere "Failed to fetch" */
     margin-top: 15px;
     font-weight: 500;
     font-size: 0.95em;
-    min-height: 1.5em; /* Forhindre hopp i layout */
-}
-.visually-hidden { /* For skjermlesere, skjuler elementet visuelt */
-    position: absolute; width: 1px; height: 1px; padding: 0;
-    margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;
+    min-height: 1.5em;
+    text-align: center;
+    color: #b71c1c; /* Standard til feilfarge, endres av JS ved suksess/sending */
 }
 
+/* Styling for takkemeldings-wrapperen */
+#newsletter-thankyou-wrapper {
+    /* text-align og padding er satt inline i HTML, men kan flyttes hit */
+    /* f.eks. text-align: center; padding: 20px; */
+}
+
+#newsletter-thankyou-wrapper h2 {
+    font-size: 1.8em; /* Stor og tydelig takke-overskrift */
+    color: #198754; /* Grønn for suksess */
+    margin-bottom: 15px;
+}
+
+#newsletter-thankyou-wrapper p {
+    font-size: 1.1em;
+    color: #343a40;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+#newsletter-thankyou-wrapper .success-icon {
+    /* Størrelse, farge og marg er satt inline i JavaScript,
+       men kan styles her hvis du fjerner det fra JS.
+       Eksempel:
+       width: 52px;
+       height: 52px;
+       color: #198754;
+       margin: 20px auto 15px auto;
+    */
+}
+
+#newsletter-thankyou-wrapper p:last-of-type { /* Siste <p> i takkemeldingen */
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-top: 15px;
+}
+/* --- SLUTT PÅ NY STYLING FOR NYHETSBREV --- */
+
+
+/* Visuelt skjult klasse (brukt i HTML for labels som kun skal leses av skjermlesere) */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+
 /* Responsivitet */
-@media (max-width: 600px) { /* Justeringer for mindre skjermer */
+@media (max-width: 600px) {
     #bike-advisor-container { margin: 10px; padding: 10px; }
     .advisor-header h1 { font-size: 1.8em; }
     .summary-box { font-size: 1em; padding: 15px; }
     #step-title { font-size: 1.4em; }
-    .option-button { min-width: 100%; } /* Knapper tar full bredde */
-    .navigation-buttons { flex-direction: column-reverse; gap: 10px; } /* Knapper under hverandre */
+    .option-button { min-width: 100%; }
+    .navigation-buttons { flex-direction: column-reverse; gap: 10px; }
     .recommendations-header { flex-direction: column; align-items: flex-start; gap: 10px; }
     .recommendations-title { font-size: 1.6em; }
     .recommendation-footer { flex-direction: column; align-items: flex-start; }
@@ -335,27 +421,28 @@ body {
     .bike-loader-png { width: 50px; bottom: 45px; }
     .bike-loading-text { font-size: 1em; margin-top: 60px; }
 
-    #newsletter-section h2 { font-size: 1.4em; }
-    #newsletter-form { gap: 12px; }
-    #newsletter-section input[type="email"] { padding: 10px 12px; }
-    .consent-label { font-size: 0.85em; }
-    #newsletter-section button[type="submit"] { width: 100%; min-width: unset; padding: 12px 20px; }
+    /* Responsivitet for nyhetsbrev */
+    #newsletter-form-wrapper h2,
+    #newsletter-thankyou-wrapper h2 { font-size: 1.4em; }
+    .newsletter-form { gap: 15px; }
+    .newsletter-form input[type="text"],
+    .newsletter-form input[type="email"] { padding: 10px 12px; }
+    .newsletter-form .consent-label { font-size: 0.8em; }
+    .newsletter-form button[type="submit"] { min-width: unset; }
+    #newsletter-thankyou-wrapper p { font-size: 1em; }
 }
 
-/* Grid justering for større skjermer (f.eks. tablet og desktop) */
+/* Grid justering for større skjermer */
 @media (min-width: 768px) {
-    .recommendations-grid { grid-template-columns: 1fr 1fr; } /* To kolonner for anbefalingskort */
-    .recommendations-grid .no-results.contact-prompt-box { grid-column: 1 / -1; } /* "Ingen resultater" tar full bredde */
+    .recommendations-grid { grid-template-columns: 1fr 1fr; }
+    .recommendations-grid .no-results.contact-prompt-box { grid-column: 1 / -1; }
     
-    /* Sentrer kort hvis det er 1 eller 3 (det siste kortet i en rad på 2) */
-    .recommendations-grid .recommendation-card:first-child:nth-last-child(1) { /* Bare ett kort */
-        grid-column: 1 / -1; /* Tar hele bredden */
-        max-width: 60%; /* Begrens bredden for å sentrere det litt */
+    .recommendations-grid .recommendation-card:first-child:nth-last-child(1) {
+        grid-column: 1 / -1;
+        max-width: 60%;
         margin-left: auto;
         margin-right: auto;
     }
-     /* Hvis det er 3 kort, vil det siste kortet automatisk starte på en ny linje og ta 1fr.
-        For å sentrere det siste kortet hvis det er oddetall og mer enn 1: */
     .recommendations-grid .recommendation-card:nth-child(odd):nth-last-child(1):not(:first-child) {
         grid-column: 1 / -1;
         max-width: 60%;
