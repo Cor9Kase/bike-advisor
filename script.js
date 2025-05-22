@@ -206,6 +206,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 modalNewsletterThankyouWrapper.innerHTML = '';
             }
             newsletterPopupModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (typeof sendHeight === 'function') sendHeight();
             newsletterModalShownThisSession = true;
             try {
                 parent.postMessage({ type: 'modalOpen' }, '*');
@@ -218,6 +220,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     function closeNewsletterModal() {
         if (newsletterPopupModal) {
             newsletterPopupModal.classList.add('hidden');
+            document.body.style.overflow = '';
+            if (typeof sendHeight === 'function') sendHeight();
             // Alltid tilbakestill til skjemavisning når modalen lukkes, for neste gang den evt. åpnes
             if (modalNewsletterFormWrapper && modalNewsletterThankyouWrapper) {
                 modalNewsletterFormWrapper.classList.remove('hidden');
