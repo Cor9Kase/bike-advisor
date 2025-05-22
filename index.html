@@ -116,9 +116,19 @@
     </div>
     <script src="script.js"></script>
     <script>
+      let lastHeight = 0;
+      let rafId = null;
+
       function sendHeight() {
-        const height = document.documentElement.scrollHeight;
-        parent.postMessage({ type: 'setHeight', height: height }, '*');
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+          const newHeight = document.documentElement.scrollHeight;
+          if (Math.abs(newHeight - lastHeight) > 1) {
+            parent.postMessage({ type: 'setHeight', height: newHeight }, '*');
+            lastHeight = newHeight;
+          }
+        });
       }
 
       window.addEventListener('load', sendHeight);
