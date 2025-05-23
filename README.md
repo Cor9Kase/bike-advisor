@@ -18,9 +18,21 @@ surrounding content is pushed down when the advisor changes height.
 
 <script>
   window.addEventListener('message', function (event) {
-    if (event.data && event.data.type === 'setHeight') {
-      var frame = document.getElementById('bike-advisor-iframe');
-      if (frame) frame.style.height = event.data.height + 'px';
+    var frame = document.getElementById('bike-advisor-iframe');
+    if (!frame || !event.data) return;
+
+    if (event.data.type === 'setHeight') {
+      frame.style.height = event.data.height + 'px';
+    } else if (event.data.type === 'modalOpen') {
+      frame.dataset.origStyles = frame.getAttribute('style') || '';
+      frame.style.position = 'fixed';
+      frame.style.top = '0';
+      frame.style.left = '0';
+      frame.style.width = '100%';
+      frame.style.height = '100vh';
+      frame.style.zIndex = '9999';
+    } else if (event.data.type === 'modalClose') {
+      frame.setAttribute('style', frame.dataset.origStyles || 'width:100%; border:0;');
     }
   });
 </script>
