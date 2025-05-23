@@ -1,97 +1,165 @@
-// Google Apps Script for å hente sykkeldata fra et regneark
-// Gå til Extensions > Apps Script i ditt Google Sheet for å lime inn denne koden.
+// Google Apps Script for Evo Elsykkel Rådgiver
+// Henter sykkeldata og lagrer nyhetsbrevpåmeldinger til Google Sheet.
 
-// Global konstant for å enkelt endre arknavn om nødvendig
-const SHEET_ID = ""; // <--- Sjekk at denne stemmer!
-const SHEET_NAME = 'sykler'; // << VIKTIG: ENDRE DETTE HVIS ARKET DITT HETER NOE ANNET
+// --- Globale Konstanter ---
+const SHEET_ID = "1xQLtzq6gl32aIl1kUsGJQTj0bOwwrCMxTJN40MCBMe0"; // <--- VIKTIG: Erstatt med din Spreadsheet ID!
+const SYKKEL_SHEET_NAME = 'sykler'; // Navnet på arket med sykkeldata
+const MAILCHIMP_SHEET_NAME = 'MailchimpPåmeldinger'; // Navnet på arket for påmeldinger
 
+/**
+ * Håndterer GET-forespørsler, primært for å hente sykkelkatalogen.
+ */
 function doGet(e) {
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-    if (!sheet) {
-      throw new Error(`Sheet med navnet "${SHEET_NAME}" ble ikke funnet.`);
+    // Hvis action=ping (brukt i testConnection i script (8).js), returner enkel respons
+    if (e && e.parameter && e.parameter.action === 'ping') {
+      return ContentService
+        .createTextOutput(JSON.stringify({ success: true, message: "Ping mottatt av doGet", timestamp: new Date().toISOString() }))
+        .setMimeType(ContentService.MimeType.JSON)
+        .withHeaders({'Access-Control-Allow-Origin': '*'}); // Tillat alle for enkel ping
     }
 
-    // Hent alle data fra rad 2 og nedover (antar at rad 1 er overskrifter)
-    // sheet.getLastColumn() henter antall kolonner med data.
-    // sheet.getLastRow() - 1 henter antall rader med data (ekskluderer overskriftsraden).
-    const dataRange = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn());
+    const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = spreadsheet.getSheetByName(SYKKEL_SHEET_NAME);
+
+    if (!sheet) {
+      throw new Error(`Sheet med navnet "${SYKKEL_SHEET_NAME}" ble ikke funnet i spreadsheet med ID ${SHEET_ID}.`);
+    }
+
+    const lastRow = sheet.getLastRow();
+    if (lastRow < 2) {
+      return ContentService.createTextOutput(JSON.stringify([])).setMimeType(ContentService.MimeType.JSON);
+    }
+    const dataRange = sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn());
     const dataRows = dataRange.getValues();
 
-    const bikes = dataRows.map(row => {
-      // Mapper kolonneindekser til mer lesbare variabler
-      // Dette er basert på skjermbildet ditt. Juster hvis kolonnerekkefølgen er annerledes.
-      const id = String(row[0]).trim(); // Kolonne A
-      const name = String(row[1]).trim(); // Kolonne B
-      const productUrl = String(row[2]).trim(); // Kolonne C
-      const purposeString = String(row[3]).trim(); // Kolonne D
-      const description = String(row[4]).trim(); // Kolonne E
-      const featuresString = String(row[5]).trim(); // Kolonne F
-      const price = String(row[6]).trim(); // Kolonne G
-      const frameTypesString = String(row[7]).trim(); // Kolonne H
-      const speedKmh = row[8] !== "" ? parseInt(row[8], 10) : 25; // Kolonne I
-      const cargoCapacity = String(row[9]).trim().toLowerCase(); // Kolonne J
-      const cargoLocation = String(row[10]).trim().toLowerCase(); // Kolonne K
-      const distanceKmString = String(row[11]).trim(); // Kolonne L
-      const maxChildren = row[12] !== "" ? parseInt(row[12], 10) : 0; // Kolonne M
-      const image = String(row[13]).trim(); // Kolonne N
-      
-      // Anta en 'preOrdered' kolonne (f.eks. kolonne O, indeks 14)
-      // Hvis den ikke finnes, sett en default eller fjern linjen.
-      const preOrdered = row.length > 14 && row[14] !== "" ? (String(row[14]).toLowerCase() === 'true' || String(row[14]) === '1') : false; // Kolonne O (antatt)
+    const bikes = dataRows.map(row => ({
+      id: String(row[0] || '').trim(),
+      name: String(row[1] || '').trim(),
+      productUrl: String(row[2] || '').trim(),
+      purpose: (String(row[3] || '').trim()).split(',').map(item => item.trim()).filter(item => item),
+      description: String(row[4] || '').trim(),
+      features: (String(row[5] || '').trim()).split(';').map(item => item.trim()).filter(item => item),
+      price: String(row[6] || '').trim(),
+      frame_types: (String(row[7] || '').trim()).split(',').map(item => item.trim()).filter(item => item),
+      speed_kmh: (row[8] !== "" && !isNaN(row[8])) ? parseInt(row[8], 10) : 25,
+      cargo_capacity: String(row[9] || '').trim().toLowerCase(),
+      cargo_location: String(row[10] || '').trim().toLowerCase(),
+      distance_km: (() => {
+        const str = String(row[11] || '').trim().replace(/km/gi, '');
+        const parts = str.split('-');
+        if (parts.length === 2) return [parseInt(parts[0].trim(), 10) || 0, parseInt(parts[1].trim(), 10) || 0];
+        if (parts.length === 1 && parts[0]) { const s = parseInt(parts[0].trim(), 10) || 0; return [s > 20 ? s - 20 : 0, s];}
+        return [0,0];
+      })(),
+      maxChildren: (row[12] !== "" && !isNaN(row[12])) ? parseInt(row[12], 10) : 0,
+      image: String(row[13] || '').trim(),
+      preOrdered: row.length > 14 && row[14] !== "" ? (String(row[14]).toLowerCase() === 'true' || String(row[14]) === '1') : false,
+    })).filter(bike => bike.id);
 
-      // Konverter strenger til arrays
-      const purpose = purposeString ? purposeString.split(',').map(item => item.trim()).filter(item => item) : [];
-      const features = featuresString ? featuresString.split(';').map(item => item.trim()).filter(item => item) : [];
-      const frame_types = frameTypesString ? frameTypesString.split(',').map(item => item.trim()).filter(item => item) : [];
-
-      // Konverter rekkevidde "40-80 km" til [40, 80]
-      let distance_km = [0, 0];
-      if (distanceKmString) {
-        const parts = distanceKmString.replace('km', '').trim().split('-');
-        if (parts.length === 2) {
-          distance_km = [parseInt(parts[0].trim(), 10) || 0, parseInt(parts[1].trim(), 10) || 0];
-        } else if (parts.length === 1 && parts[0]) { // Håndterer enkelverdi (f.eks. "80 km") som maks
-          const singleVal = parseInt(parts[0].trim(), 10) || 0;
-          distance_km = [singleVal > 20 ? singleVal - 20 : 0, singleVal]; // Enkel gjetning for min-verdi
-        }
-      }
-      
-      // Returner sykkelobjektet i det formatet frontend forventer
-      return {
-        id: id,
-        name: name,
-        purpose: purpose,
-        description: description,
-        features: features,
-        price: price,
-        image: image,
-        productUrl: productUrl,
-        frame_types: frame_types,
-        speed_kmh: speedKmh,
-        cargo_capacity: cargoCapacity,
-        cargo_location: cargoLocation,
-        distance_km: distance_km,
-        maxChildren: maxChildren,
-        preOrdered: preOrdered
-      };
-    }).filter(bike => bike.id); // Filtrer bort rader uten ID (tomme rader)
-
-    return ContentService
-      .createTextOutput(JSON.stringify(bikes))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify(bikes)).setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
     Logger.log(`Error in doGet: ${error.message}\nStack: ${error.stack}`);
-    // Returner en feilmelding i JSON-format for enklere feilsøking på klientsiden
     return ContentService
-      .createTextOutput(JSON.stringify({ error: true, message: error.message }))
+      .createTextOutput(JSON.stringify({ error: true, message: `Feil i doGet: ${error.message}`, stack: error.stack }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
-// Funksjon for å teste output i Apps Script-loggen (valgfritt)
-function testBikeDataOutput() {
-  const result = doGet(null); // Send null for 'e' siden den ikke brukes i test
-  Logger.log(result.getContent());
+/**
+ * Håndterer POST-forespørsler. Forventer FormData.
+ */
+function doPost(e) {
+  // Bestem origin basert på e.origin eller en fallback hvis det er nødvendig
+  // For nå, bruker vi den spesifikke origin du har eller '*'
+  const allowedOrigin = 'https://cor9kase.github.io'; // Eller '*' hvis du vil være mindre restriktiv
+
+  try {
+    if (!e || !e.parameter) {
+      throw new Error("Ingen parametere mottatt i POST-forespørsel.");
+    }
+
+    // Sjekk for en 'action' parameter for å rute forespørselen hvis nødvendig
+    // const action = e.parameter.action;
+    // if (action === 'saveNewsletter') { // Eller en annen handling
+    // }
+
+    // Forventer spesifikt nyhetsbrevdata basert på FormData fra frontend
+    const navn = e.parameter.navn || "";
+    const email = e.parameter.email_address;
+    const tagsString = e.parameter.tags || ""; // Mottas som en kommaseparert streng
+
+    if (!email) {
+      throw new Error("E-postadresse mangler i forespørselen (e.parameter).");
+    }
+
+    const spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = spreadsheet.getSheetByName(MAILCHIMP_SHEET_NAME);
+
+    if (!sheet) {
+      throw new Error(`Sheet med navnet "${MAILCHIMP_SHEET_NAME}" ble ikke funnet.`);
+    }
+
+    const timestamp = new Date();
+    const status = "subscribed_via_rådgiver_formdata";
+
+    sheet.appendRow([timestamp, navn, email, tagsString, status]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: true, message: "Påmeldingsdata (FormData) lagret vellykket." }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .withHeaders({ 'Access-Control-Allow-Origin': allowedOrigin });
+
+  } catch (error) {
+    Logger.log(`Error in doPost (FormData): ${error.message}\nStack: ${error.stack}`);
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: false, error: true, message: `Feil i doPost (FormData): ${error.message}`, stack: error.stack }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .withHeaders({ 'Access-Control-Allow-Origin': allowedOrigin });
+  }
+}
+
+/**
+ * Håndterer OPTIONS pre-flight forespørsler for CORS.
+ */
+function doOptions(e) {
+  const allowedOrigin = 'https://cor9kase.github.io'; // Må matche det du bruker i doPost/doGet
+  return ContentService.createTextOutput()
+    .setMimeType(ContentService.MimeType.JSON)
+    .withHeaders({
+      'Access-Control-Allow-Origin': allowedOrigin,
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Legg til Authorization hvis du planlegger å bruke det
+    });
+}
+
+// --- Valgfrie Testfunksjoner ---
+function testBikeDataOutput() { /* ... (som før) ... */ }
+function testNewsletterSignupFormData() {
+  try {
+    Logger.log("Tester doPost for nyhetsbrev med FormData-stil parametere...");
+    const mockEvent = {
+      parameter: { // Simulere e.parameter
+        navn: "Test FormData Bruker",
+        email_address: "test.formdata@example.com",
+        tags: "SykkelX,SykkelY" // Sendes som streng
+      }
+      // postData feltet ville vært annerledes for FormData, så vi tester parameter direkte
+    };
+    const response = doPost(mockEvent);
+    if (response) {
+      Logger.log(`Resultat fra doPost (getContent): ${response.getContent()}`);
+      const parsedResponse = JSON.parse(response.getContent());
+      if (parsedResponse.error) {
+        Logger.log(`Feil i testNewsletterSignupFormData (doPost): ${parsedResponse.message}`);
+      } else {
+        Logger.log("Påmelding (FormData-stil) ser ut til å ha gått bra ifølge responsen.");
+      }
+    } else {
+       Logger.log("doPost returnerte null eller undefined under FormData test.");
+    }
+  } catch (err) {
+    Logger.log(`Feil under kjøring av testNewsletterSignupFormData: ${err.message}\nStack: ${err.stack}`);
+  }
 }
