@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    if (window.self !== window.top) {
+        document.body.classList.add('embedded');
+    }
 
     // --- Konstanter ---
     // VIKTIG: Erstatt med din faktiske, publiserte Google Apps Script Web App URL
