@@ -383,15 +383,30 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error("GAS_WEB_APP_URL er ikke korrekt satt for nyhetsbrev.");
             throw new Error("Konfigurasjonsfeil for innsending (GAS URL mangler).");
         }
-        const tags = Array.isArray(recommendedBikes) ? recommendedBikes.map(b => b.name || b.id || 'UkjentSykkel').filter(Boolean) : [];
-        tags.push('bike advisor');
+        // 1. Bestem hvilke Mailchimp Grupper som skal tildeles
+        //    Navnene her må matche "Group options" satt opp i Mailchimp
+        //    under kategorien "Anbefalte Sykler".
+        const mailchimpGroups = Array.isArray(recommendedBikes)
+            ? recommendedBikes.map(bike => bike.name || bike.id || 'UkjentSykkelAnbefaling').filter(Boolean)
+            : [];
+
         const formData = new FormData();
         formData.append('navn', navn);
         formData.append('email_address', email);
-        formData.append('tags', tags.join(','));
+
+        // Send de originale tags (hvis de fortsatt skal logges i arket)
+        const tagsForSheet = Array.isArray(recommendedBikes)
+            ? recommendedBikes.map(b => b.name || b.id || 'UkjentSykkel').filter(Boolean)
+            : [];
+        tagsForSheet.push('bike advisor');
+        formData.append('tags_for_logging', tagsForSheet.join(','));
+
+        // Send Mailchimp Gruppe-navnene som skal tilordnes i Mailchimp
+        formData.append('mailchimp_groups_to_add', mailchimpGroups.join(','));
+
         try {
             await fetch(GAS_WEB_APP_URL, { method: "POST", mode: 'no-cors', body: formData });
-            console.log("Nyhetsbrevdata sendt (mode: 'no-cors'). Antar suksess på backend.");
+            console.log("Nyhetsbrevdata (inkl. grupper) sendt (mode: 'no-cors'). Antar suksess på backend.");
             return { success: true, message: "Forespørsel sendt." };
         } catch (error) {
             console.error('Feil under sending av fetch-forespørsel (mode: no-cors):', error);
