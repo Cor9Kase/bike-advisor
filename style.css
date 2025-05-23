@@ -32,6 +32,9 @@ body.embedded #bike-advisor-container {
     box-shadow: none;
 }
 
+body.embedded #options-area {
+    background-color: transparent;
+}
 /* Header */
 .advisor-header {
     padding: 20px;
