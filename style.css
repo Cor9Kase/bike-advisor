@@ -35,7 +35,6 @@ body.embedded #bike-advisor-container {
 body.embedded #options-area {
     background-color: transparent;
 }
-
 /* Header */
 .advisor-header {
     padding: 20px;
@@ -176,6 +175,9 @@ body.embedded #options-area {
 
 /* Alternativ-område */
 .options-container { background-color: #ffffff; margin-bottom: 30px; }
+body.embedded #options-area {
+    background-color: transparent;
+}
 #step-title { /* Tittel for hvert trinn */
     font-size: clamp(1.2rem, 3vw, 1.6rem);
     font-weight: 600; color: #343a40;
