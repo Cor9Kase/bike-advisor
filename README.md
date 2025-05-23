@@ -57,6 +57,15 @@ If your page listens for these messages you can switch the iframe to a
 fixed position while the modal is visible and restore the normal layout
 when it closes.
 
-## Serving the files
+## Copying the HTML elsewhere
 
-If you copy the HTML into a CMS page instead of using the provided `index.html` file, make sure `style.css` and `script.js` are reachable via absolute URLs. A common symptom of missing files is a browser error like `Unexpected token '<'` because the server returns an HTML page instead of the expected script. Update the `<link>` and `<script>` tags to point to the correct locations and verify that both resources load without 404 errors.
+If you copy `index.html` directly into another site or CMS, make sure the
+`<link>` and `<script>` tags point to your hosted copies of `style.css` and
+`script.js`. Use absolute URLs, for example:
+
+```html
+<link rel="stylesheet" href="https://example.com/bike-advisor/style.css">
+<script src="https://example.com/bike-advisor/script.js"></script>
+```
+
+Replace the URLs with the correct locations where you host the files.
