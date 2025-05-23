@@ -56,3 +56,16 @@ iframe in place:
 If your page listens for these messages you can switch the iframe to a
 fixed position while the modal is visible and restore the normal layout
 when it closes.
+
+## Copying the HTML elsewhere
+
+If you copy `index.html` directly into another site or CMS, make sure the
+`<link>` and `<script>` tags point to your hosted copies of `style.css` and
+`script.js`. Use absolute URLs, for example:
+
+```html
+<link rel="stylesheet" href="https://example.com/bike-advisor/style.css">
+<script src="https://example.com/bike-advisor/script.js"></script>
+```
+
+Replace the URLs with the correct locations where you host the files.
