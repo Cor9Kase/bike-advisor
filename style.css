@@ -19,6 +19,22 @@ body {
     overflow: visible; /* Tillat elementer (som loader) å gå utenfor visuelt om nødvendig */
 }
 
+/* Tilpass utseende når siden er innebygget i et iframe */
+body.embedded {
+    background-color: transparent;
+}
+body.embedded #bike-advisor-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+}
+body.embedded #options-area {
+    background-color: transparent;
+}
+
 /* Header */
 .advisor-header {
     padding: 20px;
