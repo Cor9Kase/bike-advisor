@@ -55,4 +55,23 @@ iframe in place:
 
 If your page listens for these messages you can switch the iframe to a
 fixed position while the modal is visible and restore the normal layout
-when it closes.
+when it closes. For example:
+
+```javascript
+window.addEventListener('message', function (event) {
+  var frame = document.getElementById('bike-advisor-iframe');
+  if (!frame || !event.data) return;
+
+  if (event.data.type === 'modalOpen') {
+    frame.dataset.origStyles = frame.getAttribute('style') || '';
+    frame.style.position = 'fixed';
+    frame.style.top = '0';
+    frame.style.left = '0';
+    frame.style.width = '100%';
+    frame.style.height = '100vh';
+    frame.style.zIndex = '9999';
+  } else if (event.data.type === 'modalClose') {
+    frame.setAttribute('style', frame.dataset.origStyles || 'width:100%; border:0;');
+  }
+});
+```
