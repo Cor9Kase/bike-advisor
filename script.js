@@ -384,6 +384,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error("Konfigurasjonsfeil for innsending (GAS URL mangler).");
         }
         const tags = Array.isArray(recommendedBikes) ? recommendedBikes.map(b => b.name || b.id || 'UkjentSykkel').filter(Boolean) : [];
+        tags.push('bike advisor');
         const formData = new FormData();
         formData.append('navn', navn);
         formData.append('email_address', email);
