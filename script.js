@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const formData = new FormData();
         formData.append('navn', navn);
         formData.append('email_address', email);
-        if (phone) formData.append('phone', phone);
+        if (phone) formData.append('telefon', phone);
 
         // Send de originale tags (hvis de fortsatt skal logges i arket)
         const tagsForSheet = Array.isArray(recommendedBikes)
