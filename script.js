@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalNewsletterForm = document.getElementById('modal-newsletter-form');
     const modalNewsletterNameInput = document.getElementById('modal-newsletter-name');
     const modalNewsletterEmailInput = document.getElementById('modal-newsletter-email');
+    const modalNewsletterPhoneInput = document.getElementById('modal-newsletter-phone');
     const modalNewsletterConsentCheckbox = document.getElementById('modal-newsletter-consent');
     const modalNewsletterMessage = document.getElementById('modal-newsletter-message');
     const modalNewsletterFormWrapper = document.getElementById('modal-newsletter-form-wrapper');
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { id: 'purpose', title: 'Jeg ser etter en sykkel for', options: [ { id: 'pendling', label: 'Turer eller pendling til jobb' }, { id: 'bybruk', label: 'Være ute i byen / Koseturer' }, { id: 'terreng', label: 'Bevege meg utenfor veien (sti/grus)' }, { id: 'transport', label: 'Transportere mye (varer/barn)' }, { id: 'allsidig', label: 'En allsidig sykkel til "litt av alt"' } ] },
         { id: 'distance', title: 'Den bør passe til', options: [ { id: 'kort', label: 'Kortere avstander (opptil 20 km)' }, { id: 'medium', label: 'Mellomdistanse (20-50 km)' }, { id: 'lang', label: 'Lange avstander (50+ km)' } ] },
         { id: 'cargo', title: 'Jeg trenger å frakte', options: [ { id: 'små', label: 'Lite (f.eks. veske, liten handlepose)' }, { id: 'store', label: 'Medium (f.eks. ukentlig handling, større bagasje)' }, { id: 'massiv', label: 'Mye (f.eks. barn, kjæledyr, store/tunge varer)' } ] },
-        { id: 'frameType', title: 'Jeg foretrekker en ramme med', options: [ { id: 'dypGjennomgang', label: 'Lavt innsteg', description: 'Enkelt å stige på og av' }, { id: 'lavtTopprør', label: 'Trapés / Lavt overrør', description: 'Sporty, men lettere å stige på/av enn høy' }, { id: 'høytTopprør', label: 'Diamant / Høyt overrør', description: 'Tradisjonell, ofte stivere ramme' } ] },
+        { id: 'frameType', title: 'Jeg foretrekker en ramme med', options: [ { id: 'dypGjennomgang', label: 'Lavt innsteg', description: 'Enkelt å stige på og av' }, { id: 'høytTopprør', label: 'Høyt overrør', description: 'Tradisjonell, ofte stivere ramme' } ] },
         { id: 'cargoLocation', title: 'Jeg ser for meg en', options: [ { id: 'frontlaster', label: 'Frontlaster', image: 'https://evoelsykler.no/wp-content/uploads/2025/04/front-1.png', description: 'Lasteboks foran', className: 'cargo-type' }, { id: 'langhale', label: 'Langhale (Longtail)', image: 'https://evoelsykler.no/wp-content/uploads/2025/04/longtail.png', description: 'Forlenget bagasjebrett bak', className: 'cargo-type' } ], condition: () => selections.purpose === 'transport' }
     ];
 
@@ -198,6 +199,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (modalNewsletterFormWrapper && modalNewsletterThankyouWrapper && modalNewsletterThankyouWrapper.classList.contains('hidden')) {
                 if(modalNewsletterNameInput) modalNewsletterNameInput.value = '';
                 if(modalNewsletterEmailInput) modalNewsletterEmailInput.value = '';
+                if(modalNewsletterPhoneInput) modalNewsletterPhoneInput.value = '';
                 if(modalNewsletterConsentCheckbox) modalNewsletterConsentCheckbox.checked = false;
                 if(modalNewsletterMessage) modalNewsletterMessage.textContent = '';
                 const submitBtn = modalNewsletterForm ? modalNewsletterForm.querySelector('button[type="submit"]') : null;
@@ -230,7 +232,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 modalNewsletterFormWrapper.classList.remove('hidden');
                 modalNewsletterThankyouWrapper.classList.add('hidden');
                 modalNewsletterThankyouWrapper.innerHTML = ''; // Tøm takkemelding
-                 if(modalNewsletterMessage) modalNewsletterMessage.textContent = ''; // Tøm også feilmeldinger
+                if(modalNewsletterNameInput) modalNewsletterNameInput.value = '';
+                if(modalNewsletterEmailInput) modalNewsletterEmailInput.value = '';
+                if(modalNewsletterPhoneInput) modalNewsletterPhoneInput.value = '';
+                if(modalNewsletterConsentCheckbox) modalNewsletterConsentCheckbox.checked = false;
+                if(modalNewsletterMessage) modalNewsletterMessage.textContent = ''; // Tøm også feilmeldinger
             }
             try {
                 parent.postMessage({ type: 'modalClose' }, '*');
@@ -284,7 +290,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!purposeOnly) {
                     if (selections.distance && !relaxDistance) { let minRange = 0; if (selections.distance === 'medium') minRange = 20; else if (selections.distance === 'lang') minRange = 50; bikesToFilter = bikesToFilter.filter(bike => bike.distance_km && Array.isArray(bike.distance_km) && bike.distance_km[1] >= minRange); }
                     if (selections.cargo) { let cargoLevels = []; if (selections.cargo === 'små') cargoLevels = ['small', 'medium', 'large', 'massive']; else if (selections.cargo === 'store') cargoLevels = ['medium', 'large', 'massive']; else if (selections.cargo === 'massiv') cargoLevels = ['large', 'massive']; bikesToFilter = bikesToFilter.filter(bike => bike.cargo_capacity && cargoLevels.includes(bike.cargo_capacity.toLowerCase())); }
-                    if (selections.frameType && !relaxFrameType) { let frameTypesToMatch = []; if (selections.frameType === 'dypGjennomgang') frameTypesToMatch = ['low-step', 'cargo', 'cargo-longtail']; else if (selections.frameType === 'lavtTopprør') frameTypesToMatch = ['mid-step']; else if (selections.frameType === 'høytTopprør') frameTypesToMatch = ['high-step']; bikesToFilter = bikesToFilter.filter(bike => bike.frame_types && Array.isArray(bike.frame_types) && bike.frame_types.some(type => frameTypesToMatch.includes(type.toLowerCase()))); }
+                    if (selections.frameType && !relaxFrameType) {
+                        let frameTypesToMatch = [];
+                        if (selections.frameType === 'dypGjennomgang') {
+                            frameTypesToMatch = ['low-step', 'cargo', 'cargo-longtail'];
+                        } else if (selections.frameType === 'høytTopprør') {
+                            frameTypesToMatch = ['high-step', 'mid-step'];
+                        }
+                        bikesToFilter = bikesToFilter.filter(bike => bike.frame_types && Array.isArray(bike.frame_types) && bike.frame_types.some(type => frameTypesToMatch.includes(type.toLowerCase())));
+                    }
                     const cargoLocationStep = steps.find(s => s.id === 'cargoLocation'); const cargoLocationAsked = !cargoLocationStep || !cargoLocationStep.condition || cargoLocationStep.condition(); if (cargoLocationAsked && selections.purpose === 'transport' && selections.cargoLocation) { const locationToMatch = selections.cargoLocation === 'frontlaster' ? 'front' : 'rear'; bikesToFilter = bikesToFilter.filter(bike => bike.cargo_location && bike.cargo_location.toLowerCase() === locationToMatch); }
                 }
                 return bikesToFilter;
@@ -292,8 +306,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             let potentialMatches = filterBikes();
             if (potentialMatches.length === 0) { potentialMatches = filterBikes(true, false); if (potentialMatches.length > 0) relaxedSearchPerformed = true; }
             if (potentialMatches.length === 0) { potentialMatches = filterBikes(false, false, true); if (potentialMatches.length > 0) relaxedSearchPerformed = true; }
-            potentialMatches.sort((a, b) => { const inferChildNeed = selections.purpose === 'transport' || selections.cargo === 'massiv' || selections.cargo === 'store'; const a_meets_child = (a.maxChildren && a.maxChildren > 0); const b_meets_child = (b.maxChildren && b.maxChildren > 0); if (inferChildNeed) { if (a_meets_child && !b_meets_child) return -1; if (!a_meets_child && b_meets_child) return 1; if (a_meets_child && b_meets_child) { return (b.maxChildren || 0) - (a.maxChildren || 0); } } return (parseFloat(String(a.price).replace(/[^0-9.]/g, '')) || Infinity) - (parseFloat(String(b.price).replace(/[^0-9.]/g, '')) || Infinity); });
-            recommendations = potentialMatches.slice(0, 3);
+            potentialMatches.sort((a, b) => {
+                const inferChildNeed = selections.purpose === 'transport' || selections.cargo === 'massiv' || selections.cargo === 'store';
+                const a_meets_child = (a.maxChildren && a.maxChildren > 0);
+                const b_meets_child = (b.maxChildren && b.maxChildren > 0);
+                if (inferChildNeed) {
+                    if (a_meets_child && !b_meets_child) return -1;
+                    if (!a_meets_child && b_meets_child) return 1;
+                    if (a_meets_child && b_meets_child) {
+                        return (b.maxChildren || 0) - (a.maxChildren || 0);
+                    }
+                }
+                return (parseFloat(String(a.price).replace(/[^0-9.]/g, '')) || Infinity) - (parseFloat(String(b.price).replace(/[^0-9.]/g, '')) || Infinity);
+            });
+
+            let finalMatches = potentialMatches.slice(0, 3);
+            if (finalMatches.length < 3) {
+                const additional = BikeCatalog.evoOriginal
+                    .filter(b => !finalMatches.includes(b))
+                    .sort((a, b) => (parseFloat(String(a.price).replace(/[^0-9.]/g, '')) || Infinity) - (parseFloat(String(b.price).replace(/[^0-9.]/g, '')) || Infinity));
+                if (additional.length > 0) {
+                    relaxedSearchPerformed = true;
+                }
+                finalMatches = finalMatches.concat(additional.slice(0, 3 - finalMatches.length));
+            }
+            recommendations = finalMatches;
             if (loadingIndicator) loadingIndicator.classList.add('hidden');
             renderRecommendations();
             if (recommendationsOutput) recommendationsOutput.classList.remove('hidden');
@@ -378,7 +415,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.addEventListener('click', function(event) { /* ... (din sporingslogikk) ... */ });
 
     // --- Nyhetsbrev innsending med FormData (mode: 'no-cors') ---
-    async function sendNewsletterDataWithFormData(navn, email, recommendedBikes = []) {
+    async function sendNewsletterDataWithFormData(navn, email, phone, recommendedBikes = []) {
         if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL === 'YOUR_PUBLISHED_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE' || GAS_WEB_APP_URL.length < 60) {
             console.error("GAS_WEB_APP_URL er ikke korrekt satt for nyhetsbrev.");
             throw new Error("Konfigurasjonsfeil for innsending (GAS URL mangler).");
@@ -393,6 +430,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const formData = new FormData();
         formData.append('navn', navn);
         formData.append('email_address', email);
+        if (phone) formData.append('phone', phone);
 
         // Send de originale tags (hvis de fortsatt skal logges i arket)
         const tagsForSheet = Array.isArray(recommendedBikes)
@@ -422,6 +460,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             const navn = modalNewsletterNameInput.value.trim();
             const email = modalNewsletterEmailInput.value.trim();
+            const phone = modalNewsletterPhoneInput ? modalNewsletterPhoneInput.value.trim() : '';
             if (!navn) { modalNewsletterMessage.textContent = "Vennligst skriv inn navnet ditt."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
             if (!modalNewsletterConsentCheckbox.checked) { modalNewsletterMessage.textContent = "Du må godta vilkårene for å motta e-post."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
             if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { modalNewsletterMessage.textContent = "Vennligst skriv inn en gyldig e-postadresse."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
@@ -432,7 +471,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (submitButton) submitButton.disabled = true;
 
             try {
-                await sendNewsletterDataWithFormData(navn, email, recommendations);
+                await sendNewsletterDataWithFormData(navn, email, phone, recommendations);
                 if (modalNewsletterFormWrapper) modalNewsletterFormWrapper.classList.add('hidden');
                 if (modalNewsletterThankyouWrapper) {
                     modalNewsletterThankyouWrapper.innerHTML = `
@@ -446,7 +485,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     modalNewsletterThankyouWrapper.classList.remove('hidden');
                 }
                 if (modalNewsletterMessage) modalNewsletterMessage.textContent = "";
-                trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, source: 'popup_modal' });
+                trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, phone: phone, source: 'popup_modal' });
                 // setTimeout(closeNewsletterModal, 7000); // Lukk modalen automatisk etter 7 sekunder
             } catch (err) {
                 console.error("Innsending av nyhetsbrev fra modal feilet:", err);
@@ -454,7 +493,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     modalNewsletterMessage.textContent = err.message || "Noe gikk galt. Prøv igjen.";
                     modalNewsletterMessage.style.color = "#b71c1c";
                 }
-                trackAdvisorEvent('newsletter_signup_failed', { navn: navn, email: email, source: 'popup_modal', error: err.message || String(err) });
+                trackAdvisorEvent('newsletter_signup_failed', { navn: navn, email: email, phone: phone, source: 'popup_modal', error: err.message || String(err) });
             } finally {
                 if (submitButton) submitButton.disabled = false;
             }
