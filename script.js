@@ -293,9 +293,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (selections.frameType && !relaxFrameType) {
                         let frameTypesToMatch = [];
                         if (selections.frameType === 'dypGjennomgang') {
-                            frameTypesToMatch = ['low-step', 'cargo', 'cargo-longtail'];
+                            frameTypesToMatch = ['low-step', 'cargo', 'cargo-longtail', 'mid-step'];
                         } else if (selections.frameType === 'høytTopprør') {
-                            frameTypesToMatch = ['high-step', 'mid-step'];
+                            frameTypesToMatch = ['high-step'];
                         }
                         bikesToFilter = bikesToFilter.filter(bike => bike.frame_types && Array.isArray(bike.frame_types) && bike.frame_types.some(type => frameTypesToMatch.includes(type.toLowerCase())));
                     }
@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const formData = new FormData();
         formData.append('navn', navn);
         formData.append('email_address', email);
-        if (phone) formData.append('telefon', phone);
+        if (phone) formData.append('phone', phone);
 
         // Send de originale tags (hvis de fortsatt skal logges i arket)
         const tagsForSheet = Array.isArray(recommendedBikes)
