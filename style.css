@@ -418,7 +418,8 @@ body.embedded #options-area {
 }
 
 .modal-form input[type="text"],
-.modal-form input[type="email"] {
+.modal-form input[type="email"],
+.modal-form input[type="tel"] {
     width: 100%;
     padding: 10px 14px; /* Litt mindre padding */
     border: 1px solid #ced4da; /* Standard grå kantlinje */
@@ -428,7 +429,8 @@ body.embedded #options-area {
     background-color: #fff;
 }
 .modal-form input[type="text"]:focus,
-.modal-form input[type="email"]:focus {
+.modal-form input[type="email"]:focus,
+.modal-form input[type="tel"]:focus {
     border-color: #0d6efd; /* Blå kantlinje ved fokus */
     box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2); /* Lett skygge ved fokus */
     outline: none;
@@ -532,7 +534,8 @@ body.embedded #options-area {
     .modal-subtitle { font-size: 0.95em; margin-bottom: 20px; }
     .modal-form label { font-size: 0.85em; }
     .modal-form input[type="text"],
-    .modal-form input[type="email"] { padding: 9px 12px; font-size: 0.95em;}
+    .modal-form input[type="email"],
+    .modal-form input[type="tel"] { padding: 9px 12px; font-size: 0.95em;}
     .modal-consent-label { font-size: 0.75em; }
     #modal-newsletter-thankyou-wrapper h2 { font-size: 1.4em; }
     #modal-newsletter-thankyou-wrapper p { font-size: 1em; }
