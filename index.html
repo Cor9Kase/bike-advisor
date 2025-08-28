@@ -5,7 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evo Elsykkel Rådgiver</title>
     <link rel="stylesheet" href="style.css">
-</head>
+
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'DIN_PIXEL_ID'); // ERSTATT MED DIN FAKTISKE PIXEL ID
+    fbq('track', 'PageView');
+    </script>
+    <noscript>
+    <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=DIN_PIXEL_ID&ev=PageView&noscript=1"
+    />
+    </noscript>
+    </head>
 <body>
     <div id="bike-advisor-container">
 
@@ -27,7 +45,7 @@
 
             <div id="recommendations-section" class="hidden">
                 <div id="summary-sentence-final" class="summary-box">
-                    </div>
+                </div>
 
                 <div id="loading-indicator" class="loading-container hidden">
                     <div class="spinner"></div>
@@ -40,7 +58,7 @@
                 </div>
 
                 <div id="recommendations-output" class="recommendations-grid hidden">
-                    </div>
+                </div>
 
                 <div class="recommendations-actions" style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0;">
                     <button id="open-newsletter-popup-btn" class="button button-secondary">Få forslagene på e-post</button>
@@ -49,13 +67,13 @@
 
             <div id="questions-section" class="hidden">
                 <div id="sentence-builder" class="summary-box">
-                    </div>
+                </div>
 
                 <div id="options-area" class="options-container">
                     <h2 id="step-title">Laster inn...</h2>
                     <div id="step-options">
-                        </div>
-                     <div id="step-progress" class="progress-indicator">
+                    </div>
+                    <div id="step-progress" class="progress-indicator">
                         <div class="progress-bar-outer">
                            <div id="progress-bar" class="progress-bar-inner"></div>
                         </div>
@@ -65,14 +83,14 @@
 
                 <div class="navigation-buttons">
                     <button id="back-button" class="button button-secondary hidden">
-                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                         </svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="icon">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                          </svg>
                         Tilbake
                     </button>
                     <button id="reset-button-step" class="button button-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                         </svg>
                         Start på nytt
                     </button>
@@ -115,7 +133,7 @@
             </div>
 
             <div id="modal-newsletter-thankyou-wrapper" class="hidden" style="text-align: center; padding: 20px 0;">
-                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
