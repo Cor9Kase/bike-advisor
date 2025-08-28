@@ -453,52 +453,99 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (modalNewsletterForm) {
-        modalNewsletterForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            if (!modalNewsletterNameInput || !modalNewsletterEmailInput || !modalNewsletterConsentCheckbox || !modalNewsletterMessage || !modalNewsletterFormWrapper || !modalNewsletterThankyouWrapper) {
-                console.error("Ett eller flere modal-nyhetsbrev-DOM-elementer mangler."); return;
+    modalNewsletterForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!modalNewsletterNameInput || !modalNewsletterEmailInput || !modalNewsletterConsentCheckbox || !modalNewsletterMessage || !modalNewsletterFormWrapper || !modalNewsletterThankyouWrapper) {
+            console.error("Ett eller flere modal-nyhetsbrev-DOM-elementer mangler."); 
+            return;
+        }
+
+        const navn = modalNewsletterNameInput.value.trim();
+        const email = modalNewsletterEmailInput.value.trim();
+        const phone = modalNewsletterPhoneInput ? modalNewsletterPhoneInput.value.trim() : '';
+
+        if (!navn) { 
+            modalNewsletterMessage.textContent = "Vennligst skriv inn navnet ditt."; 
+            modalNewsletterMessage.style.color = "#b71c1c"; 
+            return; 
+        }
+        if (!modalNewsletterConsentCheckbox.checked) { 
+            modalNewsletterMessage.textContent = "Du må godta vilkårene for å motta e-post."; 
+            modalNewsletterMessage.style.color = "#b71c1c"; 
+            return; 
+        }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { 
+            modalNewsletterMessage.textContent = "Vennligst skriv inn en gyldig e-postadresse."; 
+            modalNewsletterMessage.style.color = "#b71c1c"; 
+            return; 
+        }
+
+        modalNewsletterMessage.textContent = "Sender...";
+        modalNewsletterMessage.style.color = "#495057";
+
+        const submitButton = modalNewsletterForm.querySelector('button[type="submit"]');
+        if (submitButton) submitButton.disabled = true;
+
+        try {
+            await sendNewsletterDataWithFormData(navn, email, phone, recommendations);
+
+            if (modalNewsletterFormWrapper) modalNewsletterFormWrapper.classList.add('hidden');
+            if (modalNewsletterThankyouWrapper) {
+                modalNewsletterThankyouWrapper.innerHTML = `
+                    <h2>Takk, ${navn}!</h2>
+                    <p>Du får straks anbefalingene dine tilsendt på e-post til ${email}.</p>
+                    <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:48px; height:48px; color: #198754; margin-top: 15px; margin-bottom: 10px;">
+                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.06-1.06l-3.72 3.72-1.72-1.72a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l4.25-4.25Z" clip-rule="evenodd" />
+                    </svg>
+                    <p style="font-size: 0.9em; color: #6c757d;">Sjekk også søppelpostmappen din.</p>
+                `;
+                modalNewsletterThankyouWrapper.classList.remove('hidden');
             }
-            const navn = modalNewsletterNameInput.value.trim();
-            const email = modalNewsletterEmailInput.value.trim();
-            const phone = modalNewsletterPhoneInput ? modalNewsletterPhoneInput.value.trim() : '';
-            if (!navn) { modalNewsletterMessage.textContent = "Vennligst skriv inn navnet ditt."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
-            if (!modalNewsletterConsentCheckbox.checked) { modalNewsletterMessage.textContent = "Du må godta vilkårene for å motta e-post."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { modalNewsletterMessage.textContent = "Vennligst skriv inn en gyldig e-postadresse."; modalNewsletterMessage.style.color = "#b71c1c"; return; }
+            if (modalNewsletterMessage) modalNewsletterMessage.textContent = "";
 
-            modalNewsletterMessage.textContent = "Sender...";
-            modalNewsletterMessage.style.color = "#495057";
-            const submitButton = modalNewsletterForm.querySelector('button[type="submit"]');
-            if (submitButton) submitButton.disabled = true;
+            // === Sporingskall lokalt ===
+            trackAdvisorEvent('newsletter_signup_success', { navn, email, phone, source: 'popup_modal' });
 
+            // === NYTT: Send melding til parent (WordPress-siden) ===
             try {
-                await sendNewsletterDataWithFormData(navn, email, phone, recommendations);
-                if (modalNewsletterFormWrapper) modalNewsletterFormWrapper.classList.add('hidden');
-                if (modalNewsletterThankyouWrapper) {
-                    modalNewsletterThankyouWrapper.innerHTML = `
-                        <h2>Takk, ${navn}!</h2>
-                        <p>Du får straks anbefalingene dine tilsendt på e-post til ${email}.</p>
-                        <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:48px; height:48px; color: #198754; margin-top: 15px; margin-bottom: 10px;">
-                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.06-1.06l-3.72 3.72-1.72-1.72a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l4.25-4.25Z" clip-rule="evenodd" />
-                        </svg>
-                        <p style="font-size: 0.9em; color: #6c757d;">Sjekk også søppelpostmappen din.</p>
-                    `;
-                    modalNewsletterThankyouWrapper.classList.remove('hidden');
-                }
-                if (modalNewsletterMessage) modalNewsletterMessage.textContent = "";
-                trackAdvisorEvent('newsletter_signup_success', { navn: navn, email: email, phone: phone, source: 'popup_modal' });
-                // setTimeout(closeNewsletterModal, 7000); // Lukk modalen automatisk etter 7 sekunder
-            } catch (err) {
-                console.error("Innsending av nyhetsbrev fra modal feilet:", err);
-                if (modalNewsletterMessage) {
-                    modalNewsletterMessage.textContent = err.message || "Noe gikk galt. Prøv igjen.";
-                    modalNewsletterMessage.style.color = "#b71c1c";
-                }
-                trackAdvisorEvent('newsletter_signup_failed', { navn: navn, email: email, phone: phone, source: 'popup_modal', error: err.message || String(err) });
-            } finally {
-                if (submitButton) submitButton.disabled = false;
+                window.parent.postMessage({
+                    type: 'newsletter_signup_success',
+                    navn: navn,
+                    email: email,
+                    phone: phone,
+                    source: 'popup_modal'
+                }, '*');
+            } catch (e) {
+                console.error('Kunne ikke sende postMessage til parent:', e);
             }
-        });
-    }
+
+        } catch (err) {
+            console.error("Innsending av nyhetsbrev fra modal feilet:", err);
+            if (modalNewsletterMessage) {
+                modalNewsletterMessage.textContent = err.message || "Noe gikk galt. Prøv igjen.";
+                modalNewsletterMessage.style.color = "#b71c1c";
+            }
+
+            trackAdvisorEvent('newsletter_signup_failed', { navn, email, phone, source: 'popup_modal', error: err.message || String(err) });
+
+            // === NYTT: Send feilmelding til parent ===
+            try {
+                window.parent.postMessage({
+                    type: 'newsletter_signup_failed',
+                    navn: navn,
+                    email: email,
+                    phone: phone,
+                    source: 'popup_modal',
+                    error: err.message || String(err)
+                }, '*');
+            } catch (e) {
+                console.error('Kunne ikke sende postMessage error til parent:', e);
+            }
+
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
 
     // Event listeners for modal
     if (closeNewsletterModalBtn) closeNewsletterModalBtn.addEventListener('click', closeNewsletterModal);
