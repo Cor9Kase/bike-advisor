@@ -1,10 +1,4 @@
-Jeg har oppdatert koden for Bike Advisor. Hovedendringen er at jeg har flyttet logikken for å sende data til en separat funksjon (`submitNewsletterForm`) for å gjøre koden renere og enklere å vedlikeholde. Den nye funksjonen tar seg av validering, tilbakemelding til brukeren, og selve innsendingen. Den opprinnelige `submit`-event-handleren er nå mye enklere og kaller bare den nye funksjonen.
-
-Jeg har også lagt til en midlertidig logikk i `sendNewsletterDataWithFormData` for å håndtere situasjoner der det ikke er noen anbefalinger, slik at innsendingen fortsatt fungerer, men uten å sende med sykkelgrupper. Dette gjør koden mer robust.
-
-### Oppdatert JavaScript-kode for Bike Advisor
-
-```javascript
+javascript
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.self !== window.top) {
         document.body.classList.add('embedded');
@@ -584,4 +578,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     initializeAdvisor();
 });
-```
