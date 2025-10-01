@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     let relaxedSearchPerformed = false;
     let totalSteps;
     let newsletterModalShownThisSession = false;
+    let teaserShownThisSession = false;
+    let scrolledPastRecommendations = false;
+    let teaserTimeout = null;
+    let modalTimeout = null;
 
     // --- DOM Referanser ---
     const initialLoader = document.getElementById('initial-loader');
@@ -32,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const recommendationsOutput = document.getElementById('recommendations-output');
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
-    const currentYearSpan = document.getElementById('current-year');
     const loadingIndicator = document.getElementById('loading-indicator');
     const contactEvoSection = document.getElementById('contact-evo-section');
 
@@ -48,6 +51,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalNewsletterFormWrapper = document.getElementById('modal-newsletter-form-wrapper');
     const modalNewsletterThankyouWrapper = document.getElementById('modal-newsletter-thankyou-wrapper');
     const openNewsletterPopupBtn = document.getElementById('open-newsletter-popup-btn');
+
+    // NYTT: Teaser DOM Referanser
+    const newsletterTeaser = document.getElementById('newsletter-teaser');
+    const teaserCtaBtn = document.getElementById('teaser-cta-btn');
+    const teaserCloseBtn = document.getElementById('teaser-close-btn');
 
     // --- Steps Definisjon ---
     const steps = [
@@ -191,9 +199,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- Modal Funksjoner ---
+    // --- NYTT: Teaser Funksjoner ---
+    function showTeaser() {
+        if (newsletterTeaser && !teaserShownThisSession && !newsletterModalShownThisSession && showRecommendationsView && recommendations.length > 0) {
+            newsletterTeaser.classList.remove('hidden');
+            teaserShownThisSession = true;
+            if (typeof sendHeight === 'function') sendHeight();
+            trackAdvisorEvent('newsletter_teaser_shown');
+        }
+    }
+
+    function hideTeaser() {
+        if (newsletterTeaser) {
+            newsletterTeaser.classList.add('hidden');
+            if (typeof sendHeight === 'function') sendHeight();
+        }
+    }
+
+    // --- Modal Funksjoner (Oppdatert) ---
     function openNewsletterModal() {
         if (newsletterPopupModal && !newsletterModalShownThisSession) {
+            // Skjul teaser hvis den vises
+            hideTeaser();
+            
             if (modalNewsletterFormWrapper && modalNewsletterThankyouWrapper && modalNewsletterThankyouWrapper.classList.contains('hidden')) {
                 if(modalNewsletterNameInput) modalNewsletterNameInput.value = '';
                 if(modalNewsletterEmailInput) modalNewsletterEmailInput.value = '';
@@ -210,6 +238,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.body.style.overflow = 'hidden';
             if (typeof sendHeight === 'function') sendHeight();
             newsletterModalShownThisSession = true;
+            trackAdvisorEvent('newsletter_modal_shown');
             try {
                 parent.postMessage({ type: 'modalOpen' }, '*');
             } catch (e) {
@@ -241,6 +270,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // --- NYTT: Scroll Trigger for Modal ---
+    function checkScrollTrigger() {
+        if (showRecommendationsView && !newsletterModalShownThisSession && recommendations.length > 0) {
+            const recommendationsSection = document.getElementById('recommendations-section');
+            if (recommendationsSection) {
+                const rect = recommendationsSection.getBoundingClientRect();
+                
+                // Hvis bruker scroller forbi anbefalingene
+                if (rect.bottom < window.innerHeight / 2 && !scrolledPastRecommendations) {
+                    scrolledPastRecommendations = true;
+                    
+                    // Avbryt eksisterende timers
+                    if (teaserTimeout) clearTimeout(teaserTimeout);
+                    if (modalTimeout) clearTimeout(modalTimeout);
+                    
+                    // Vis modal direkte ved scroll
+                    openNewsletterModal();
+                    trackAdvisorEvent('newsletter_modal_triggered_by_scroll');
+                }
+            }
+        }
+    }
+
     // --- Oppdater Visning ---
     function updateView() {
         totalSteps = calculateTotalVisibleSteps();
@@ -265,10 +317,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateProgress();
     }
 
-    // --- Generer Anbefalinger (Oppdatert til å potensielt trigge modal) ---
+    // --- Generer Anbefalinger (Oppdatert med ny timing-strategi) ---
     function generateAndShowRecommendations() {
         relaxedSearchPerformed = false;
         showRecommendationsView = true;
+        scrolledPastRecommendations = false;
+        
         if (questionsSection) questionsSection.classList.add('hidden');
         if (recommendationsSection) { recommendationsSection.classList.remove('hidden'); recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
@@ -331,8 +385,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (recommendationsOutput) recommendationsOutput.classList.remove('hidden');
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
 
-            if (recommendations.length > 0 && !newsletterModalShownThisSession) {
-                setTimeout(openNewsletterModal, 7000);
+            // NYTT: Implementer kombinert teaser + modal strategi
+            if (recommendations.length > 0 && !newsletterModalShownThisSession && !teaserShownThisSession) {
+                // 1. Vis teaser etter 2 sekunder
+                teaserTimeout = setTimeout(() => {
+                    showTeaser();
+                    
+                    // 2. Hvis bruker ikke klikker på teaser, vis modal etter ytterligere 3 sekunder (5 sek totalt)
+                    modalTimeout = setTimeout(() => {
+                        if (!newsletterModalShownThisSession) {
+                            openNewsletterModal();
+                            trackAdvisorEvent('newsletter_modal_triggered_by_timer');
+                        }
+                    }, 3000);
+                }, 2000);
             }
         }, 300);
     }
@@ -370,9 +436,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             currentStep = lastVisibleStepIndex + 1;
             trackAdvisorEvent('navigation_back_from_results', { to_step: currentStep });
+            
+            // Skjul teaser og modal ved tilbakenavigering
+            hideTeaser();
+            closeNewsletterModal();
+            
             updateView();
-            newsletterModalShownThisSession = true;
-            if (newsletterPopupModal) newsletterPopupModal.classList.add('hidden');
         } else if (currentStep > 1) {
             const fromStepVisible = calculateCurrentVisibleStep();
             currentStep--;
@@ -393,9 +462,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         recommendations = [];
         showRecommendationsView = false;
         relaxedSearchPerformed = false;
-        if (contactEvoSection) contactEvoSection.classList.add('hidden');
+        scrolledPastRecommendations = false;
+        
+        // Avbryt alle timers
+        if (teaserTimeout) clearTimeout(teaserTimeout);
+        if (modalTimeout) clearTimeout(modalTimeout);
+        teaserTimeout = null;
+        modalTimeout = null;
+        
+        // Skjul teaser og modal
+        hideTeaser();
         closeNewsletterModal();
+        
+        // Reset teaser/modal states
         newsletterModalShownThisSession = false;
+        teaserShownThisSession = false;
+        
+        if (contactEvoSection) contactEvoSection.classList.add('hidden');
         totalSteps = calculateTotalVisibleSteps();
         updateView();
     }
@@ -404,7 +487,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     function trackAdvisorEvent(eventName, eventParameters) {
         console.log(`TRACKING EVENT: ${eventName}`, eventParameters || {});
     }
-    document.body.addEventListener('click', function(event) { /* ... (din sporingslogikk) ... */ });
 
     // --- Nyhetsbrev innsending med FormData (mode: 'no-cors') ---
     async function sendNewsletterDataWithFormData(navn, email, phone, recommendedBikes = []) {
@@ -413,7 +495,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error("Konfigurasjonsfeil for innsending (GAS URL mangler).");
         }
         
-        // Bestem hvilke Mailchimp Grupper som skal tildeles
         const mailchimpGroups = Array.isArray(recommendedBikes)
             ? recommendedBikes.map(bike => bike.name || bike.id || 'UkjentSykkelAnbefaling').filter(Boolean)
             : [];
@@ -423,14 +504,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         formData.append('email_address', email);
         if (phone) formData.append('phone', phone);
         
-        // Send de originale tags (hvis de fortsatt skal logges i arket)
         const tagsForSheet = Array.isArray(recommendedBikes)
             ? recommendedBikes.map(b => b.name || b.id || 'UkjentSykkel').filter(Boolean)
             : [];
         tagsForSheet.push('bike advisor');
         formData.append('tags_for_logging', tagsForSheet.join(','));
-        
-        // Send Mailchimp Gruppe-navnene som skal tilordnes i Mailchimp
         formData.append('mailchimp_groups_to_add', mailchimpGroups.join(','));
         
         try {
@@ -446,7 +524,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function submitNewsletterForm(e) {
         e.preventDefault();
         
-        // Sjekk for nødvendige DOM-elementer. Returner tidlig hvis de mangler.
         if (!modalNewsletterNameInput || !modalNewsletterEmailInput || !modalNewsletterConsentCheckbox || !modalNewsletterMessage || !modalNewsletterFormWrapper || !modalNewsletterThankyouWrapper) {
             console.error("Ett eller flere modal-nyhetsbrev-DOM-elementer mangler.");
             return;
@@ -456,7 +533,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const email = modalNewsletterEmailInput.value.trim();
         const phone = modalNewsletterPhoneInput ? modalNewsletterPhoneInput.value.trim() : '';
 
-        // Valideringssjekker
         if (!navn) {
             modalNewsletterMessage.textContent = "Vennligst skriv inn navnet ditt.";
             modalNewsletterMessage.style.color = "#b71c1c";
@@ -473,7 +549,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         
-        // Vis "Sender..." melding og deaktiver knappen
         modalNewsletterMessage.textContent = "Sender...";
         modalNewsletterMessage.style.color = "#495057";
         const submitButton = modalNewsletterForm.querySelector('button[type="submit"]');
@@ -482,7 +557,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             await sendNewsletterDataWithFormData(navn, email, phone, recommendations);
 
-            // Skjul skjema og vis takkemelding ved suksess
             if (modalNewsletterFormWrapper) modalNewsletterFormWrapper.classList.add('hidden');
             if (modalNewsletterThankyouWrapper) {
                 modalNewsletterThankyouWrapper.innerHTML = `
@@ -497,7 +571,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             if (modalNewsletterMessage) modalNewsletterMessage.textContent = "";
 
-            // NYTT: Kall fbq-hendelsen direkte for å spore konvertering
             if (typeof fbq === 'function') {
                 fbq('track', 'Lead', {
                     content_name: 'Bike Advisor Newsletter',
@@ -507,8 +580,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.log("Meta Pixel 'Lead' event trigget direkte fra koden.");
             }
 
-            // Gamle GTM postMessage-kall er nå unødvendige for Meta Pixel-sporing
-            // De kan beholdes hvis de brukes for andre formål
             trackAdvisorEvent('newsletter_signup_success', { navn, email, phone, source: 'popup_modal' });
             try {
                 window.parent.postMessage({
@@ -522,7 +593,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Kunne ikke sende postMessage til parent:', e);
             }
         } catch (err) {
-            // ... (din eksisterende feilhåndteringskode) ...
             console.error("Innsending av nyhetsbrev fra modal feilet:", err);
             if (modalNewsletterMessage) {
                 modalNewsletterMessage.textContent = err.message || "Noe gikk galt. Prøv igjen.";
@@ -542,7 +612,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Kunne ikke sende postMessage error til parent:', e);
             }
         } finally {
-            // Aktiver knappen igjen
             if (submitButton) submitButton.disabled = false;
         }
     }
@@ -559,10 +628,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (openNewsletterPopupBtn) {
         openNewsletterPopupBtn.addEventListener('click', () => {
+            // Avbryt eksisterende timers
+            if (teaserTimeout) clearTimeout(teaserTimeout);
+            if (modalTimeout) clearTimeout(modalTimeout);
+            
             newsletterModalShownThisSession = false;
             openNewsletterModal();
+            trackAdvisorEvent('newsletter_modal_opened_manually');
         });
     }
+
+    // NYTT: Teaser Event Listeners
+    if (teaserCtaBtn) {
+        teaserCtaBtn.addEventListener('click', () => {
+            // Avbryt modal timer når bruker klikker på teaser
+            if (modalTimeout) clearTimeout(modalTimeout);
+            
+            openNewsletterModal();
+            trackAdvisorEvent('newsletter_modal_opened_via_teaser');
+        });
+    }
+
+    if (teaserCloseBtn) {
+        teaserCloseBtn.addEventListener('click', () => {
+            hideTeaser();
+            trackAdvisorEvent('newsletter_teaser_closed');
+            
+            // Når bruker lukker teaser, vent litt lengre før modal vises (3 sek ekstra)
+            if (modalTimeout) clearTimeout(modalTimeout);
+            modalTimeout = setTimeout(() => {
+                if (!newsletterModalShownThisSession) {
+                    openNewsletterModal();
+                    trackAdvisorEvent('newsletter_modal_triggered_after_teaser_close');
+                }
+            }, 3000);
+        });
+    }
+
+    // NYTT: Legg til scroll listener
+    window.addEventListener('scroll', checkScrollTrigger);
 
     // --- Initialisering ---
     async function initializeAdvisor() {
@@ -572,12 +676,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const backButton = document.getElementById('back-button'); 
         const resetButtonStep = document.getElementById('reset-button-step');
         const resetButtonFinal = document.getElementById('reset-button-final');
-        const currentYearSpan = document.getElementById('current-year');
 
         if (backButton) backButton.addEventListener('click', handleBack);
         if (resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
         if (resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor);
-        if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 
         if (catalogLoaded && BikeCatalog.evoOriginal.length > 0) {
             trackAdvisorEvent('advisor_ui_ready');
