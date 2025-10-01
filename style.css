@@ -3,23 +3,22 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
     margin: 0;
-    background-color: #f8f9fa; /* Lys grå bakgrunn */
-    color: #343a40; /* Mørk tekstfarge */
+    background-color: #f8f9fa;
+    color: #343a40;
 }
 
 #bike-advisor-container {
-    max-width: 800px; /* Maksimal bredde på containeren */
+    max-width: 800px;
     width: 100%;
     box-sizing: border-box;
-    margin: 20px auto; /* Sentrer containeren med marg */
+    margin: 20px auto;
     padding: 15px;
-    background-color: #ffffff; /* Hvit bakgrunn for innholdet */
-    border-radius: 12px; /* Avrundede hjørner */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Subtil skygge */
-    overflow: visible; /* Tillat elementer (som loader) å gå utenfor visuelt om nødvendig */
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: visible;
 }
 
-/* Tilpass utseende når siden er innebygget i et iframe */
 body.embedded {
     background-color: transparent;
 }
@@ -35,37 +34,36 @@ body.embedded #bike-advisor-container {
 body.embedded #options-area {
     background-color: transparent;
 }
+
 /* Header */
 .advisor-header {
     padding: 20px;
     text-align: center;
-    border-bottom: 1px solid #e9ecef; /* Lys skillelinje */
+    border-bottom: 1px solid #e9ecef;
     margin-bottom: 20px;
 }
 
 .advisor-header h1 {
     font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: bold;
-    color: #212529; /* Nesten svart tittel */
+    color: #212529;
     margin-bottom: 5px;
 }
 
 .advisor-header h1 .highlight {
-    color: #0d6efd; /* Blåfarge for utheving */
+    color: #0d6efd;
 }
 
 .advisor-header p {
-    color: #6c757d; /* Grå undertekst */
+    color: #6c757d;
     font-size: 1.1em;
 }
 
-/* Innholdsområde */
 #advisor-content {
     padding: 10px 20px;
-    position: relative; /* For absolutt posisjonering av interne elementer om nødvendig */
+    position: relative;
 }
 
-/* Skjult klasse */
 .hidden {
     display: none !important;
 }
@@ -77,81 +75,78 @@ body.embedded #options-area {
   justify-content: center;
   align-items: center;
   padding: 40px 20px;
-  min-height: 180px; /* Minimumshøyde for lasteanimasjonen */
+  min-height: 180px;
   text-align: center;
   border: 1px solid #e9ecef;
   border-radius: 8px;
   background-color: #f8f9fa;
   margin-bottom: 30px;
-  overflow: hidden; /* Skjul sykkelen når den går utenfor denne boksen */
-  position: relative; /* For animasjonens posisjonering */
+  overflow: hidden;
+  position: relative;
 }
 .bike-loader-png {
-  width: 60px; /* Bredde på sykkelbildet */
+  width: 60px;
   height: auto;
   display: block;
   position: absolute;
-  bottom: 50px; /* Vertikal posisjon */
-  left: -80px; /* Startposisjon utenfor venstre kant */
-  transform-origin: 85% 95%; /* Rotasjonspunkt (ca. bakhjul) */
-  transform: rotate(-18deg); /* Statisk rotasjon for "wheelie"-effekt */
-  animation: rideLeftAcross 2.5s linear infinite; /* Animasjon */
+  bottom: 50px;
+  left: -80px;
+  transform-origin: 85% 95%;
+  transform: rotate(-18deg);
+  animation: rideLeftAcross 2.5s linear infinite;
 }
 .bike-loading-text {
   font-size: 1.1em;
   color: #495057;
   font-weight: 500;
-  margin-top: 70px; /* Plass under animasjonsområdet */
+  margin-top: 70px;
 }
-@keyframes rideLeftAcross { /* Animasjon for sykkelen */
-  0% { left: -80px; opacity: 0; } /* Start utenfor, usynlig */
-  10% { opacity: 1; } /* Fade inn */
-  90% { opacity: 1; } /* Begynn å fade ut */
-  100% { left: 100%; opacity: 0; } /* Slutt utenfor, usynlig */
+@keyframes rideLeftAcross {
+  0% { left: -80px; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
 }
 
-/* Spinner-styling (for lasteindikator når anbefalinger genereres) */
 .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1); /* Lys grå sirkel */
+    border: 4px solid rgba(0, 0, 0, 0.1);
     width: 36px; height: 36px;
-    border-radius: 50%; /* Perfekt sirkel */
-    border-left-color: #343a40; /* Mørkere farge for animert del */
-    animation: spin 1s linear infinite; /* Rotasjonsanimasjon */
+    border-radius: 50%;
+    border-left-color: #343a40;
+    animation: spin 1s linear infinite;
 }
-@keyframes spin { /* Rotasjonsanimasjon for spinner */
+@keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-.loading-text { /* Tekst brukt med spinneren */
+.loading-text {
     font-size: 1.1em; color: #495057; font-weight: 500;
 }
-.loading-container { /* Container for anbefalings-spinner */
+.loading-container {
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     padding: 40px 20px; min-height: 200px; text-align: center;
     border: 1px solid #e9ecef; border-radius: 8px; background-color: #f8f9fa; margin-bottom: 30px;
 }
-.loading-container .spinner { margin-bottom: 15px; } /* Avstand mellom spinner og tekst */
+.loading-container .spinner { margin-bottom: 15px; }
 
-/* Feilmeldingsstyling */
 .error-message {
-    background-color: #fff3f3; /* Lys rød bakgrunn for feil */
-    color: #b71c1c; /* Mørk rød tekstfarge */
-    border: 1px solid #ef9a9a; /* Rød kantlinje */
+    background-color: #fff3f3;
+    color: #b71c1c;
+    border: 1px solid #ef9a9a;
     padding: 15px; border-radius: 8px; text-align: center; width: 100%;
 }
 .error-message small { display: block; margin-top: 8px; font-size: 0.9em; color: #c62828; }
 
-/* Setningsbygger / Oppsummering */
 .summary-box {
-    background-color: #e9ecef; /* Lys grå bakgrunn */
+    background-color: #e9ecef;
     color: #343a40;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 30px;
-    font-size: 1.2em; /* Større tekst for oppsummering */
+    font-size: 1.2em;
     line-height: 1.7;
 }
-.summary-box .placeholder, .summary-box .selected-value { /* Styling for valgte verdier og plassholdere */
+.summary-box .placeholder, .summary-box .selected-value {
     display: inline-block; padding: 3px 8px; border-radius: 5px;
     margin: 2px 6px; vertical-align: baseline;
 }
@@ -164,80 +159,72 @@ body.embedded #options-area {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: none; }
 }
-.summary-box .placeholder { /* Plassholdertekst (f.eks. "bruksområde") */
+.summary-box .placeholder {
     background-color: rgba(255, 255, 255, 0.7); color: #6c757d;
     min-width: 100px; text-align: center; border: 1px dashed #ced4da;
 }
-.summary-box .selected-value { /* Valgt verdi */
-    font-weight: 600; border-bottom: 2px solid #0d6efd; /* Blå understrekning */
+.summary-box .selected-value {
+    font-weight: 600; border-bottom: 2px solid #0d6efd;
     padding-bottom: 1px; border-radius: 0; padding-left: 2px; padding-right: 2px;
 }
 
-/* Alternativ-område */
 .options-container { background-color: #ffffff; margin-bottom: 30px; }
 body.embedded #options-area {
     background-color: transparent;
 }
-#step-title { /* Tittel for hvert trinn */
+#step-title {
     font-size: clamp(1.2rem, 3vw, 1.6rem);
     font-weight: 600; color: #343a40;
     margin-bottom: 25px; text-align: left;
 }
-#step-options { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; } /* Container for valgknapper */
+#step-options { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
 
-/* Knapper for alternativer */
 .option-button {
-    padding: 12px 20px; border: 2px solid #ced4da; /* Grå kantlinje */
+    padding: 12px 20px; border: 2px solid #ced4da;
     border-radius: 8px;
     background-color: #ffffff; color: #495057;
     font-size: 1em; font-weight: 500;
-    cursor: pointer; transition: all 0.2s ease-in-out; /* Myk overgang */
+    cursor: pointer; transition: all 0.2s ease-in-out;
     text-align: left;
-    flex-grow: 1; min-width: 180px; /* Fleksibel bredde */
+    flex-grow: 1; min-width: 180px;
     min-height: 44px;
 }
-.option-button:hover { /* Hover-effekt */
-    border-color: #0d6efd; color: #0d6efd; /* Blå kant og tekst */
+.option-button:hover {
+    border-color: #0d6efd; color: #0d6efd;
     box-shadow: 0 2px 5px rgba(13, 110, 253, 0.1);
 }
-.option-button.selected { /* Valgt knapp */
-    background-color: #0d6efd; color: white; border-color: #0d6efd; /* Blå bakgrunn, hvit tekst */
-    transform: scale(1.02); /* Lett forstørrelse */
+.option-button.selected {
+    background-color: #0d6efd; color: white; border-color: #0d6efd;
+    transform: scale(1.02);
     box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
 }
-.option-button .description { /* Beskrivelse under knappetekst */
+.option-button .description {
     font-size: 0.85em; color: #6c757d; margin-top: 5px; font-weight: 400;
 }
-.option-button.selected .description { color: rgba(255, 255, 255, 0.85); } /* Lysere beskrivelse på valgt knapp */
+.option-button.selected .description { color: rgba(255, 255, 255, 0.85); }
 
-/* Spesifikk styling for lastetype-knapper (med bilder) */
 .option-button.cargo-type { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 150px; }
 .option-button.cargo-type img { width: 60px; height: auto; margin-bottom: 10px; opacity: 0.7; transition: opacity 0.2s ease; }
-.option-button.cargo-type:hover img, .option-button.cargo-type.selected img { opacity: 1; } /* Full opasitet på bilde ved hover/valg */
+.option-button.cargo-type:hover img, .option-button.cargo-type.selected img { opacity: 1; }
 
-/* Fremdriftsindikator */
 .progress-indicator { display: flex; align-items: center; margin-top: 20px; }
 .progress-bar-outer { flex-grow: 1; height: 8px; background-color: #e9ecef; border-radius: 4px; overflow: hidden; margin-right: 10px; }
-.progress-bar-inner { /* Selve fremdriftslinjen */
-    height: 100%; width: 0%; background-color: #0d6efd; /* Blå farge */
-    border-radius: 4px; transition: width 0.4s ease-out; /* Myk animasjon av bredde */
+.progress-bar-inner {
+    height: 100%; width: 0%; background-color: #0d6efd;
+    border-radius: 4px; transition: width 0.4s ease-out;
 }
-.progress-label { font-size: 0.9em; color: #6c757d; white-space: nowrap; } /* Tekst (Trinn X/Y) */
+.progress-label { font-size: 0.9em; color: #6c757d; white-space: nowrap; }
 
-/* Navigasjonsknapper (Tilbake/Reset) */
 .navigation-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e9ecef; }
 
-/* Generell knappestyling */
 .button { padding: 10px 20px; border: none; border-radius: 6px; font-size: 1em; font-weight: 500; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-.button .icon { width: 1.2em; height: 1.2em; } /* Ikonstørrelse i knapper */
+.button .icon { width: 1.2em; height: 1.2em; }
 
-/* KNAPPFARGER */
-.button-primary { background-color: #0d6efd; color: white; } /* Primærknapp (blå) */
+.button-primary { background-color: #0d6efd; color: white; }
 .button-primary:hover { background-color: #0b5ed7; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-.button-secondary { background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; } /* Sekundærknapp (lys grå) */
+.button-secondary { background-color: #f8f9fa; color: #495057; border: 1px solid #ced4da; }
 .button-secondary:hover { background-color: #e9ecef; border-color: #adb5bd; }
 
-/* Gjør "Få forslagene på e-post"-knappen mer fremtredende */
 #open-newsletter-popup-btn {
     background-color: #0d6efd;
     color: #fff;
@@ -248,17 +235,15 @@ body.embedded #options-area {
     background-color: #0b5ed7;
 }
 
-/* Anbefalingsseksjon */
 .recommendations-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e9ecef; }
 .recommendations-title { font-size: 2em; font-weight: bold; color: #343a40; margin: 0; }
-.recommendations-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; } /* Grid for anbefalingskort */
+.recommendations-grid { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 30px; }
 
-/* Anbefalingskort Styling */
 .recommendation-card { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; background-color: #ffffff; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07); transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; position: relative; }
-.recommendation-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); } /* Hover-effekt på kort */
-.recommendation-badge { position: absolute; top: 0; right: 0; background-color: #0d6efd; color: white; padding: 5px 12px; border-bottom-left-radius: 8px; font-size: 0.8em; font-weight: bold; z-index: 1; } /* Badge (f.eks. "TOPPVALG") */
+.recommendation-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); }
+.recommendation-badge { position: absolute; top: 0; right: 0; background-color: #0d6efd; color: white; padding: 5px 12px; border-bottom-left-radius: 8px; font-size: 0.8em; font-weight: bold; z-index: 1; }
 .recommendation-image-container { background-color: #ffffff; padding: 10px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #e0e0e0; }
-.recommendation-image { max-width: 100%; height: auto; max-height: 200px; /* Begrens bildehøyde */ object-fit: contain; display: block; }
+.recommendation-image { max-width: 100%; height: auto; max-height: 200px; object-fit: contain; display: block; }
 .recommendation-image-container a { display: block; line-height: 0; text-decoration: none; color: inherit; }
 .recommendation-image-container a:hover { opacity: 0.9; transition: opacity 0.2s ease-in-out; }
 .card-toggle {
@@ -280,27 +265,24 @@ body.embedded #options-area {
     outline: 2px solid #0d6efd;
     color: #ffffff;
 }
-.recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; } /* Innhold i kortet */
+.recommendation-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
 .recommendation-content h3 { font-size: 1.3em; font-weight: 600; margin-top: 0; margin-bottom: 10px; color: #343a40; }
 .child-capacity-info { font-size: 0.9em; color: #495057; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
 .child-capacity-info svg { width: 1.1em; height: 1.1em; flex-shrink: 0; color: #495057; }
 .recommendation-content .description { font-size: 0.95em; color: #6c757d; margin-bottom: 15px; flex-grow: 1; }
-.recommendation-features { margin-bottom: 20px; } /* Nøkkelegenskaper */
+.recommendation-features { margin-bottom: 20px; }
 .recommendation-features h4 { font-size: 1em; font-weight: 600; margin-bottom: 10px; color: #495057; display: flex; align-items: center; gap: 5px; }
-.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #198754; } /* Grønt ikon for egenskaper */
+.recommendation-features h4 .icon { width: 1.1em; height: 1.1em; color: #198754; }
 .recommendation-features ul { list-style: none; padding: 0; margin: 0; font-size: 0.9em; color: #6c757d; }
 .recommendation-features li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; }
-.recommendation-features li::before { content: '✓'; color: #343a40; font-weight: bold; display: inline-block; line-height: 1.3; } /* Hake-ikon */
-.recommendation-footer { border-top: 1px solid #e9ecef; padding-top: 15px; margin-top: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; } /* Bunnseksjon av kortet */
+.recommendation-features li::before { content: '✓'; color: #343a40; font-weight: bold; display: inline-block; line-height: 1.3; }
+.recommendation-footer { border-top: 1px solid #e9ecef; padding-top: 15px; margin-top: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .recommendation-price .price-label { font-size: 0.85em; color: #6c757d; display: block; }
-.recommendation-price .price-value { font-size: 1.5em; font-weight: bold; color: #343a40; } /* Prisvisning */
+.recommendation-price .price-value { font-size: 1.5em; font-weight: bold; color: #343a40; }
 .recommendation-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
 .recommendation-buttons .button { padding: 8px 12px; font-size: 0.9em; }
-.recommendations-actions { display: block; } /* Skjult som standard, kan brukes senere */
+.recommendations-actions { display: block; }
 
-/* Kontakt Oss Seksjon & "Ingen Resultater" Melding */
-/* .contact-prompt-box er nå brukt av #newsletter-section før, men den fjernes for modal.
-   Denne kan gjenbrukes for "ingen resultater" eller andre kontaktprompter. */
 .contact-prompt-box {
     background-color: #f8f9fa;
     padding: 25px;
@@ -317,25 +299,94 @@ body.embedded #options-area {
 .contact-prompt-box ul li { margin-bottom: 8px; margin-left: 20px; }
 .contact-prompt-box a:not(.button) { color: #0d6efd; text-decoration: underline; }
 .contact-prompt-box a:not(.button):hover { color: #0b5ed7; }
-#recommendations-output .no-results.contact-prompt-box { margin-top: 0; grid-column: 1 / -1; } /* "Ingen resultater" tar full bredde i grid */
+#recommendations-output .no-results.contact-prompt-box { margin-top: 0; grid-column: 1 / -1; }
 #recommendations-output .no-results.contact-prompt-box p,
 #recommendations-output .no-results.contact-prompt-box ul { max-width: 100%; text-align: left; }
 #recommendations-output .no-results.contact-prompt-box ul { display: block; }
 
+/* --- NYTT: TEASER BANNER STYLING --- */
+.newsletter-teaser {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 50px;
+    box-shadow: 0 6px 25px rgba(13, 110, 253, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    max-width: 90%;
+    opacity: 0;
+}
 
-/* --- STYLING FOR NYHETSBREV POP-UP MODAL --- */
+.newsletter-teaser:not(.hidden) {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.teaser-text {
+    font-size: 0.95em;
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.teaser-btn {
+    background: white;
+    color: #0d6efd;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.teaser-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.teaser-close {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.3em;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.teaser-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- STYLING FOR NYHETSBREV POP-UP MODAL (FORBEDRET) --- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.65); /* Mørkere semi-transparent bakgrunn */
+    background-color: rgba(0, 0, 0, 0.65);
     display: flex;
     justify-content: center;
-    align-items: center; /* Sentrer modalen vertikalt */
+    align-items: center;
     padding-bottom: 0;
-    z-index: 1050; /* Sørg for at den er over annet innhold */
+    z-index: 1050;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0s linear 0.3s;
@@ -345,67 +396,100 @@ body.embedded #options-area {
     opacity: 1;
     visibility: visible;
     transition: opacity 0.3s ease;
+    animation: fadeInOverlay 0.3s ease-out;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .modal-content {
     background-color: #ffffff;
-    padding: 25px 30px; /* Justert padding */
-    border-radius: 10px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     width: 90%;
-    max-width: 480px; /* Litt smalere modal for et renere utseende */
+    max-width: 480px;
     position: relative;
-    transform: translateY(20px) scale(0.95); /* Startposisjon for animasjon nederst */
+    transform: translateY(100px) scale(0.9);
     opacity: 0;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .modal-overlay:not(.hidden) .modal-content {
-    transform: translateY(0) scale(1); /* Sluttposisjon for animasjon */
+    transform: translateY(0) scale(1);
     opacity: 1;
+    animation: slideUpAndBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUpAndBounce {
+    0% { transform: translateY(100px) scale(0.9); opacity: 0; }
+    70% { transform: translateY(-10px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .modal-close-btn {
     position: absolute;
-    top: 8px; /* Litt nærmere toppen */
-    right: 12px; /* Litt nærmere kanten */
-    font-size: 2.2em; /* Større kryss */
+    top: 8px;
+    right: 12px;
+    font-size: 2.2em;
     font-weight: bold;
     color: #aaa;
     background: none;
     border: none;
     cursor: pointer;
     line-height: 1;
-    padding: 5px; /* Litt padding for enklere klikk */
+    padding: 5px;
+    transition: color 0.2s;
 }
 .modal-close-btn:hover {
     color: #333;
 }
 
-/* Styling for innhold i modalen - skjemadel */
+/* Ikon øverst i modalen */
+.modal-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.modal-header-icon {
+    width: 50px;
+    height: 50px;
+    color: #0d6efd;
+    animation: iconPulse 2s infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
 #modal-newsletter-form-wrapper h3 {
-    font-size: 1.5em; /* Justert størrelse */
-    color: #212529; /* Mørkere tekst */
+    font-size: 1.6em;
+    color: #212529;
     text-align: center;
     margin-top: 0;
-    margin-bottom: 8px; /* Mindre marg under hovedtittel */
+    margin-bottom: 8px;
     font-weight: 600;
 }
 .modal-subtitle {
     text-align: center;
-    font-size: 1em; /* Litt mindre */
+    font-size: 1em;
     color: #555;
-    margin-bottom: 25px; /* God plass før skjemaet */
+    margin-bottom: 25px;
+    line-height: 1.5;
 }
 
-.modal-form { /* Selve skjemaet */
+.modal-form {
     display: flex;
     flex-direction: column;
-    gap: 0; /* Fjern global gap, kontroller med .form-group */
+    gap: 0;
 }
 
 .modal-form .form-group {
-    margin-bottom: 16px; /* Avstand mellom hver gruppe (label + input) */
+    margin-bottom: 16px;
 }
 
 .modal-form label {
@@ -414,96 +498,95 @@ body.embedded #options-area {
     font-weight: 500;
     font-size: 0.9em;
     color: #495057;
-    text-align: left; /* Sørg for at labels er venstrejustert */
+    text-align: left;
 }
 
 .modal-form input[type="text"],
 .modal-form input[type="email"],
 .modal-form input[type="tel"] {
     width: 100%;
-    padding: 10px 14px; /* Litt mindre padding */
-    border: 1px solid #ced4da; /* Standard grå kantlinje */
+    padding: 10px 14px;
+    border: 1px solid #ced4da;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 1em;
     background-color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 .modal-form input[type="text"]:focus,
 .modal-form input[type="email"]:focus,
 .modal-form input[type="tel"]:focus {
-    border-color: #0d6efd; /* Blå kantlinje ved fokus */
-    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2); /* Lett skygge ved fokus */
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2);
     outline: none;
 }
 
 .modal-consent-container {
     display: flex;
-    align-items: flex-start; /* Justerer checkbox og label fint */
-    gap: 8px; /* Litt mellomrom */
-    margin-top: 10px; /* Plass over */
-    margin-bottom: 20px; /* Plass under, før knappen */
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 .modal-consent-container input[type="checkbox"] {
-    margin-top: 3px; /* Juster vertikalt med teksten */
+    margin-top: 3px;
     flex-shrink: 0;
-    width: 1.1em; height: 1.1em; /* Størrelse på checkbox */
+    width: 1.1em; height: 1.1em;
 }
 .modal-consent-label {
-    font-size: 0.8em; /* Mindre tekst for samtykke */
+    font-size: 0.8em;
     color: #505050;
     line-height: 1.4;
-    margin-bottom: 0; /* Fjern unødvendig marg */
+    margin-bottom: 0;
 }
 
 .modal-submit-btn {
-    /* Fjern eller kommenter ut width: 100%; */
-    /* width: 100%; */ 
-    width: auto; /* La knappen tilpasse seg innholdet */
-    min-width: 200px; /* Sett en fornuftig minimumsbredde */
-    max-width: 300px; /* Sett en eventuell maksbredde */
-    padding: 11px 25px !important; /* Juster padding etter ønske */
+    width: auto;
+    min-width: 200px;
+    max-width: 300px;
+    padding: 12px 28px !important;
     font-size: 1.05em !important;
-    margin-top: 15px; /* Øk gjerne margin-top for mer luft */
-    margin-left: auto;  /* For sentrering */
-    margin-right: auto; /* For sentrering */
-    display: block; /* Nødvendig for at margin auto skal fungere på bredde auto */
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    animation: pulseGlow 2s infinite;
 }
 
-.modal-message { /* For feilmeldinger i modalen */
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4); }
+    50% { box-shadow: 0 0 15px 5px rgba(13, 110, 253, 0.3); }
+}
+
+.modal-message {
     margin-top: 15px;
     font-weight: 500;
     font-size: 0.9em;
-    min-height: 1.4em; /* Forhindre hopp i layout */
+    min-height: 1.4em;
     text-align: center;
-    color: #b71c1c; /* Standard til feilfarge, endres av JS */
+    color: #b71c1c;
 }
 
-/* Styling for takkemeldingen inne i modalen */
 #modal-newsletter-thankyou-wrapper h2 {
-    font-size: 1.6em; /* Justert */
-    color: #198754; /* Grønn for suksess */
+    font-size: 1.6em;
+    color: #198754;
     margin-bottom: 12px;
 }
 #modal-newsletter-thankyou-wrapper p {
-    font-size: 1.05em; /* Justert */
+    font-size: 1.05em;
     color: #343a40;
     line-height: 1.5;
     margin-bottom: 8px;
 }
 #modal-newsletter-thankyou-wrapper .success-icon {
-    /* Størrelse (48px), farge (#198754) og marg (15px top, 10px bottom)
-       er satt inline i JavaScript-koden som genererer takkemeldingen.
-       Kan overstyres her hvis ønskelig. */
     margin-bottom: 12px;
 }
-#modal-newsletter-thankyou-wrapper p:last-of-type { /* "Sjekk søppelpost" */
-    font-size: 0.85em; /* Mindre tekst */
+#modal-newsletter-thankyou-wrapper p:last-of-type {
+    font-size: 0.85em;
     color: #6c757d;
     margin-top: 12px;
 }
-/* --- SLUTT PÅ STYLING FOR MODAL --- */
 
-/* Visuelt skjult klasse */
 .visually-hidden {
     position: absolute; width: 1px; height: 1px; padding: 0;
     margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;
@@ -528,8 +611,7 @@ body.embedded #options-area {
     .bike-loader-png { width: 50px; bottom: 45px; }
     .bike-loading-text { font-size: 1em; margin-top: 60px; }
 
-    /* Modal responsivitet */
-    .modal-content { padding: 20px 25px; } /* Litt mindre padding på små skjermer */
+    .modal-content { padding: 20px 25px; }
     #modal-newsletter-form-wrapper h3 { font-size: 1.4em; }
     .modal-subtitle { font-size: 0.95em; margin-bottom: 20px; }
     .modal-form label { font-size: 0.85em; }
@@ -547,23 +629,44 @@ body.embedded #options-area {
     .recommendation-card.expanded .child-capacity-info,
     .recommendation-card.expanded .description,
     .recommendation-card.expanded .recommendation-features { display: block; }
+
+    /* Teaser responsivitet */
+    .newsletter-teaser {
+        flex-direction: column;
+        padding: 12px 18px;
+        gap: 10px;
+        max-width: 85%;
+        bottom: 15px;
+    }
+    .teaser-text {
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .teaser-btn {
+        width: 100%;
+        padding: 10px 16px;
+    }
+    .teaser-close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 24px;
+        height: 24px;
+        font-size: 1.2em;
+    }
 }
 
 @media (min-width: 601px) {
     .card-toggle { display: none; }
 }
 
-
-/* Grid justering for større skjermer */
 @media (min-width: 768px) {
     .recommendations-grid { grid-template-columns: 1fr 1fr; }
     .recommendations-grid .no-results.contact-prompt-box { grid-column: 1 / -1; }
   
-    /* Første kort tar alltid hele bredden */
     .recommendations-grid .recommendation-card:first-child {
         grid-column: 1 / -1;
     }
-    /* Hvis det bare finnes ett kort, sentrer det */
     .recommendations-grid .recommendation-card:first-child:nth-last-child(1) {
         grid-column: 1 / -1;
         max-width: 60%;
