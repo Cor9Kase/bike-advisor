@@ -546,6 +546,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function resetAdvisor() {
+        console.log('resetAdvisor called');
         trackAdvisorEvent('advisor_reset', { from_step: showRecommendationsView ? 'results' : calculateCurrentVisibleStep() });
         currentStep = 1;
         selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
@@ -767,9 +768,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const resetButtonStep = document.getElementById('reset-button-step');
         const resetButtonFinal = document.getElementById('reset-button-final');
 
+        console.log('Reset buttons found:', {
+            backButton: !!backButton,
+            resetButtonStep: !!resetButtonStep,
+            resetButtonFinal: !!resetButtonFinal
+        });
+
         if (backButton) backButton.addEventListener('click', handleBack);
         if (resetButtonStep) resetButtonStep.addEventListener('click', resetAdvisor);
-        if (resetButtonFinal) resetButtonFinal.addEventListener('click', resetAdvisor);
+        if (resetButtonFinal) {
+            resetButtonFinal.addEventListener('click', resetAdvisor);
+            console.log('Reset button final event listener attached');
+        }
 
         if (catalogLoaded && BikeCatalog.evoOriginal.length > 0) {
             trackAdvisorEvent('advisor_ui_ready');
