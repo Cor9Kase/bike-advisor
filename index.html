@@ -171,20 +171,43 @@
             if (rafId) return;
             rafId = requestAnimationFrame(() => {
                 rafId = null;
-                const newHeight = document.documentElement.scrollHeight;
-                if (Math.abs(newHeight - lastHeight) > 1) {
+
+                // Beregn høyde mer nøyaktig
+                const body = document.body;
+                const html = document.documentElement;
+
+                const newHeight = Math.max(
+                    body.scrollHeight,
+                    body.offsetHeight,
+                    html.clientHeight,
+                    html.scrollHeight,
+                    html.offsetHeight
+                ) + 100; // Legg til buffer
+
+                if (Math.abs(newHeight - lastHeight) > 5) {
                     parent.postMessage({ type: 'setHeight', height: newHeight }, '*');
                     lastHeight = newHeight;
                 }
             });
         }
 
-        window.addEventListener('load', sendHeight);
+        // Send høyde med en gang
+        sendHeight();
+
+        // Send høyde når alt er lastet
+        window.addEventListener('load', () => {
+            sendHeight();
+            // Send igjen etter litt for å fange opp sent-lastede elementer
+            setTimeout(sendHeight, 100);
+            setTimeout(sendHeight, 500);
+            setTimeout(sendHeight, 1000);
+        });
+
         window.addEventListener('resize', sendHeight);
-        setTimeout(sendHeight, 1000); // fallback
 
         const resizeObserver = new ResizeObserver(() => sendHeight());
         resizeObserver.observe(document.body);
+        resizeObserver.observe(document.documentElement);
     </script>
 </body>
 
