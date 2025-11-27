@@ -1,0 +1,193 @@
+<!-- WORDPRESS DIREKTE INNBYGGING -->
+<!-- Lim inn denne koden i en "Custom HTML" block i WordPress -->
+
+<!-- 1. Last inn Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- 2. Last inn CSS -->
+<link rel="stylesheet" href="https://cor9kase.github.io/bike-advisor/style.css">
+
+<!-- 3. Sett opp containeren -->
+<div id="bike-advisor-container">
+    <header class="advisor-header">
+        <h1>EVO <span class="highlight">Sykkelrådgivning</span></h1>
+        <p>Finn din perfekte elsykkel basert på dine behov.</p>
+    </header>
+
+    <div id="advisor-content">
+        <div id="initial-loader" class="hidden">
+            <img src="https://evoelsykler.no/wp-content/uploads/2025/05/free-bicycle-icon-1054-thumb.png"
+                alt="Laster..." class="bike-loader-png" loading="lazy"
+                onerror="this.style.display='none'; document.getElementById('bike-loading-text-element').textContent='Kunne ikke laste bilde.';">
+            <p id="bike-loading-text-element" class="bike-loading-text">Laster sykkeldata, vennligst vent...</p>
+        </div>
+
+        <div id="recommendations-section" class="hidden">
+            <div id="loading-indicator" class="loading-container hidden">
+                <div class="spinner"></div>
+                <p class="loading-text">Konfigurerer dine anbefalinger...</p>
+            </div>
+
+            <div class="recommendations-header">
+                <h2 class="recommendations-title">Din anbefaling</h2>
+                <button id="reset-button-final" class="button button-secondary">Start på nytt</button>
+            </div>
+
+            <div id="recommendations-output" class="recommendations-grid hidden">
+            </div>
+
+            <div class="recommendations-actions"
+                style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0;">
+                <button id="open-newsletter-popup-btn" class="button button-secondary">Få forslagene på
+                    e-post</button>
+            </div>
+        </div>
+
+        <div id="questions-section" class="hidden">
+            <div id="selection-summary" class="selection-summary-container">
+                <!-- Badges will be injected here -->
+            </div>
+
+            <div id="options-area" class="options-container">
+                <h2 id="step-title">Laster inn...</h2>
+                <div id="step-options">
+                </div>
+                <div id="step-progress" class="progress-indicator">
+                    <div class="progress-bar-outer">
+                        <div id="progress-bar" class="progress-bar-inner"></div>
+                    </div>
+                    <span id="progress-text" class="progress-label">Trinn 1/X</span>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="back-button" class="button button-secondary hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                    Tilbake
+                </button>
+                <button id="reset-button-step" class="button button-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Start på nytt
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NYTT: Teaser Banner -->
+<div id="newsletter-teaser" class="newsletter-teaser hidden">
+    <span class="teaser-text">💌 Vil du ha disse anbefalingene på e-post?</span>
+    <button class="teaser-btn" id="teaser-cta-btn">Ja, send meg dem!</button>
+    <button class="teaser-close" id="teaser-close-btn" aria-label="Lukk">&times;</button>
+</div>
+
+<div id="newsletter-popup-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button class="modal-close-btn" id="close-newsletter-modal" aria-label="Lukk">&times;</button>
+
+        <div id="modal-newsletter-form-wrapper">
+            <div class="modal-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="modal-header-icon">
+                    <path
+                        d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                    <path
+                        d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+                </svg>
+            </div>
+            <h3>🎁 Vil du ha anbefalingene på e-post?</h3>
+            <p class="modal-subtitle">Få detaljert info + ekstra tips direkte i innboksen din!</p>
+            <form id="modal-newsletter-form" class="modal-form">
+                <div class="form-group">
+                    <label for="modal-newsletter-name">Navn:</label>
+                    <input type="text" id="modal-newsletter-name" name="name" required placeholder="Ditt navn...">
+                </div>
+                <div class="form-group">
+                    <label for="modal-newsletter-email">E-post:</label>
+                    <input type="email" id="modal-newsletter-email" name="email" required placeholder="din@epost.no">
+                </div>
+                <div class="form-group">
+                    <label for="modal-newsletter-phone">Telefon (valgfritt):</label>
+                    <input type="tel" id="modal-newsletter-phone" name="phone" placeholder="Ditt telefonnummer...">
+                </div>
+                <div class="form-group modal-consent-container">
+                    <input type="checkbox" id="modal-newsletter-consent" name="consent" required>
+                    <label for="modal-newsletter-consent" class="modal-consent-label">
+                        Ja, jeg ønsker å motta forslagene på mail og godtar at Evo Elsykler lagrer min e-postadresse
+                        for dette formålet. Jeg kan når som helst melde meg av.
+                    </label>
+                </div>
+                <button type="submit" class="button button-primary modal-submit-btn">Send meg forslagene</button>
+            </form>
+            <p id="modal-newsletter-message" class="modal-message"></p>
+        </div>
+
+        <div id="modal-newsletter-thankyou-wrapper" class="hidden" style="text-align: center; padding: 20px 0;">
+        </div>
+    </div>
+</div>
+
+<!-- 4. Last inn JavaScript -->
+<script src="https://cor9kase.github.io/bike-advisor/script.js"></script>
+
+<!-- 5. WordPress-spesifikk CSS for å fjerne konflikter -->
+<style>
+    /* Fjern WordPress-styling som kan påvirke rådgiveren */
+    #bike-advisor-container * {
+        box-sizing: border-box;
+    }
+
+    #bike-advisor-container {
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+
+    /* Sørg for at modal vises over WordPress-elementer */
+    .modal-overlay {
+        z-index: 999999 !important;
+    }
+
+    .newsletter-teaser {
+        z-index: 999998 !important;
+    }
+
+    /* MOBIL: Fjern all WordPress-padding og få full bredde */
+    @media (max-width: 768px) {
+
+        /* Fjern padding fra WordPress-containeren */
+        .wp-block-html:has(#bike-advisor-container) {
+            margin-left: -20px !important;
+            margin-right: -20px !important;
+            padding: 0 !important;
+        }
+
+        /* Hvis WordPress bruker entry-content wrapper */
+        .entry-content .wp-block-html:has(#bike-advisor-container) {
+            margin-left: calc(-1 * var(--wp--style--root--padding-left, 20px)) !important;
+            margin-right: calc(-1 * var(--wp--style--root--padding-right, 20px)) !important;
+        }
+
+        /* Sikre at containeren tar full bredde */
+        #bike-advisor-container {
+            width: 100vw !important;
+            max-width: 100vw !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw !important;
+            margin-right: -50vw !important;
+        }
+    }
+</style>

@@ -1136,24 +1136,34 @@ body.embedded #options-area {
 }
 
 /* Responsivitet */
-/* Responsivitet */
 @media (max-width: 600px) {
     #bike-advisor-container {
-        margin: 0;
-        border-radius: 0;
-        box-shadow: none;
-        min-height: 100vh;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
         background-color: #fff;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
+        border: none !important;
     }
 
     .advisor-header {
-        padding: 30px 20px 10px;
-        text-align: left;
-        /* Left align on mobile for modern feel */
+        padding: 30px 20px 20px;
+        text-align: center;
+        border-bottom: 1px solid #edf2f7;
     }
 
     .advisor-header h1 {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
+    }
+
+    .advisor-header p {
+        font-size: 1em;
     }
 
     #questions-section {
