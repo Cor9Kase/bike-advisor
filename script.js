@@ -548,6 +548,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function resetAdvisor() {
         console.log('resetAdvisor called');
         trackAdvisorEvent('advisor_reset', { from_step: showRecommendationsView ? 'results' : calculateCurrentVisibleStep() });
+
         currentStep = 1;
         selections = { purpose: null, distance: null, cargo: null, frameType: null, cargoLocation: null };
         recommendations = [];
@@ -570,8 +571,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         teaserShownThisSession = false;
 
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
+
+        // Fjern fade-out class hvis den finnes
+        if (questionsSection) questionsSection.classList.remove('fade-out');
+
         totalSteps = calculateTotalVisibleSteps();
         updateView();
+
+        // Scroll til toppen av rådgiveren
+        const container = document.getElementById('bike-advisor-container');
+        if (container) {
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        console.log('Reset complete, currentStep:', currentStep, 'showRecommendationsView:', showRecommendationsView);
     }
 
     // --- Sporingsfunksjon ---
