@@ -1,12 +1,16 @@
 /* Generell Styling - Professional Business Look */
-body {
+/* Generell Styling - Scoped to Advisor */
+#bike-advisor-container,
+#newsletter-popup-modal,
+#newsletter-teaser {
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.5;
-    margin: 0;
-    background-color: #f4f5f7;
     color: #2d3748;
     -webkit-font-smoothing: antialiased;
 }
+
+/* Apply background only to the main container wrapper if needed, or leave transparent for embed */
+/* body rule removed to prevent overriding site styles */
 
 #bike-advisor-container {
     max-width: 900px;
@@ -444,8 +448,11 @@ body.embedded #options-area {
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
     text-decoration: none;
+    line-height: 1.2;
+    /* Tighter line height for alignment */
+    justify-content: center;
+    /* Center content */
 }
 
 .button .icon {
@@ -1302,8 +1309,28 @@ body.embedded #options-area {
         font-size: 0.95em;
     }
 
+    .modal-consent-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .modal-consent-container input[type="checkbox"] {
+        margin-top: 4px;
+        /* Optisk justering */
+        flex-shrink: 0;
+        width: 18px;
+        height: 18px;
+    }
+
     .modal-consent-label {
-        font-size: 0.75em;
+        font-size: 0.85em;
+        line-height: 1.4;
+        text-transform: none !important;
+        /* Forhindre uppercase fra tema */
+        color: #4a5568;
+        text-align: left;
     }
 
     #modal-newsletter-thankyou-wrapper h2 {
