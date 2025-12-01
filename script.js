@@ -252,10 +252,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else { if (index === 0) badgeText = 'TOPPVALG'; else if (index === 1) badgeText = 'GOD MATCH'; else if (index === 2) badgeText = 'ALTERNATIV'; }
             let childInfoHTML = ''; if (bike.maxChildren && bike.maxChildren > 0) { const t = bike.maxChildren === 1 ? "ett barn" : `${bike.maxChildren} barn`; childInfoHTML = `<p class="child-capacity-info"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:1.1em;height:1.1em;"><path fill-rule="evenodd" d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z" clip-rule="evenodd" /></svg> Passer for opptil ${t}.</p>`; }
             let featuresHTML = ''; if (bike.features && Array.isArray(bike.features) && bike.features.length > 0) { featuresHTML = `<div class="recommendation-features"><h4>Nøkkelegenskaper:</h4><ul>${bike.features.map(f => `<li>${f}</li>`).join('')}</ul></div>`; }
-            const imageLink = document.createElement('a'); imageLink.href = bike.productUrl || '#'; imageLink.target = '_blank'; imageLink.title = `Se ${bike.name}`; imageLink.dataset.trackEvent = 'view_bike_details_image'; imageLink.dataset.bikeId = bike.id; imageLink.dataset.bikeName = bike.name;
+
+            // Legg til tracking på URL
+            const trackingParams = "?utm_source=sykkelvelger&utm_medium=referral&utm_campaign=bonus_lock&coupon=SYKKELVELGER";
+            const productUrlWithTracking = (bike.productUrl || '#') + trackingParams;
+
+            const imageLink = document.createElement('a'); imageLink.href = productUrlWithTracking; imageLink.target = '_blank'; imageLink.title = `Se ${bike.name}`; imageLink.dataset.trackEvent = 'view_bike_details_image'; imageLink.dataset.bikeId = bike.id; imageLink.dataset.bikeName = bike.name;
             imageLink.innerHTML = `<img src="${bike.image || 'https://placehold.co/300x180/e9ecef/343a40?text=Bilde+mangler'}" alt="${bike.name || 'Sykkelbilde'}" class="recommendation-image" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/300x180/e9ecef/343a40?text=Bilde+feilet';">`;
             const imageContainer = document.createElement('div'); imageContainer.classList.add('recommendation-image-container'); imageContainer.appendChild(imageLink);
-            const detailsButton = `<a href="${bike.productUrl || '#'}" target="_blank" class="button button-primary" data-track-event="view_bike_details_button" data-bike-id="${bike.id}" data-bike-name="${bike.name}">Se detaljer</a>`;
+            const detailsButton = `<a href="${productUrlWithTracking}" target="_blank" class="button button-primary" data-track-event="view_bike_details_button" data-bike-id="${bike.id}" data-bike-name="${bike.name}">Se detaljer</a>`;
             card.innerHTML = `${badgeText ? `<div class="recommendation-badge">${badgeText}</div>` : ''}${imageContainer.outerHTML}<button class="card-toggle" aria-expanded="false">Mer info</button><div class="recommendation-content"><h3>${bike.name || 'Sykkelnavn mangler'}</h3>${childInfoHTML}<p class="description">${bike.description || 'Ingen beskrivelse.'}</p>${featuresHTML}<div class="recommendation-footer"><div class="recommendation-price">${bike.price ? `<span class="price-label">Fra</span><span class="price-value">${bike.price}</span>` : ''}</div><div class="recommendation-buttons">${detailsButton}</div></div></div>`;
 
             const toggleBtn = card.querySelector('.card-toggle');
@@ -380,6 +385,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             if (recommendationsSection) recommendationsSection.classList.add('hidden');
             if (contactEvoSection) contactEvoSection.classList.add('hidden');
+
+            const incentiveBanner = document.getElementById('incentive-banner');
+            if (incentiveBanner) incentiveBanner.classList.add('hidden');
             if (loadingIndicator) loadingIndicator.classList.add('hidden');
             if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
             renderSelectionSummary();
@@ -400,6 +408,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (recommendationsSection) { recommendationsSection.classList.remove('hidden'); recommendationsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
+
+        const incentiveBanner = document.getElementById('incentive-banner');
+        if (incentiveBanner) incentiveBanner.classList.add('hidden');
         if (loadingIndicator) loadingIndicator.classList.remove('hidden');
 
 
@@ -456,6 +467,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (loadingIndicator) loadingIndicator.classList.add('hidden');
             renderRecommendations();
             if (recommendationsOutput) recommendationsOutput.classList.remove('hidden');
+
+            // NYTT: Vis insentiv banner
+            const incentiveBanner = document.getElementById('incentive-banner');
+            if (incentiveBanner) {
+                incentiveBanner.classList.remove('hidden');
+            }
+
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
 
             // NYTT: Implementer kombinert teaser + modal strategi
@@ -571,6 +589,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         teaserShownThisSession = false;
 
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
+
+        const incentiveBanner = document.getElementById('incentive-banner');
+        if (incentiveBanner) incentiveBanner.classList.add('hidden');
 
         // Fjern fade-out class hvis den finnes
         if (questionsSection) questionsSection.classList.remove('fade-out');
