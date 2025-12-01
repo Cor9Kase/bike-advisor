@@ -1310,27 +1310,29 @@ body.embedded #options-area {
     }
 
     .modal-consent-container {
-        display: flex;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: auto 1fr;
         gap: 12px;
+        align-items: start;
         margin-top: 15px;
     }
 
     .modal-consent-container input[type="checkbox"] {
         margin-top: 4px;
-        /* Optisk justering */
-        flex-shrink: 0;
         width: 18px;
         height: 18px;
+        cursor: pointer;
     }
 
     .modal-consent-label {
         font-size: 0.85em;
-        line-height: 1.4;
+        line-height: 1.5;
         text-transform: none !important;
-        /* Forhindre uppercase fra tema */
         color: #4a5568;
         text-align: left;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
     }
 
     #modal-newsletter-thankyou-wrapper h2 {
@@ -1339,6 +1341,18 @@ body.embedded #options-area {
 
     #modal-newsletter-thankyou-wrapper p {
         font-size: 1em;
+    }
+
+    #reset-button-final {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    #reset-button-final svg {
+        margin-top: -2px;
+        /* Finjustering for vertikal sentrering */
     }
 
     .card-toggle {
