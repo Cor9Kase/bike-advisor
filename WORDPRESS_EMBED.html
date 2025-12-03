@@ -210,4 +210,27 @@
             margin-right: -50vw !important;
         }
     }
+
+    /* FIX: Bedre justering av sjekkboks og tekst */
+    .modal-consent-container {
+        display: grid !important;
+        grid-template-columns: auto 1fr !important;
+        gap: 12px !important;
+        align-items: start !important;
+    }
+
+    .modal-consent-container input[type="checkbox"] {
+        margin-top: 4px !important;
+        width: 18px !important;
+        height: 18px !important;
+        cursor: pointer;
+    }
+
+    .modal-consent-label {
+        text-transform: none !important;
+        font-size: 0.9em !important;
+        line-height: 1.5 !important;
+        word-break: normal !important;
+        text-align: left !important;
+    }
 </style>

@@ -1053,25 +1053,31 @@ body.embedded #options-area {
 }
 
 .modal-consent-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: start;
     margin-top: 10px;
     margin-bottom: 20px;
 }
 
 .modal-consent-container input[type="checkbox"] {
-    margin-top: 3px;
+    margin-top: 4px;
     flex-shrink: 0;
-    width: 1.1em;
-    height: 1.1em;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
 }
 
 .modal-consent-label {
-    font-size: 0.8em;
+    font-size: 0.9em;
     color: #505050;
-    line-height: 1.4;
+    line-height: 1.5;
     margin-bottom: 0;
+    text-transform: none;
+    word-break: normal;
+    text-align: left;
+    cursor: pointer;
 }
 
 .modal-submit-btn {
