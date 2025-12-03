@@ -1053,31 +1053,37 @@ body.embedded #options-area {
 }
 
 .modal-consent-container {
-    display: grid;
-    grid-template-columns: auto 1fr;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
     gap: 12px;
-    align-items: start;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 20px;
+    text-align: left;
 }
 
 .modal-consent-container input[type="checkbox"] {
     margin-top: 4px;
     flex-shrink: 0;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+    appearance: auto;
+    -webkit-appearance: checkbox;
 }
 
 .modal-consent-label {
-    font-size: 0.9em;
+    font-size: 0.95em;
     color: #505050;
     line-height: 1.5;
     margin-bottom: 0;
     text-transform: none;
     word-break: normal;
+    overflow-wrap: break-word;
     text-align: left;
     cursor: pointer;
+    font-weight: 400;
+    letter-spacing: normal;
 }
 
 .modal-submit-btn {
