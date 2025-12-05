@@ -462,6 +462,7 @@ body.embedded #options-area {
     /* Nudge icon down slightly for optical alignment */
     margin: 0 !important;
     /* Prevent WP margins */
+    flex-shrink: 0 !important;
 }
 
 .button-primary {

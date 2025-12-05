@@ -243,4 +243,42 @@
         color: #4a5568 !important;
         width: auto !important;
     }
+
+    /* FIX: Aggressiv reset av knappestiler for å overstyre WordPress-tema */
+    #bike-advisor-container .button {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        text-transform: none !important;
+        /* Forhindre uppercase fra tema */
+        letter-spacing: normal !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        text-decoration: none !important;
+        background-image: none !important;
+        box-shadow: none !important;
+    }
+
+    #bike-advisor-container .button .icon {
+        display: block !important;
+        width: 1.2em !important;
+        height: 1.2em !important;
+        min-width: 1.2em !important;
+        min-height: 1.2em !important;
+        transform: translateY(1px) !important;
+        /* Finjustering av vertikal sentrering */
+        margin: 0 !important;
+        padding: 0 !important;
+        fill: none !important;
+        /* Sikre at ikonet ikke fylles av tema-farger */
+    }
+
+    /* Spesifikk reset for sekundærknapper hvis temaet har sterke meninger */
+    #bike-advisor-container .button-secondary {
+        background-color: transparent !important;
+        color: #0071e3 !important;
+        border: none !important;
+        padding: 10px 20px !important;
+    }
 </style>
