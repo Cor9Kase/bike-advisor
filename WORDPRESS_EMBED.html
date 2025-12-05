@@ -39,7 +39,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                         </svg>
-                        Start på nytt
+                        <span>Start på nytt</span>
                     </button>
                 </div>
 
@@ -86,7 +86,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>
-                    Start på nytt
+                    <span>Start på nytt</span>
                 </button>
             </div>
         </div>
@@ -253,25 +253,35 @@
         text-transform: none !important;
         /* Forhindre uppercase fra tema */
         letter-spacing: normal !important;
-        line-height: 1.2 !important;
+        line-height: 1 !important;
         margin: 0 !important;
         text-decoration: none !important;
         background-image: none !important;
         box-shadow: none !important;
+        padding: 10px 16px !important;
+        height: auto !important;
+        min-height: 44px !important;
+    }
+
+    #bike-advisor-container .button span {
+        display: inline-block !important;
+        line-height: 1 !important;
+        transform: translateY(1px);
+        /* Juster tekst litt ned for å matche ikon */
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     #bike-advisor-container .button .icon {
         display: block !important;
-        width: 1.2em !important;
-        height: 1.2em !important;
-        min-width: 1.2em !important;
-        min-height: 1.2em !important;
-        transform: translateY(1px) !important;
-        /* Finjustering av vertikal sentrering */
+        width: 1.25em !important;
+        height: 1.25em !important;
+        min-width: 1.25em !important;
+        min-height: 1.25em !important;
+        transform: none !important;
         margin: 0 !important;
         padding: 0 !important;
         fill: none !important;
-        /* Sikre at ikonet ikke fylles av tema-farger */
     }
 
     /* Spesifikk reset for sekundærknapper hvis temaet har sterke meninger */
