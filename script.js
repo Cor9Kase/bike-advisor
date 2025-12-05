@@ -386,8 +386,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (recommendationsSection) recommendationsSection.classList.add('hidden');
             if (contactEvoSection) contactEvoSection.classList.add('hidden');
 
-            const incentiveBanner = document.getElementById('incentive-banner');
-            if (incentiveBanner) incentiveBanner.classList.add('hidden');
+
             if (loadingIndicator) loadingIndicator.classList.add('hidden');
             if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
             renderSelectionSummary();
@@ -409,8 +408,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (recommendationsOutput) recommendationsOutput.classList.add('hidden');
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
 
-        const incentiveBanner = document.getElementById('incentive-banner');
-        if (incentiveBanner) incentiveBanner.classList.add('hidden');
+
         if (loadingIndicator) loadingIndicator.classList.remove('hidden');
 
 
@@ -468,11 +466,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderRecommendations();
             if (recommendationsOutput) recommendationsOutput.classList.remove('hidden');
 
-            // NYTT: Vis insentiv banner
-            const incentiveBanner = document.getElementById('incentive-banner');
-            if (incentiveBanner) {
-                incentiveBanner.classList.remove('hidden');
-            }
+
 
             if (contactEvoSection) { recommendations.length > 0 ? contactEvoSection.classList.remove('hidden') : contactEvoSection.classList.add('hidden'); }
 
@@ -590,8 +584,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (contactEvoSection) contactEvoSection.classList.add('hidden');
 
-        const incentiveBanner = document.getElementById('incentive-banner');
-        if (incentiveBanner) incentiveBanner.classList.add('hidden');
+
 
         // Fjern fade-out class hvis den finnes
         if (questionsSection) questionsSection.classList.remove('fade-out');
